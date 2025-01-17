@@ -33,7 +33,7 @@ function CountrySelector({ data, selected, onChange }: CountrySelectorProps) {
     <div className='w-full'>
       <Combobox
         value={selected}
-        onChange={(county: any) => onChange(county.isoCode)}
+        onChange={(county: ICountry) => onChange(county.isoCode)}
         onClose={() => setQuery('')}
       >
         <div className='relative'>
@@ -43,7 +43,7 @@ function CountrySelector({ data, selected, onChange }: CountrySelectorProps) {
               'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
             )}
             placeholder='Country'
-            displayValue={(country: any) => country?.name}
+            displayValue={(country: ICountry) => country?.name}
             onChange={(event) => setQuery(event.target.value)}
           />
           <ComboboxButton className='group absolute inset-y-0 right-0 px-2.5 z-30'>

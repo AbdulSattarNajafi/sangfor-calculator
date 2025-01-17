@@ -18,11 +18,13 @@ function ContactFormThree() {
     const country = Country.getCountryByCode(countryCode);
     const countryStates = State.getStatesOfCountry(countryCode);
 
-    country && setSelectedCountry(country);
+    if (country) {
+      setSelectedCountry(country);
+    }
     setStates(countryStates);
   };
 
-  const handleStateChange = (state: any) => {
+  const handleStateChange = (state: IState) => {
     setSelectedState(state);
   };
 

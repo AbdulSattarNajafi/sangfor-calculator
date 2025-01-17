@@ -33,7 +33,7 @@ function StateSelector({ data, selected, onChange }: StateSelectorProps) {
     <div className='w-full'>
       <Combobox
         value={selected}
-        onChange={(value: any) => onChange(value)}
+        onChange={(value: IState) => onChange(value)}
         onClose={() => setQuery('')}
       >
         <div className='relative'>
@@ -42,7 +42,7 @@ function StateSelector({ data, selected, onChange }: StateSelectorProps) {
               'w-full rounded border-none bg-gray-200 py-1.5 pr-8 pl-3 text-sm/6 text-black',
               'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
             )}
-            displayValue={(country: any) => country?.name}
+            displayValue={(country: IState) => country?.name}
             onChange={(event) => setQuery(event.target.value)}
             placeholder='Province'
           />
