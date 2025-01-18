@@ -1,8 +1,8 @@
-import { Text, StyleSheet, View } from '@react-pdf/renderer';
+import { Text, StyleSheet, View } from "@react-pdf/renderer";
 
 type inputDataType = {
   label: string;
-  value: string;
+  value: string | number;
 };
 
 type InputTableProps = {
@@ -13,52 +13,54 @@ type InputTableProps = {
 const styles = StyleSheet.create({
   title: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
+    color: "#0b2651",
   },
   table: {
-    width: 'auto',
+    width: "100%",
     marginBottom: 30,
+    borderRadius: 4,
+    overflow: "hidden",
   },
   tableHeader: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     padding: 8,
-    backgroundColor: '#0b2651',
-    borderRight: '1px solid #0b2651',
-    color: '#fff',
+    color: "#fff",
   },
   tableHeaderRow: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "#0070c0",
   },
   tableHeaderValue: {
     fontSize: 12,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     width: 160,
     padding: 8,
-    backgroundColor: '#0b2651',
-    borderLeft: '1px solid #0b2651',
-    color: '#fff',
+    color: "#fff",
   },
   tableRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottom: '1px solid #fff',
+    display: "flex",
+    flexDirection: "row",
+    borderBottom: "1px solid #fff",
   },
   tableCell: {
     padding: 8,
     fontSize: 10,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: "#e6f2ff",
   },
   tableCellValue: {
     width: 160,
-    padding: 8,
+    paddingHorizontal: 2,
+    paddingVertical: 8,
     fontSize: 10,
-    textAlign: 'center',
-    backgroundColor: '#c0f0c7',
-    borderLeft: '1px solid #fff',
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#d6f5d6",
+    borderLeft: "1px solid #fff",
   },
 });
 

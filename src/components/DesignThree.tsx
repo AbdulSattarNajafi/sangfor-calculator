@@ -1,112 +1,125 @@
-import { regionData } from '@/utils/constants';
-import ContactFormThree from './ContactFormThree';
+"use client";
+
+import { regionData } from "@/utils/constants";
+import ContactFormThree from "./ContactFormThree";
+import { useUserInputContext } from "@/contexts/UserInputContext";
+import Select from "./Select";
+import Input from "./Input";
 
 function DesignThree() {
+  const { state, changeHandler } = useUserInputContext();
+
   return (
-    <section className='py-20 bg-section-bg bg-cover bg-center'>
-      <div className='wrapper '>
-        <div className='text-center text-white mb-10 max-w-3xl w-full mx-auto'>
-          <h2 className='text-4xl font-bold mb-2'>Sangfor ROI Calculator</h2>
+    <section className="bg-section-bg bg-cover bg-center py-20">
+      <div className="wrapper">
+        <div className="mx-auto mb-10 w-full max-w-3xl text-center text-white">
+          <h2 className="mb-2 text-4xl font-bold">Sangfor ROI Calculator</h2>
         </div>
 
-        <div className='mb-4  bg-white px-5 py-6 rounded-md shadow-md'>
-          <div className=' mb-4'>
-            <h2 className='text-2xl font-bold mb-2'>Lorem ipsum dolor sit amet?</h2>
-            <p className=''>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit alias fuga magnam optio
-              similique deserunt aspernatur vitae adipisci natus, fugiat soluta corporis eveniet
-              neque ipsam inventore non voluptatibus amet earum!
-            </p>
+        <div className="mb-4 rounded-md bg-white px-5 py-6 shadow-md">
+          <div className="mb-4 grid grid-cols-3 gap-3">
+            <div className="col-span-2 pe-8">
+              <h2 className="mb-1 text-xl font-bold">
+                Lorem ipsum dolor sit amet?
+              </h2>
+              <p className="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
+                alias fuga magnam optio similique deserunt aspernatur vitae
+                adipisci natus, fugiat soluta corporis eveniet neque ipsam
+                inventore non voluptatibus amet earum!
+              </p>
+            </div>
+
+            <div className="">
+              <h4 className="mb-1 text-xl font-bold">Your Quick Results</h4>
+              <div>
+                <p>
+                  Avg Yearly Benefit: <b>$1,168,295</b>
+                </p>
+
+                <p>
+                  Payback Period (In Months): <b>5.04%</b>
+                </p>
+                <p>
+                  3-Year TCO Savings: <b>$3,000,000</b>
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className='border-t border-gray-300 grid grid-cols-3 gap-x-3 gap-y-4 pt-4'>
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='region'>Region</label>
-              <select
-                id='region'
-                name='region'
-                className='w-full rounded bg-color-gray px-3 py-2 focus:outline-color-pink/70'
+          <div className="grid grid-cols-3 gap-x-3 gap-y-4 border-t border-gray-300 pt-4">
+            <Select
+              label="Region"
+              id="countryName"
+              name="countryName"
+              value={state.countryName}
+              onChange={changeHandler}
+            >
+              {regionData.map((region) => (
+                <option key={region.name} value={region.securityEmployeeSalary}>
+                  {region.name}
+                </option>
+              ))}
+            </Select>
+
+            <Input
+              label="Total Number of Employees"
+              id="employeeCount"
+              name="employeeCount"
+              type="number"
+              value={state.employeeCount}
+              onChange={changeHandler}
+            />
+
+            <Input
+              label="Percentage of Remote/Hybrid Employees"
+              id="hybridPercentage"
+              name="hybridPercentage"
+              type="number"
+              value={state.hybridPercentage}
+              onChange={changeHandler}
+            />
+            <Input
+              label="Number of locations/sites"
+              id="locations"
+              name="locations"
+              type="number"
+              value={state.locations}
+              onChange={changeHandler}
+            />
+            <Input
+              label="Number of countries"
+              id="countries"
+              name="countries"
+              type="number"
+              value={state.countries}
+              onChange={changeHandler}
+            />
+            <Input
+              label="Number of Application Hosting Sites"
+              id="hostingSites"
+              name="hostingSites"
+              type="number"
+              value={state.hostingSites}
+              onChange={changeHandler}
+            />
+            <div className="col-span-3 flex">
+              <Select
+                label="Replace existing MPLS with SASE Traffic Acceleration"
+                id="acceleration"
+                name="acceleration"
+                value={state.acceleration}
+                onChange={changeHandler}
               >
-                {regionData.map((region) => (
-                  <option key={region.name} value={region.securityEmployeeSalary}>
-                    {region.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='employee'>Total Number of Employees</label>
-              <input
-                id='employee'
-                type='text'
-                name='name'
-                placeholder='placeholder'
-                className='w-full rounded bg-color-gray px-3 py-1.5 focus:outline-color-pink/70'
-              />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='hybrid-employee'>Percentage of Remote/Hybrid Employees</label>
-              <input
-                id='hybrid-employee'
-                type='text'
-                name='name'
-                placeholder='placeholder'
-                className='w-full rounded bg-color-gray px-3 py-1.5 focus:outline-color-pink/70'
-              />
-            </div>
-
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='locations'>Number of locations/sites</label>
-              <input
-                id='locations'
-                type='text'
-                name='name'
-                placeholder='placeholder'
-                className='w-full rounded bg-color-gray px-3 py-1.5 focus:outline-color-pink/70'
-              />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='countries'>Number of countries</label>
-              <input
-                id='countries'
-                type='text'
-                name='name'
-                placeholder='placeholder'
-                className='w-full rounded bg-color-gray px-3 py-1.5 focus:outline-color-pink/70'
-              />
-            </div>
-            <div className='flex flex-col gap-1'>
-              <label htmlFor='hosting-sites'>Number of Application Hosting Sites</label>
-              <input
-                id='hosting-sites'
-                type='text'
-                name='name'
-                placeholder='placeholder'
-                className='w-full rounded bg-color-gray px-3 py-1.5 focus:outline-color-pink/70'
-              />
-            </div>
-            <div className='flex items-center col-span-3 gap-3'>
-              <label htmlFor='acceleration'>
-                Replace existing MPLS with SASE Traffic Acceleration
-              </label>
-              <input type='checkbox' name='acceleration' defaultChecked={true} id='acceleration' />
+                <option value={1}>Yes</option>
+                <option value={0}>No</option>
+              </Select>
             </div>
           </div>
         </div>
 
-        <div className='px-5 py-6 rounded-md shadow-md bg-[#002a5e] text-white'>
-          <div className='border-b border-gray-600 pb-5 mb-5'>
-            <h4 className='text-xl font-bold mb-3'>Your Quick Results</h4>
-            <div>
-              <p>Avg Yearly Benefit: $1,168,295</p>
-
-              <p>Payback Period (In Months): 5.04%</p>
-              <p>3-Year TCO Savings: $3,000,000</p>
-            </div>
-          </div>
-
-          <h4 className='text-xl font-bold mb-3 '>Get Your Complete Report</h4>
+        <div className="rounded-md bg-[#002a5e] px-5 py-6 text-white shadow-md">
+          <h4 className="mb-3 text-xl font-bold">Get Your Complete Report</h4>
           <ContactFormThree />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View } from '@react-pdf/renderer';
+import { Text, StyleSheet, View } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   list: {
@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   listItem: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
   bullet: {
     width: 10,

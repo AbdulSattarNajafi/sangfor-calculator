@@ -1,18 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Country, State, IState, ICountry } from 'country-state-city';
+import { useState } from "react";
+import { Country, State, IState, ICountry } from "country-state-city";
 
-import Input from './Input';
-import CountrySelector from './CountrySelector';
-import StateSelector from './StateSelector';
-import SubmitButton from './SubmitButton';
+import Input from "./Input";
+import CountrySelector from "./CountrySelector";
+import StateSelector from "./StateSelector";
+import SubmitButton from "./SubmitButton";
+import { sendEmail } from "@/utils/actions";
+// import { useUserInputContext } from "@/contexts/UserInputContext";
 
 function ContactForm() {
   const countiesData = Country.getAllCountries();
   const [states, setStates] = useState<IState[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [selectedState, setSelectedState] = useState<IState | null>(null);
+  // const { state } = useUserInputContext();
 
   const handleCountryChange = (countryCode: string) => {
     const country = Country.getCountryByCode(countryCode);
@@ -29,13 +32,18 @@ function ContactForm() {
   };
 
   return (
-    <form className='w-full'>
-      <div className='flex flex-col gap-4 mb-8'>
-        <Input label='First Name' id='first-name' placeholder='First Name' />
-        <Input label='Last Name' id='last-name' placeholder='Last Name' />
-        <Input label='Work Email' id='email' placeholder='E-mail' />
-        <Input label='Company Name' id='company-name' placeholder='Company Name' />
-        <div className='flex flex-col gap-1'>
+    <form className="w-full" action={sendEmail}>
+      {/* <p>{state.employeeCount}</p> */}
+      <div className="mb-8 flex flex-col gap-4">
+        <Input label="First Name" id="first-name" placeholder="First Name" />
+        <Input label="Last Name" id="last-name" placeholder="Last Name" />
+        <Input label="Work Email" id="email" placeholder="E-mail" />
+        <Input
+          label="Company Name"
+          id="company-name"
+          placeholder="Company Name"
+        />
+        <div className="flex flex-col gap-1">
           <p>Country</p>
           <CountrySelector
             data={countiesData}
@@ -44,17 +52,24 @@ function ContactForm() {
           />
         </div>
         {states.length > 0 && (
-          <div className='flex flex-col gap-1'>
+          <div className="flex flex-col gap-1">
             <p>Province</p>
-            <StateSelector data={states} selected={selectedState} onChange={handleStateChange} />
+            <StateSelector
+              data={states}
+              selected={selectedState}
+              onChange={handleStateChange}
+            />
           </div>
         )}
 
-        <Input label='Phone' id='phone' placeholder='Phone' />
+        <Input label="Phone" id="phone" placeholder="Phone" />
       </div>
 
       <div>
-        <SubmitButton label='Get the Full Report' loadingLabel='Preparing the Report' />
+        <SubmitButton
+          label="Get the Full Report"
+          loadingLabel="Preparing the Report"
+        />
       </div>
     </form>
   );

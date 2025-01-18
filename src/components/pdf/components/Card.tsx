@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
 type CardProps = {
   label: string;
@@ -9,30 +9,35 @@ type CardProps = {
 function Card({ label, labelWidth, text }: CardProps) {
   const styles = StyleSheet.create({
     card: {
-      marginBottom: 10,
+      marginBottom: 15,
     },
     cardLabel: {
-      backgroundColor: '#0053b8',
-      display: 'flex',
-      fontSize: 12,
+      backgroundColor: "#0070c0",
+      display: "flex",
+      fontSize: 10,
       fontWeight: 600,
-      lineHeight: 1,
+      lineHeight: 1.2,
       width: labelWidth,
-      padding: '4px 10px 6px 10px',
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      borderTopRightRadius: 4,
+      borderTopLeftRadius: 4,
     },
     cardLabelText: {
-      color: '#fff',
+      color: "#fff",
     },
     cardBody: {
-      backgroundColor: '#eef4fc',
-      display: 'flex',
+      display: "flex",
+      backgroundColor: "#e6f2ff",
+      // border: "1px solid #0070c0",
+      borderRadius: 4,
+      borderTopLeftRadius: 0,
       padding: 10,
-      paddingTop: 20,
-      marginTop: -10,
+      marginTop: -1,
       zIndex: -1,
     },
     cardBodyText: {
-      color: '#00000070',
+      // color: "#444444",
     },
   });
 

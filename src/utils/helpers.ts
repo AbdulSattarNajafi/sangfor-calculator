@@ -1,11 +1,10 @@
 import html2canvas from 'html2canvas';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-// import { type ClassValue, clsx } from 'clsx';
-// import { twMerge } from 'tailwind-merge';
-
-// export function cn(...inputs: ClassValue[]) {
-//   return twMerge(clsx(inputs));
-// }
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function convertToArray(texts: string) {
   return texts.split('\n').map((text) => text.trim());
@@ -22,7 +21,7 @@ export async function captureElementAsImage(
   scale: number = 2
 ): Promise<string | null> {
   if (!element) {
-    return null; // Return null if the element is not provided or doesn't exist
+    return null;
   }
 
   try {
@@ -32,4 +31,20 @@ export async function captureElementAsImage(
     console.error('Error capturing element as image:', error);
     return null;
   }
+}
+
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
+  currency: 'USD',
+  style: 'currency',
+  minimumFractionDigits: 0,
+});
+
+export function formatCurrency(amount: number) {
+  return CURRENCY_FORMATTER.format(amount);
+}
+
+const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number);
 }
