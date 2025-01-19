@@ -8,14 +8,15 @@ import CountrySelector from "./CountrySelector";
 import StateSelector from "./StateSelector";
 import SubmitButton from "./SubmitButton";
 import { sendEmail } from "@/utils/actions";
-// import { useUserInputContext } from "@/contexts/UserInputContext";
+import { useUserInputContext } from "@/contexts/UserInputContext";
+import { storeUserInputData } from "@/utils/helpers";
 
 function ContactForm() {
   const countiesData = Country.getAllCountries();
   const [states, setStates] = useState<IState[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [selectedState, setSelectedState] = useState<IState | null>(null);
-  // const { state } = useUserInputContext();
+  const { state, changeHandler } = useUserInputContext();
 
   const handleCountryChange = (countryCode: string) => {
     const country = Country.getCountryByCode(countryCode);
@@ -31,11 +32,22 @@ function ContactForm() {
     setSelectedState(state);
   };
 
+  const submitHandler = (data: FormData) => {
+    storeUserInputData(state);
+    sendEmail(data);
+  };
+
   return (
-    <form className="w-full" action={sendEmail}>
+    <form className="w-full" action={(data) => submitHandler(data)}>
       {/* <p>{state.employeeCount}</p> */}
       <div className="mb-8 flex flex-col gap-4">
-        <Input label="First Name" id="first-name" placeholder="First Name" />
+        <Input
+          label="First Name"
+          name="userName"
+          id="userName"
+          placeholder="First Name"
+          onChange={changeHandler}
+        />
         <Input label="Last Name" id="last-name" placeholder="Last Name" />
         <Input label="Work Email" id="email" placeholder="E-mail" />
         <Input

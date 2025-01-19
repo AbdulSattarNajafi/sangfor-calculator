@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useFormStatus } from 'react-dom';
+import { useFormStatus } from "react-dom";
 
 type SubmitButtonProps = {
   label: string;
@@ -13,8 +13,8 @@ function SubmitButton({ label, loadingLabel }: SubmitButtonProps) {
   return (
     <button
       disabled={pending}
-      type='submit'
-      className='rounded bg-green text-white py-2 px-4 font-semibold transition-all duration-300 hover:bg-green/75'
+      type="submit"
+      className="rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
     >
       {pending ? loadingLabel : label}
     </button>

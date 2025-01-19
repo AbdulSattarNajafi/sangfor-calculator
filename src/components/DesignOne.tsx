@@ -8,6 +8,7 @@ import Select from "./Select";
 
 function DesignOne() {
   const { state, changeHandler } = useUserInputContext();
+  // Based on the User inputs generate & display FINANCIAL SUMMARY
 
   return (
     <section className="bg-section-bg-2 bg-cover bg-center py-20">
@@ -40,10 +41,7 @@ function DesignOne() {
                   onChange={changeHandler}
                 >
                   {regionData.map((region) => (
-                    <option
-                      key={region.name}
-                      value={region.securityEmployeeSalary}
-                    >
+                    <option key={region.name} value={region.name}>
                       {region.name}
                     </option>
                   ))}

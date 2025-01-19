@@ -1,24 +1,25 @@
-import html2canvas from 'html2canvas';
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import html2canvas from "html2canvas";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { UserInputDataType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function convertToArray(texts: string) {
-  return texts.split('\n').map((text) => text.trim());
+  return texts.split("\n").map((text) => text.trim());
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    dateStyle: 'long',
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "long",
   }).format(new Date(date));
 }
 
 export async function captureElementAsImage(
   element: HTMLElement | null,
-  scale: number = 2
+  scale: number = 2,
 ): Promise<string | null> {
   if (!element) {
     return null;
@@ -26,16 +27,16 @@ export async function captureElementAsImage(
 
   try {
     const canvas = await html2canvas(element, { scale });
-    return canvas.toDataURL('image/png');
+    return canvas.toDataURL("image/png");
   } catch (error) {
-    console.error('Error capturing element as image:', error);
+    console.error("Error capturing element as image:", error);
     return null;
   }
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
-  style: 'currency',
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  currency: "USD",
+  style: "currency",
   minimumFractionDigits: 0,
 });
 
@@ -43,8 +44,18 @@ export function formatCurrency(amount: number) {
   return CURRENCY_FORMATTER.format(amount);
 }
 
-const NUMBER_FORMATTER = new Intl.NumberFormat('en-US');
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
 
 export function formatNumber(number: number) {
   return NUMBER_FORMATTER.format(number);
+}
+
+export function storeUserInputData(data: UserInputDataType) {
+  localStorage.setItem("sangforPdfData", JSON.stringify(data));
+}
+
+export function getUserInputData() {
+  const storedValue = localStorage.getItem("sangforPdfData");
+
+  return storedValue ? JSON.parse(storedValue) : null;
 }

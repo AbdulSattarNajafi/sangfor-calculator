@@ -1,6 +1,6 @@
-'use server';
+"use server";
 
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
 export async function sendEmail(formData: FormData) {
   console.log(formData);
@@ -10,5 +10,5 @@ export async function sendEmail(formData: FormData) {
   // 2- Send Email
 
   // 3- Redirect the user
-  redirect('/result');
+  redirect("/report");
 }

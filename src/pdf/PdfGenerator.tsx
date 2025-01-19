@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
   Page,
@@ -12,21 +12,21 @@ import {
   pdf,
   View,
 } from "@react-pdf/renderer";
-import InputTable from "./components/InputTable";
+import InputTable from "./Tables/InputTable";
 import Header from "./components/Header";
 import Card from "./components/Card";
-import RoiCharts from "./RoiCharts";
+import RoiCharts from "./charts/RoiCharts";
 import { InputTableResult } from "@/utils/constants";
-import FinancialChart from "./FinancialChart";
+import FinancialChart from "./charts/FinancialChart";
 import { captureElementAsImage } from "@/utils/helpers";
-import FinanceTable from "./FinanceTable";
-import FincanceDonutCharts from "./FincanceDonutCharts";
-import RiskCharts from "./RiskCharts";
-import SavingCharts from "./SavingCharts";
-import TotalSavingCharts from "./TotalSavingCharts";
+import FinanceTable from "./Tables/FinanceTable";
+import FincanceDonutCharts from "./charts/FincanceDonutCharts";
+import RiskCharts from "./charts/RiskCharts";
+import SavingCharts from "./charts/SavingCharts";
+import TotalSavingCharts from "./charts/TotalSavingCharts";
 import ListItem from "./components/ListItem";
-import { useUserInputContext } from "@/contexts/UserInputContext";
 import Step from "./components/Step";
+import { UserInputDataType } from "@/utils/types";
 
 const styles = StyleSheet.create({
   page: {
@@ -56,8 +56,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-function PdfGenerator() {
+type PdfGeneratorProps = {
+  data: UserInputDataType;
+};
+function PdfGenerator({ data }: PdfGeneratorProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const roiChartRef = useRef<HTMLDivElement>(null);
   const financialChartRef = useRef<HTMLDivElement>(null);
   const financeDonutChartsRef = useRef<HTMLDivElement>(null);
@@ -65,37 +68,37 @@ function PdfGenerator() {
   const savingChartsRef = useRef<HTMLDivElement>(null);
   const totalSavingChartsRef = useRef<HTMLDivElement>(null);
 
-  const { state } = useUserInputContext();
-
   const userInputData = [
-    { label: "Total Number of Employees", value: state.employeeCount },
+    { label: "Total Number of Employees", value: data.employeeCount },
     {
       label: "Percentage of Remote/Hybrid Employees ",
-      value: state.hybridPercentage + "%",
+      value: data.hybridPercentage + "%",
     },
     {
       label:
         "Number of locations/sites (Inclu des HQ, Datacentres, Cloud, Branch, Retail, Manufacturing Plants) ",
-      value: state.locations,
+      value: data.locations,
     },
     {
       label:
         "Number of countries (if multiple sites are in one country, count them as one) ",
-      value: state.countries,
+      value: data.countries,
     },
     {
       label:
         "Number of Application Hosting Sites. Number of locations where applications servers are hosted. Please include public/private cloud locations as well. ",
-      value: state.hostingSites,
+      value: data.hostingSites,
     },
-    { label: "Region (Country)", value: state.countryName },
+    { label: "Region (Country)", value: data.countryName },
     {
       label: "Replace existing MPLS with SASE Traffic Acceleration",
-      value: state.acceleration,
+      value: data.acceleration === 1 ? "Yes" : "No",
     },
   ];
 
   const generatePDF = async () => {
+    setIsLoading(true);
+
     const roiChartImage = await captureElementAsImage(roiChartRef.current);
     const financialChartImage = await captureElementAsImage(
       financialChartRef.current,
@@ -116,7 +119,7 @@ function PdfGenerator() {
       <Document>
         {/* ========= Page 1 =============== */}
         <Page size="A4" style={{ fontSize: 10, lineHeight: 1.5 }}>
-          <Header />
+          <Header userName={data.userName} />
           <View style={{ paddingVertical: 10, paddingHorizontal: 30 }}>
             <Card
               label="Simplified Management"
@@ -367,6 +370,9 @@ function PdfGenerator() {
     // Generate the PDF as a blob
     const pdfBlob = await pdf(<MyDocument />).toBlob();
 
+    // await new Promise((res) => setTimeout(res, 3000));
+
+    setIsLoading(false);
     // Open the PDF in a new browser tab
     const pdfUrl = URL.createObjectURL(pdfBlob);
     window.open(pdfUrl, "_blank");
@@ -377,9 +383,10 @@ function PdfGenerator() {
       <div className="absolute left-1/2 top-[180px] z-10 flex -translate-x-1/2 justify-center">
         <button
           onClick={generatePDF}
-          className="hover:bg-green/7 rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300"
+          disabled={isLoading}
+          className="rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
         >
-          View My Report
+          {isLoading ? "loading..." : "View My Report"}
         </button>
       </div>
       <div className="mb-6 w-full bg-white p-6">

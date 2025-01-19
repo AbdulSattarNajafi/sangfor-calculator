@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function Header() {
+function Header({ userName }: { userName: string }) {
   return (
     <>
       <View
@@ -50,7 +50,9 @@ function Header() {
           }}
         >
           <Text style={styles.subHeading}>SASE ROI Analysis Report for:</Text>
-          <Text style={[styles.subHeading, { color: "#0070c0" }]}>Sattar</Text>
+          <Text style={[styles.subHeading, { color: "#0070c0" }]}>
+            {userName}
+          </Text>
         </View>
         <Text style={styles.date}>{formatDate(new Date())}</Text>
         <Text style={styles.text}>
