@@ -16,9 +16,9 @@ import InputTable from "./Tables/InputTable";
 import Header from "./components/Header";
 import Card from "./components/Card";
 import RoiCharts from "./charts/RoiCharts";
-import { InputTableResult } from "@/utils/constants";
+import { regionData } from "@/utils/constants";
 import FinancialChart from "./charts/FinancialChart";
-import { captureElementAsImage } from "@/utils/helpers";
+import { captureElementAsImage, shortenNumber } from "@/utils/helpers";
 import FinanceTable from "./Tables/FinanceTable";
 import FincanceDonutCharts from "./charts/FincanceDonutCharts";
 import RiskCharts from "./charts/RiskCharts";
@@ -27,6 +27,7 @@ import TotalSavingCharts from "./charts/TotalSavingCharts";
 import ListItem from "./components/ListItem";
 import Step from "./components/Step";
 import { UserInputDataType } from "@/utils/types";
+import { costSavingBenefits } from "@/utils/financeSummary";
 
 const styles = StyleSheet.create({
   page: {
@@ -68,6 +69,11 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
   const savingChartsRef = useRef<HTMLDivElement>(null);
   const totalSavingChartsRef = useRef<HTMLDivElement>(null);
 
+  const selectedCountry = regionData.find(
+    (region) => region.name === data.countryName,
+  );
+  const financeSummary = costSavingBenefits(data, selectedCountry!);
+
   const userInputData = [
     { label: "Total Number of Employees", value: data.employeeCount },
     {
@@ -93,6 +99,68 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
     {
       label: "Replace existing MPLS with SASE Traffic Acceleration",
       value: data.acceleration === 1 ? "Yes" : "No",
+    },
+  ];
+
+  const inputTableResult = [
+    {
+      label: "ROI ",
+      value: Math.round(financeSummary.roiPercentages.total) + "%",
+    },
+    {
+      label: "Payback Period  ",
+      value: `Less than ${Math.round(financeSummary.paybackPeriod.value)} months`,
+    },
+    {
+      label: "Total Benefits (NPV) ",
+      value: `${shortenNumber(financeSummary.benefits.npv)} USD`,
+    },
+    {
+      label: "Average Yearly Benefit ",
+      value: `${shortenNumber(financeSummary.avgYearlyBenefits.value)} USD`,
+    },
+  ];
+
+  const financeTableData = [
+    {
+      label: "Workforce Productivity Gains",
+      year1: financeSummary.productivity.year1,
+      year2: financeSummary.productivity.year2,
+      year3: financeSummary.productivity.year3,
+      total: financeSummary.productivity.total,
+      presentValue: financeSummary.productivity.npv,
+    },
+    {
+      label: "Security and Data Breach Risk Reduction",
+      year1: financeSummary.breachRisk.year1,
+      year2: financeSummary.breachRisk.year2,
+      year3: financeSummary.breachRisk.year3,
+      total: financeSummary.breachRisk.total,
+      presentValue: financeSummary.breachRisk.npv,
+    },
+    {
+      label: "Security & Networking Org Efficiency Gain",
+      year1: financeSummary.orgEfficiency.year1,
+      year2: financeSummary.orgEfficiency.year2,
+      year3: financeSummary.orgEfficiency.year3,
+      total: financeSummary.orgEfficiency.total,
+      presentValue: financeSummary.orgEfficiency.npv,
+    },
+    {
+      label: "Security & Networking Infra Cost Reduction",
+      year1: financeSummary.networking.year1,
+      year2: financeSummary.networking.year2,
+      year3: financeSummary.networking.year3,
+      total: financeSummary.networking.total,
+      presentValue: financeSummary.networking.npv,
+    },
+    {
+      label: "Total Benefits (Risk Adjusted)",
+      year1: financeSummary.benefits.year1,
+      year2: financeSummary.benefits.year2,
+      year3: financeSummary.benefits.year3,
+      total: financeSummary.benefits.total,
+      presentValue: financeSummary.benefits.npv,
     },
   ];
 
@@ -172,7 +240,7 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
           />
           <InputTable
             title="FINANCIAL SUMMARY – CONSOLIDATED 3 Year Risk Adjusted Metrics"
-            data={InputTableResult}
+            data={inputTableResult}
           />
           {financialChartImage && (
             <Image style={styles.chartImage} src={financialChartImage} />
@@ -181,7 +249,7 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
 
         {/* ========= Page 3 =============== */}
         <Page size="A4" style={styles.page}>
-          <FinanceTable />
+          <FinanceTable data={financeTableData} />
           <Text style={styles.text}>
             Workforce Productivity Gains: The modern workforce is increasingly
             mobile, with employees requiring access to critical applications and
@@ -391,7 +459,12 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
       </div>
       <div className="mb-6 w-full bg-white p-6">
         <div ref={roiChartRef}>
-          <RoiCharts />
+          <RoiCharts
+            roi={Math.round(financeSummary.roiPercentages.total)}
+            npv={financeSummary.benefits.npv / 1000000}
+            breachRisk={financeSummary.breachRisk.total}
+            paybackPeriod={Math.round(financeSummary.paybackPeriod.value)}
+          />
         </div>
         <div ref={financeDonutChartsRef}>
           <FincanceDonutCharts />
@@ -406,7 +479,18 @@ function PdfGenerator({ data }: PdfGeneratorProps) {
           <TotalSavingCharts />
         </div>
         <div ref={financialChartRef}>
-          <FinancialChart />
+          <FinancialChart
+            benefits={[
+              financeSummary.cost.year1,
+              financeSummary.cost.year2,
+              financeSummary.cost.year3,
+            ]}
+            costs={[
+              financeSummary.benefits.year1 - financeSummary.cost.year1,
+              financeSummary.benefits.year2 - financeSummary.cost.year2,
+              financeSummary.benefits.year3 - financeSummary.cost.year3,
+            ]}
+          />
         </div>
       </div>
     </>

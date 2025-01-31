@@ -21,21 +21,26 @@ ChartJS.register(
   Legend,
 );
 
-const FinancialChart = () => {
+type FinancialChartProps = {
+  benefits: number[];
+  costs: number[];
+};
+
+const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
   // Define data for the chart
   const data = {
     labels: ["1", "2", "3"], // X-axis labels (e.g., quarters)
     datasets: [
       {
         label: "Total Benefits",
-        data: [5000, 7000, 8000], // Example benefit data
+        data: benefits, // Example benefit data
         backgroundColor: "rgba(75, 192, 192, 0.6)", // Light green color
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
       {
         label: "Total Costs",
-        data: [3000, 4000, 3500], // Example cost data
+        data: costs, // Example cost data
         backgroundColor: "rgba(255, 99, 132, 0.6)", // Light red color
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
@@ -55,7 +60,6 @@ const FinancialChart = () => {
         text: "Financial Analysis (Risk Adjusted)", // Chart title
         font: {
           size: 24,
-          color: "red",
         },
       },
     },
@@ -71,7 +75,13 @@ const FinancialChart = () => {
           display: false,
           text: "Amount ($)", // Y-axis label
         },
+        fontSixe: 26,
         beginAtZero: true, // Start Y-axis at 0
+        ticks: {
+          callback: function (value: string | number) {
+            return `$${value.toLocaleString()}`; // Add dollar sign and format numbers
+          },
+        },
       },
     },
   };

@@ -5,10 +5,17 @@ import { regionData } from "@/utils/constants";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import Input from "./Input";
 import Select from "./Select";
+import { shortenNumber } from "@/utils/helpers";
+
+import { costSavingBenefits } from "@/utils/financeSummary";
 
 function DesignOne() {
   const { state, changeHandler } = useUserInputContext();
-  // Based on the User inputs generate & display FINANCIAL SUMMARY
+  const selectedCountry = regionData.find(
+    (region) => region.name === state.countryName,
+  );
+  const { roiPercentages, benefits, paybackPeriod, avgYearlyBenefits } =
+    costSavingBenefits(state, selectedCountry!);
 
   return (
     <section className="bg-section-bg-2 bg-cover bg-center py-20">
@@ -113,22 +120,26 @@ function DesignOne() {
                 </h4>
                 <ul className="flex flex-col gap-1 leading-tight">
                   <li className="flex items-center gap-4">
+                    <span className="inline-block w-48">ROI</span>
+                    <span>{Math.round(roiPercentages.total)}%</span>
+                  </li>
+                  <li className="flex items-center gap-4">
                     <span className="inline-block w-48">
                       Payback Period (In Months):
                     </span>
-                    <span>5.04%</span>
+                    <span>{Math.round(paybackPeriod.value)}</span>
+                  </li>
+                  <li className="flex items-center gap-4">
+                    <span className="inline-block w-48">
+                      Total Benefits (NPV):
+                    </span>
+                    <span>{shortenNumber(benefits.npv)} USD</span>
                   </li>
                   <li className="flex items-center gap-4">
                     <span className="inline-block w-48">
                       Avg Yearly Benefit:
                     </span>
-                    <span>$1,168,295</span>
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <span className="inline-block w-48">
-                      3-Year TCO Savings:
-                    </span>
-                    <span>$3,000,000</span>
+                    <span>{shortenNumber(avgYearlyBenefits.value)} USD</span>
                   </li>
                 </ul>
               </div>

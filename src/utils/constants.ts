@@ -70,35 +70,3 @@ export const regionData = [
     saseCostPerUserPerYear: 75,
   },
 ];
-
-export const InputTableData = [
-  { label: "Total Number of Employees", value: "5000" },
-  { label: "Percentage of Remote/Hybrid Employees ", value: "50%" },
-  {
-    label:
-      "Number of locations/sites (Inclu des HQ, Datacentres, Cloud, Branch, Retail, Manufacturing Plants) ",
-    value: "5",
-  },
-  {
-    label:
-      "Number of countries (if multiple sites are in one country, count them as one) ",
-    value: "2",
-  },
-  {
-    label:
-      "Number of Application Hosting Sites. Number of locations where applications servers are hosted. Please include public/private cloud locations as well. ",
-    value: "1",
-  },
-  { label: "Region (Country)", value: "Singapore" },
-  {
-    label: "Replace existing MPLS with SASE Traffic Acceleration",
-    value: "Yes",
-  },
-];
-
-export const InputTableResult = [
-  { label: "ROI ", value: "281%" },
-  { label: "Payback Period  ", value: "Less than 5 months " },
-  { label: "Total Benefits (NPV) ", value: "4.38 million USD " },
-  { label: "Average Yearly Benefit ", value: "1.2 million USD " },
-];

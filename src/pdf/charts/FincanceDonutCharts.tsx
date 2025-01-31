@@ -8,6 +8,7 @@ function FincanceDonutCharts() {
         color="#b9e5ae"
         label="Number of FTEs Savings"
         value={10}
+        totalValue={100}
       >
         <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">40</h5>
       </DonutChart>
@@ -16,6 +17,7 @@ function FincanceDonutCharts() {
         color="#c7e0f1"
         label="Additional Business Value"
         value={20}
+        totalValue={100}
       >
         <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#0070c0]">
           $ 3.32 <br /> million
@@ -26,6 +28,7 @@ function FincanceDonutCharts() {
         color="#c5edfc"
         label="Lost Productivity Recovered"
         value={30}
+        totalValue={100}
       >
         <h5 className="-mt-8 text-4xl font-bold text-[#00b0f0]">8%</h5>
       </DonutChart>

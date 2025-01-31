@@ -8,6 +8,7 @@ function TotalSavingCharts() {
         color="#a1c490"
         label="Savings from Vendor Consolidation"
         value={10}
+        totalValue={100}
       >
         <h5 className="-mt-8 text-4xl font-bold text-[#61993e]">30%</h5>
       </DonutChart>
@@ -16,6 +17,7 @@ function TotalSavingCharts() {
         color="#90a2d4"
         label="Total Infrastructure cost savings"
         value={20}
+        totalValue={100}
       >
         <h5 className="-mt-8 text-center text-4xl font-bold text-[#3a64ad]">
           336K
@@ -26,6 +28,7 @@ function TotalSavingCharts() {
         color="#b3b3b3"
         label="SD-WAN and MPLS Cost Savings"
         value={30}
+        totalValue={100}
       >
         <h5 className="-mt-8 text-4xl font-bold text-[#5f5f5f]">~ 200K</h5>
       </DonutChart>

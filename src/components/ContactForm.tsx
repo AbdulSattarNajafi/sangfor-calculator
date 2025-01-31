@@ -26,6 +26,7 @@ function ContactForm() {
       setSelectedCountry(country);
     }
     setStates(countryStates);
+    setSelectedState(null);
   };
 
   const handleStateChange = (state: IState) => {

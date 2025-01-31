@@ -50,6 +50,15 @@ export function formatNumber(number: number) {
   return NUMBER_FORMATTER.format(number);
 }
 
+export function shortenNumber(value: number): string {
+  if (value >= 1_000_000) {
+    return (value / 1_000_000).toFixed(1).replace(/\.0$/, "") + " million";
+  } else if (value >= 1_000) {
+    return (value / 1_000).toFixed(0) + "K";
+  }
+  return value.toString();
+}
+
 export function storeUserInputData(data: UserInputDataType) {
   localStorage.setItem("sangforPdfData", JSON.stringify(data));
 }

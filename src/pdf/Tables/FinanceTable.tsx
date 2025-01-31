@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/utils/helpers";
 import { Text, StyleSheet, View } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
@@ -17,8 +18,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     padding: 8,
-    // backgroundColor: "#0070c0",
-    // borderRight: "1px solid #0070c0",
     color: "#fff",
   },
   tableHeaderRow: {
@@ -32,9 +31,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     padding: 8,
-    // backgroundColor: "#0070c0",
-    // borderLeft: "1px solid #0070c0",
-    // borderRight: "1px solid #0070c0",
     color: "#fff",
   },
   tableHeaderPresentValue: {
@@ -43,8 +39,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     paddingVertical: 8,
-    // backgroundColor: "#0070c0",
-    // borderLeft: "1px solid #0070c0",
     color: "#fff",
   },
   tableRow: {
@@ -66,52 +60,40 @@ const styles = StyleSheet.create({
     backgroundColor: "#d6f5d6",
     borderLeft: "1px solid #fff",
   },
+  tableFooter: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "#0070c0",
+    color: "#fff",
+  },
+  tableFooterCell: {
+    padding: 8,
+    fontSize: 10,
+  },
+  tableFooterCellValue: {
+    width: 82,
+    paddingVertical: 8,
+    paddingHorizontal: 2,
+    fontSize: 10,
+    textAlign: "center",
+    borderLeft: "1px solid #fff",
+  },
 });
 
-const data = [
-  {
-    label: "Workforce Productivity Gains",
-    firstYear: "$ 1,107,000 ",
-    secondYear: "$ 1,107,000 ",
-    thirdYear: "$ 1,107,000 ",
-    total: "$ 1,107,000 ",
-    presentValue: "$ 1,107,000 ",
-  },
-  {
-    label: "Security and Data Breach Risk Reduction ",
-    firstYear: "$ 1,107,000 ",
-    secondYear: "$ 1,107,000 ",
-    thirdYear: "$ 1,107,000 ",
-    total: "$ 1,107,000 ",
-    presentValue: "$ 1,107,000 ",
-  },
-  {
-    label: "Security & Networking Org Efficiency Gain",
-    firstYear: "$ 1,107,000 ",
-    secondYear: "$ 1,107,000 ",
-    thirdYear: "$ 1,107,000 ",
-    total: "$ 1,107,000 ",
-    presentValue: "$ 1,107,000 ",
-  },
-  {
-    label: "Security & Networking Infra Cost Reduction",
-    firstYear: "$ 1,107,000 ",
-    secondYear: "$ 1,107,000 ",
-    thirdYear: "$ 1,107,000 ",
-    total: "$ 1,107,000 ",
-    presentValue: "$ 1,107,000 ",
-  },
-  {
-    label: "Total Benefits (Risk Adjusted)",
-    firstYear: "$ 1,107,000 ",
-    secondYear: "$ 1,107,000 ",
-    thirdYear: "$ 1,107,000 ",
-    total: "$ 1,107,000 ",
-    presentValue: "$ 1,107,000 ",
-  },
-];
+type dataType = {
+  label: string;
+  year1: number;
+  year2: number;
+  year3: number;
+  total: number;
+  presentValue: number;
+};
 
-function FinanceTable() {
+type FinanceTableProps = {
+  data: dataType[];
+};
+
+function FinanceTable({ data }: FinanceTableProps) {
   return (
     <>
       <Text style={styles.title}>
@@ -126,14 +108,46 @@ function FinanceTable() {
           <Text style={styles.tableHeaderValue}>Total</Text>
           <Text style={styles.tableHeaderPresentValue}>Present Value</Text>
         </View>
-        {data.map((row, index) => (
+        {data.slice(0, -1).map((row, index) => (
           <View key={index} style={styles.tableRow}>
             <Text style={[styles.tableCell, { flex: 1 }]}>{row.label}</Text>
-            <Text style={styles.tableCellValue}>{row.firstYear}</Text>
-            <Text style={styles.tableCellValue}>{row.secondYear}</Text>
-            <Text style={styles.tableCellValue}>{row.thirdYear}</Text>
-            <Text style={styles.tableCellValue}>{row.total}</Text>
-            <Text style={styles.tableCellValue}>{row.presentValue}</Text>
+            <Text style={styles.tableCellValue}>
+              {formatCurrency(row.year1)}
+            </Text>
+            <Text style={styles.tableCellValue}>
+              {formatCurrency(row.year2)}
+            </Text>
+            <Text style={styles.tableCellValue}>
+              {formatCurrency(row.year3)}
+            </Text>
+            <Text style={styles.tableCellValue}>
+              {formatCurrency(row.total)}
+            </Text>
+            <Text style={styles.tableCellValue}>
+              {formatCurrency(row.presentValue)}
+            </Text>
+          </View>
+        ))}
+        {data.slice(-1).map((row, index) => (
+          <View key={index} style={styles.tableFooter}>
+            <Text style={[styles.tableFooterCell, { flex: 1 }]}>
+              {row.label}
+            </Text>
+            <Text style={styles.tableFooterCellValue}>
+              {formatCurrency(row.year1)}
+            </Text>
+            <Text style={styles.tableFooterCellValue}>
+              {formatCurrency(row.year2)}
+            </Text>
+            <Text style={styles.tableFooterCellValue}>
+              {formatCurrency(row.year3)}
+            </Text>
+            <Text style={styles.tableFooterCellValue}>
+              {formatCurrency(row.total)}
+            </Text>
+            <Text style={styles.tableFooterCellValue}>
+              {formatCurrency(row.presentValue)}
+            </Text>
           </View>
         ))}
       </View>

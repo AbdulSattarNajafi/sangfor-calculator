@@ -1,42 +1,58 @@
+import { shortenNumber } from "@/utils/helpers";
 import DonutChart from "./DonutChart";
 
-function RoiCharts() {
+type RoiChartsProps = {
+  roi: number;
+  npv: number;
+  breachRisk: number;
+  paybackPeriod: number;
+};
+
+function RoiCharts({ roi, npv, breachRisk, paybackPeriod }: RoiChartsProps) {
   return (
     <div className="flex items-start justify-center">
       <DonutChart
         background="#58c13d"
         color="#b9e5ae"
         label="3 Year ROI"
-        value={10}
+        value={roi}
+        totalValue={100}
       >
-        <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">281%</h5>
+        <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">{roi}%</h5>
       </DonutChart>
       <DonutChart
         background="#0070c0"
         color="#c7e0f1"
         label="Net Present Value (NPV)"
-        value={20}
+        value={npv}
+        totalValue={10}
       >
         <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#0070c0]">
-          $ 4.38 <br /> million
+          <span className="word break-words">
+            $ {npv.toFixed(1)} <br /> million
+          </span>
         </h5>
       </DonutChart>
       <DonutChart
         background="#00b0f0"
         color="#c5edfc"
         label="Security Breach Risk Reduction"
-        value={30}
+        value={breachRisk}
+        totalValue={100000}
       >
-        <h5 className="-mt-8 text-4xl font-semibold text-[#00b0f0]">715K</h5>
+        <h5 className="-mt-8 text-4xl font-semibold text-[#00b0f0]">
+          {shortenNumber(breachRisk)}
+        </h5>
       </DonutChart>
       <DonutChart
-        background="#f1a78a"
-        color="#d26e2a"
+        background="#d26e2a"
+        color="#f1a78a"
         label="Payback Period"
-        value={40}
+        value={paybackPeriod}
+        totalValue={36}
       >
-        <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#f1a78a]">
-          &lt; 5 <br /> months
+        <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#d26e2a]">
+          &lt; {paybackPeriod} <br /> months
         </h5>
       </DonutChart>
     </div>
