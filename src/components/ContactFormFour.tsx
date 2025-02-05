@@ -12,8 +12,9 @@ import { omitKeys, storeUserInputData } from "@/utils/helpers";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { contactSchema } from "@/utils/zodSchema";
+import CheckboxInput from "./CheckboxInput";
 
-function ContactForm() {
+function ContactFormFour() {
   const countiesData = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const { state, dispatch } = useUserInputContext();
@@ -63,9 +64,13 @@ function ContactForm() {
         action={action}
         onSubmit={form.onSubmit}
       >
-        <div className="mb-8 flex flex-col gap-1">
+        <h2 className="mb-4 text-2xl font-bold text-white">
+          Get Your Complete Report
+        </h2>
+        <div className="mb-6 grid grid-cols-2 gap-x-4 gap-y-1">
           <Input
             label="First Name"
+            labelClassName="text-white"
             id="userName"
             placeholder="First Name"
             key={fields.firstName.key}
@@ -77,6 +82,7 @@ function ContactForm() {
 
           <Input
             label="Email Address"
+            labelClassName="text-white"
             id="email"
             placeholder="Email Address"
             key={fields.email.key}
@@ -87,6 +93,7 @@ function ContactForm() {
 
           <Input
             label="Business Phone"
+            labelClassName="text-white"
             id="phone"
             placeholder="Business Phone"
             key={fields.phone.key}
@@ -96,6 +103,7 @@ function ContactForm() {
           />
           <Input
             label="Company"
+            labelClassName="text-white"
             id="company-name"
             placeholder="Company"
             key={fields.company.key}
@@ -105,6 +113,7 @@ function ContactForm() {
           />
           <Input
             label="Job Title"
+            labelClassName="text-white"
             id="job-title"
             placeholder="Job Title"
             key={fields.jobTitle.key}
@@ -115,6 +124,7 @@ function ContactForm() {
 
           <CountrySelector
             data={countiesData}
+            labelClassName="text-white"
             selected={selectedCountry}
             onChange={handleCountryChange}
             key={fields.country.key}
@@ -122,24 +132,20 @@ function ContactForm() {
             errorMessage={fields.country.errors}
           />
 
-          <div className="flex items-center gap-2.5">
-            <label
-              htmlFor="request-demo"
-              className="text-sm text-blue-secondary"
-            >
-              Do you want to Request a Demo for Sangfor SASE?
-            </label>
-            <input type="checkbox" id="request-demo" name="requestDemo" />
+          <div>
+            <CheckboxInput
+              label="Do you want to Request a Demo for Sangfor SASE?"
+              id="request-demo"
+              name="requestDemo"
+            />
           </div>
 
-          <div className="flex items-center gap-2.5">
-            <label
-              htmlFor="receive-updates"
-              className="text-sm text-blue-secondary"
-            >
-              Receive Updates User Consent
-            </label>
-            <input type="checkbox" id="receive-updates" name="receiveUpdates" />
+          <div>
+            <CheckboxInput
+              label="Receive Updates User Consent"
+              id="receive-updates"
+              name="receiveUpdates"
+            />
           </div>
         </div>
 
@@ -151,4 +157,4 @@ function ContactForm() {
   );
 }
 
-export default ContactForm;
+export default ContactFormFour;

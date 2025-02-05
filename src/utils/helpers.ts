@@ -40,8 +40,18 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 0,
 });
 
+const CURRENCY_COMPACT_FORMATTER = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  notation: "compact",
+});
+
 export function formatCurrency(amount: number) {
   return CURRENCY_FORMATTER.format(amount);
+}
+
+export function formatCompactCurrency(amount: number) {
+  return CURRENCY_COMPACT_FORMATTER.format(amount);
 }
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US");
@@ -68,3 +78,19 @@ export function getUserInputData() {
 
   return storedValue ? JSON.parse(storedValue) : null;
 }
+
+export function toCamelCase(str: string): string {
+  return str
+    .replace(/\s(.)/g, (match) => match.toUpperCase())
+    .replace(/\s/g, "") // Remove spaces
+    .replace(/^(.)/, (match) => match.toLowerCase());
+}
+
+export const omitKeys = <T extends Record<string, unknown>, K extends keyof T>(
+  obj: T,
+  keys: K[],
+): Omit<T, K> => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key as K)),
+  ) as Omit<T, K>;
+};

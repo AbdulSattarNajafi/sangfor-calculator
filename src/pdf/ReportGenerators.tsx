@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function PdfGenerator({ data }: { data: UserInputDataType }) {
+function ReportGenerators({ data }: { data: UserInputDataType }) {
   const [isLoading, setIsLoading] = useState(false);
   const roiChartRef = useRef<HTMLDivElement>(null);
   const financialChartRef = useRef<HTMLDivElement>(null);
@@ -435,29 +435,34 @@ function PdfGenerator({ data }: { data: UserInputDataType }) {
       </Document>
     );
 
-    // Generate the PDF as a blob
     const pdfBlob = await pdf(<MyDocument />).toBlob();
 
-    // await new Promise((res) => setTimeout(res, 3000));
-
     setIsLoading(false);
-    // Open the PDF in a new browser tab
+
+    // Create a Blob URL
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, "_blank");
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = "sangfor-sase-roi-report.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(pdfUrl);
   };
 
   return (
     <>
-      <div className="absolute left-1/2 top-[180px] z-10 flex -translate-x-1/2 justify-center">
+      <div className="">
         <button
+          id="generate-pdf-btn"
           onClick={generatePDF}
           disabled={isLoading}
           className="rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
         >
-          {isLoading ? "loading..." : "View My Report"}
+          {isLoading ? "Downloading..." : "Download Report"}
         </button>
       </div>
-      <div className="mb-6 flex w-full flex-col gap-4 bg-white p-6">
+      <div className="mb-6 w-full bg-white p-6">
         <div ref={roiChartRef}>
           <RoiCharts
             roi={Math.round(financeSummary.roiPercentages.total)}
@@ -497,4 +502,4 @@ function PdfGenerator({ data }: { data: UserInputDataType }) {
   );
 }
 
-export default PdfGenerator;
+export default ReportGenerators;

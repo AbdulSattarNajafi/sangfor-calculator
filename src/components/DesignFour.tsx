@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 
-import ContactForm from "./ContactForm";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import Input from "./Input";
 import Select from "./Select";
 import { omitKeys, shortenNumber } from "@/utils/helpers";
 import { costSavingBenefits } from "@/utils/financeSummary";
 import ReportGenerators from "@/pdf/ReportGenerators";
+import ContactFormFour from "./ContactFormFour";
+import FinancialChart from "@/pdf/charts/FinancialChart";
 
 const initalState = {
   employeeCount: "",
@@ -18,7 +19,7 @@ const initalState = {
   hostingSites: "",
 };
 
-function DesignOne() {
+function DesignFour() {
   const [error, setError] = useState(initalState);
 
   const { state, dispatch } = useUserInputContext();
@@ -65,8 +66,10 @@ function DesignOne() {
 
   const hasError = Object.values(error).some((msg) => msg !== "");
 
-  const { roiPercentages, benefits, paybackPeriod, avgYearlyBenefits } =
+  const { roiPercentages, paybackPeriod, avgYearlyBenefits } =
     costSavingBenefits(state, selectedCountry);
+
+  const financeSummary = costSavingBenefits(newState, selectedCountry);
 
   return (
     <section className="bg-section-bg-2 bg-cover bg-center py-20">
@@ -75,8 +78,8 @@ function DesignOne() {
           <h2 className="mb-2 text-4xl font-bold">Sangfor ROI Calculator</h2>
         </div>
         <div className="flex justify-between gap-4">
-          <div className="w-3/5">
-            <div className="rounded-md bg-blue-tertiary px-5 py-6">
+          <div className="flex w-3/5 flex-col gap-4">
+            <div className="rounded-md bg-blue-tertiary px-5 py-6 shadow-md">
               <div className="mb-4 text-white">
                 <h2 className="mb-2 text-2xl font-bold">
                   Lorem ipsum dolor sit amet?
@@ -189,7 +192,7 @@ function DesignOne() {
                   errorMessage={error.hostingSites}
                 />
                 <div className="col-span-2">
-                  <Select
+                  {/* <Select
                     label="Replace existing MPLS with SASE Traffic Acceleration"
                     labelClassName="text-white"
                     id="acceleration"
@@ -201,8 +204,8 @@ function DesignOne() {
                   >
                     <option value={1}>Yes</option>
                     <option value={0}>No</option>
-                  </Select>
-                  {/* <div className="flex items-center space-x-4">
+                  </Select> */}
+                  <div className="flex items-center space-x-4">
                     <label className="text-white" htmlFor="acceleration">
                       Replace existing MPLS with SASE Traffic Acceleration
                     </label>
@@ -214,7 +217,9 @@ function DesignOne() {
                         name="acceleration"
                         value="1"
                         checked={state.acceleration === 1}
-                        onChange={changeHandler}
+                        onChange={(e) =>
+                          inputChangeHandler(e, { min: 0, isNumber: true })
+                        }
                         className="mr-2"
                       />
                       <label htmlFor="yes" className="text-white">
@@ -229,63 +234,75 @@ function DesignOne() {
                         name="acceleration"
                         value="0"
                         checked={state.acceleration === 0}
-                        onChange={changeHandler}
+                        onChange={(e) =>
+                          inputChangeHandler(e, { min: 0, isNumber: true })
+                        }
                         className="mr-2"
                       />
                       <label htmlFor="no" className="text-white">
                         No
                       </label>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="mt-6 border-t border-gray-500 pt-6 text-sm font-semibold text-white">
-                <h4 className="mb-3 text-lg font-bold leading-none">
-                  Your Quick Results:
-                </h4>
-                <ul className="flex flex-col gap-1 leading-tight">
-                  <li className="flex items-center gap-4">
-                    <span className="inline-block w-48">ROI</span>
-                    {!hasError && (
-                      <span>{Math.round(roiPercentages.total)}%</span>
-                    )}
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <span className="inline-block w-48">
-                      Payback Period (In Months):
-                    </span>
-                    {!hasError && (
-                      <span>{Math.round(paybackPeriod.value)}</span>
-                    )}
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <span className="inline-block w-48">
-                      Total Benefits (NPV):
-                    </span>
-                    {!hasError && (
-                      <span>{shortenNumber(benefits.npv)} USD</span>
-                    )}
-                  </li>
-                  <li className="flex items-center gap-4">
-                    <span className="inline-block w-48">
-                      Avg Yearly Benefit:
-                    </span>
-                    {!hasError && (
-                      <span>{shortenNumber(avgYearlyBenefits.value)} USD</span>
-                    )}
-                  </li>
-                </ul>
-              </div>
+            <div className="rounded-md bg-blue-tertiary px-5 py-6 shadow-md">
+              <ContactFormFour />
             </div>
           </div>
 
           <div className="w-2/5">
-            <div className="rounded-md bg-white px-5 py-6 shadow-md">
-              <h4 className="mb-4 text-lg font-bold leading-none">
-                Get Your Complete ROI Report
-              </h4>
-              <ContactForm />
+            <div className="h-full rounded-md bg-white px-5 py-6 shadow-md">
+              <div>
+                <div className="border-b border-gray-500 pb-6">
+                  <h4 className="text-xl font-bold leading-none">
+                    Your Quick Results
+                  </h4>
+                </div>
+                <div className="grid grid-cols-3 gap-2.5 py-6">
+                  <div className="flex flex-col items-center rounded-md border border-gray-200 bg-white px-2 py-4 text-center leading-tight shadow-sm">
+                    <h4 className="text-gray-500">ROI</h4>
+                    <h5 className="text-2xl font-bold text-green">
+                      {!hasError && (
+                        <span>{Math.round(roiPercentages.total)}%</span>
+                      )}
+                    </h5>
+                  </div>
+                  <div className="flex flex-col items-center rounded-md border border-gray-200 bg-white px-2 py-4 text-center leading-tight shadow-sm">
+                    <h4 className="text-gray-500">Payback Period</h4>
+                    <h5 className="text-2xl font-bold text-green">
+                      {!hasError && (
+                        <span>{Math.round(paybackPeriod.value)} </span>
+                      )}
+                    </h5>
+                  </div>
+                  <div className="flex flex-col items-center rounded-md border border-gray-200 bg-white px-2 py-4 text-center leading-tight shadow-sm">
+                    <h4 className="text-gray-500">Avg Yearly Benefit</h4>
+                    <h5 className="text-2xl font-bold text-green">
+                      {!hasError && (
+                        <span>{shortenNumber(avgYearlyBenefits.value)}</span>
+                      )}
+                    </h5>
+                  </div>
+                </div>
+
+                <div className="m-6">
+                  <FinancialChart
+                    benefits={[
+                      financeSummary.cost.year1,
+                      financeSummary.cost.year2,
+                      financeSummary.cost.year3,
+                    ]}
+                    costs={[
+                      financeSummary.benefits.year1 - financeSummary.cost.year1,
+                      financeSummary.benefits.year2 - financeSummary.cost.year2,
+                      financeSummary.benefits.year3 - financeSummary.cost.year3,
+                    ]}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -297,4 +314,4 @@ function DesignOne() {
   );
 }
 
-export default DesignOne;
+export default DesignFour;

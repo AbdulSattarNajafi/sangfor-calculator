@@ -1,5 +1,5 @@
 export type UserInputDataType = {
-  userName: string;
+  firstName: string;
   employeeCount: number;
   hybridPercentage: number;
   locations: number;
@@ -10,11 +10,11 @@ export type UserInputDataType = {
 };
 
 export type SelectedCountryType = {
-  name: string;
+  country: string;
   securityEmployeeSalary: number;
   networkEmployeeSalary: number;
-  avgNationalSalary2024: number;
-  saseCostPerUserPerYear: number;
+  avgNationalSalary: number;
+  sASECostPerUserPerYear: number;
 };
 
 export type CostsPercentageType = {

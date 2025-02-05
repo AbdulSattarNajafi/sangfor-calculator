@@ -2,12 +2,18 @@
 
 import ContactForm from "./ContactForm";
 import Badge from "./Badge";
-import { regionData } from "@/utils/constants";
+
 import { formatCurrency } from "@/utils/helpers";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 
 function DesignTwo() {
-  const { state, changeHandler } = useUserInputContext();
+  const { state } = useUserInputContext();
+
+  function changeHandler(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) {
+    console.log(e.target.value);
+  }
 
   return (
     <section className="bg-[#f7f7f7] py-20">
@@ -38,9 +44,9 @@ function DesignTwo() {
                     value={state.countryName}
                     onChange={changeHandler}
                   >
-                    {regionData.map((region) => (
-                      <option key={region.name} value={region.name}>
-                        {region.name}
+                    {state.regionList.map((region) => (
+                      <option key={region.country} value={region.country}>
+                        {region.country}
                       </option>
                     ))}
                   </select>

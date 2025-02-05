@@ -28,7 +28,7 @@ export class TotalCost {
     this.trafficAcceleration = Boolean(userInput.acceleration);
     this.numCountries = userInput.countries;
     this.securityEmployeeSalary = selectedCountry.securityEmployeeSalary;
-    this.saseCostPerUserPerYear = selectedCountry.saseCostPerUserPerYear;
+    this.saseCostPerUserPerYear = selectedCountry.sASECostPerUserPerYear;
     this.saseTimeSpentPerMember = costsPercentages.saseTimeSpentPerMember / 100;
     this.saseTimeSpentMigration = costsPercentages.saseTimeSpentMigration / 100;
     this.ongoingManagementTime = costsPercentages.ongoingManagementTime / 100;

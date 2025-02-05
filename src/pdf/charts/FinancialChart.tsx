@@ -57,11 +57,20 @@ const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
       },
       title: {
         display: true,
-        text: "Financial Analysis (Risk Adjusted)", // Chart title
+        text: "Financial Analysis (Risk Adjusted)",
+        padding: 20,
         font: {
-          size: 24,
+          size: 16,
+          weight: 500,
         },
       },
+      // tooltip: {
+      //   callbacks: {
+      //     title: (index: any) => {
+      //       return "Year " + index[0].label;
+      //     },
+      //   },
+      // },
     },
     scales: {
       x: {
@@ -88,7 +97,7 @@ const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Bar data={data} options={options} />
+      <Bar data={data} options={options} height={200} />
     </div>
   );
 };

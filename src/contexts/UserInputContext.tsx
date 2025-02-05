@@ -1,51 +1,63 @@
 "use client";
 
-import React, { createContext, useContext, useReducer } from "react";
-import { regionData } from "@/utils/constants";
-import { UserInputDataType } from "@/utils/types";
+import { SelectedCountryType, UserInputDataType } from "@/utils/types";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 
-type Action = {
-  type: "UPDATE_FIELD";
-  payload: { name: string; value: number | string };
+type StateType = UserInputDataType & {
+  regionList: SelectedCountryType[];
 };
 
-const initialState = {
-  userName: "",
+// Define action types
+type Action =
+  | { type: "UPDATE_FIELD"; payload: { name: string; value: number | string } }
+  | { type: "UPDATE_REGION_LIST"; payload: { value: SelectedCountryType[] } };
+
+// Initial state
+const initialState: StateType = {
+  firstName: "",
   employeeCount: 5000,
   hybridPercentage: 50,
   locations: 5,
   countries: 2,
   hostingSites: 1,
-  countryName: regionData[0].name,
+  countryName: "",
+  regionList: [],
   acceleration: 1,
 };
 
-const reducer = (
-  state: UserInputDataType,
-  action: Action,
-): UserInputDataType => {
+// Reducer function
+const reducer = (state: StateType, action: Action): StateType => {
   switch (action.type) {
     case "UPDATE_FIELD":
       return {
         ...state,
         [action.payload.name]: action.payload.value,
       };
+    case "UPDATE_REGION_LIST":
+      return {
+        ...state,
+        regionList: action.payload.value,
+      };
     default:
       return state;
   }
 };
 
+// Define the context type
 interface UserInputContextType {
-  state: UserInputDataType;
-  changeHandler: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
+  state: StateType;
+  // changeHandler: (
+  //   event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  // ) => void;
+  dispatch: React.ActionDispatch<[action: Action]>;
 }
 
+// Create context
 const UserInputContext = createContext<UserInputContextType | undefined>(
   undefined,
 );
 
+// Provider component
 export default function UserInputContextProvider({
   children,
 }: {
@@ -53,22 +65,38 @@ export default function UserInputContextProvider({
 }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const changeHandler = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    if (name === "countryName" || name === "userName") {
-      dispatch({ type: "UPDATE_FIELD", payload: { name, value } });
-    } else {
-      dispatch({
-        type: "UPDATE_FIELD",
-        payload: { name, value: Number(value) },
-      });
+  useEffect(() => {
+    async function fetchListsData() {
+      try {
+        const res = await fetch("/api/countryList");
+        if (!res.ok)
+          throw new Error(`Error ${res.status}: Failed to fetch lists data`);
+        const json = await res.json();
+
+        if (json.listsData && json.listsData.length > 0) {
+          dispatch({
+            type: "UPDATE_FIELD",
+            payload: {
+              name: "countryName",
+              value: json.listsData[0]?.country || "",
+            },
+          });
+
+          dispatch({
+            type: "UPDATE_REGION_LIST",
+            payload: { value: json.listsData },
+          });
+        }
+      } catch (err) {
+        throw new Error(`Error ${err}: Failed to fetch lists data`);
+      }
     }
-  };
+
+    fetchListsData();
+  }, []);
 
   return (
-    <UserInputContext.Provider value={{ state, changeHandler }}>
+    <UserInputContext.Provider value={{ state, dispatch }}>
       {children}
     </UserInputContext.Provider>
   );
@@ -79,7 +107,7 @@ export function useUserInputContext() {
 
   if (!context) {
     throw new Error(
-      "UserInputContext must be used within a UserInputContextProvider",
+      "useUserInputContext must be used within a UserInputContextProvider",
     );
   }
 

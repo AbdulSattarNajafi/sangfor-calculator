@@ -1,13 +1,18 @@
 "use client";
 
-import { regionData } from "@/utils/constants";
 import ContactFormThree from "./ContactFormThree";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import Select from "./Select";
 import Input from "./Input";
 
 function DesignThree() {
-  const { state, changeHandler } = useUserInputContext();
+  const { state } = useUserInputContext();
+
+  function changeHandler(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) {
+    console.log(e.target.value);
+  }
 
   return (
     <section className="bg-section-bg bg-cover bg-center py-20">
@@ -55,9 +60,9 @@ function DesignThree() {
               value={state.countryName}
               onChange={changeHandler}
             >
-              {regionData.map((region) => (
-                <option key={region.name} value={region.securityEmployeeSalary}>
-                  {region.name}
+              {state.regionList.map((region) => (
+                <option key={region.country} value={region.country}>
+                  {region.country}
                 </option>
               ))}
             </Select>

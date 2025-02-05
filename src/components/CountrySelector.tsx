@@ -12,14 +12,25 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
+import { cn } from "@/utils/helpers";
 
 type CountrySelectorProps = {
   data: ICountry[];
   selected: ICountry | null;
   onChange: (countryCode: string) => void;
+  name?: string;
+  errorMessage?: string[];
+  labelClassName?: string;
 };
 
-function CountrySelector({ data, selected, onChange }: CountrySelectorProps) {
+function CountrySelector({
+  data,
+  selected,
+  onChange,
+  name,
+  errorMessage,
+  labelClassName,
+}: CountrySelectorProps) {
   const [query, setQuery] = useState("");
 
   const filteredCountries =
@@ -36,19 +47,32 @@ function CountrySelector({ data, selected, onChange }: CountrySelectorProps) {
         onChange={(county: ICountry) => onChange(county.isoCode)}
         onClose={() => setQuery("")}
       >
-        <div className="relative">
-          <ComboboxInput
-            className={clsx(
-              "w-full rounded border-none bg-gray-200 py-1.5 pl-3 pr-8 text-sm/6 text-black",
-              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
-            )}
-            placeholder="Country"
-            displayValue={(country: ICountry) => country?.name}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <ComboboxButton className="group absolute inset-y-0 right-0 z-30 px-2.5">
-            <HiChevronDown className="size-4 fill-black/70 group-data-[hover]:fill-black" />
-          </ComboboxButton>
+        <div className="flex flex-col gap-1">
+          <label
+            htmlFor="select-country"
+            className={cn("text-base", labelClassName)}
+          >
+            Country / Region
+          </label>
+          <div className="relative">
+            <ComboboxInput
+              id="select-country"
+              className={clsx(
+                "w-full rounded border-none bg-gray-200 py-1.5 pl-3 pr-8 text-sm/6 text-black",
+                "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+              )}
+              name={name}
+              placeholder="Country / Region"
+              displayValue={(country: ICountry) => country?.name}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <ComboboxButton className="group absolute inset-y-0 right-0 z-30 px-2.5">
+              <HiChevronDown className="size-4 fill-black/70 group-data-[hover]:fill-black" />
+            </ComboboxButton>
+          </div>
+          <p className="h-4 text-sm leading-tight text-red-500">
+            {errorMessage}
+          </p>
         </div>
 
         <ComboboxOptions

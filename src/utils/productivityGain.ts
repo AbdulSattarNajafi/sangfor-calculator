@@ -17,7 +17,7 @@ export class ProductivityGain {
   ) {
     this.numEmployees = unserInput.employeeCount;
     this.hybridEmployeePercentage = unserInput.hybridPercentage / 100;
-    this.avgNationalSalary = selectedCountry.avgNationalSalary2024;
+    this.avgNationalSalary = selectedCountry.avgNationalSalary;
   }
 
   // Calculate total impacted user productivity

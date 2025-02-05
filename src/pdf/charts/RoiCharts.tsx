@@ -1,4 +1,4 @@
-import { shortenNumber } from "@/utils/helpers";
+import { cn, shortenNumber } from "@/utils/helpers";
 import DonutChart from "./DonutChart";
 
 type RoiChartsProps = {
@@ -6,11 +6,18 @@ type RoiChartsProps = {
   npv: number;
   breachRisk: number;
   paybackPeriod: number;
+  className?: string;
 };
 
-function RoiCharts({ roi, npv, breachRisk, paybackPeriod }: RoiChartsProps) {
+function RoiCharts({
+  roi,
+  npv,
+  breachRisk,
+  paybackPeriod,
+  className,
+}: RoiChartsProps) {
   return (
-    <div className="flex items-start justify-center">
+    <div className={cn("flex items-start justify-center", className)}>
       <DonutChart
         background="#58c13d"
         color="#b9e5ae"
