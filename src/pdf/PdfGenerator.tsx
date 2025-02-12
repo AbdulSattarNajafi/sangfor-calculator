@@ -230,12 +230,12 @@ function PdfGenerator() {
         <div ref={financialChartRef}>
           <FinancialChart
             titleFontSize={24}
-            benefits={[
+            costs={[
               financeSummary.cost.year1,
               financeSummary.cost.year2,
               financeSummary.cost.year3,
             ]}
-            costs={[
+            benefits={[
               financeSummary.benefits.year1 - financeSummary.cost.year1,
               financeSummary.benefits.year2 - financeSummary.cost.year2,
               financeSummary.benefits.year3 - financeSummary.cost.year3,
