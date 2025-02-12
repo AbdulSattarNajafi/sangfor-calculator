@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Country, ICountry } from "country-state-city";
 
 import Input from "./Input";
@@ -23,6 +23,38 @@ function ContactForm() {
     sendEmail.bind(null, newState),
     undefined,
   );
+
+  const [userData, setUserData] = useState<{
+    name: string;
+    age: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Security: Check if the message comes from the expected origin
+      if (event.origin !== "https://calculator-test-sandy.vercel.app/") return;
+
+      // Extract data from message
+      const { key, value } = event.data;
+      if (key === "_scs" && value) {
+        try {
+          const parsedData = JSON.parse(value);
+          setUserData(parsedData);
+          localStorage.setItem("_scs", value); // Store it in Next.js localStorage if needed
+        } catch (error) {
+          console.error("Failed to parse received data:", error);
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  console.log(userData, "------------------receivedData");
 
   const [form, fields] = useForm({
     lastResult,

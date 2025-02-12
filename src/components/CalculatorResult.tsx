@@ -69,8 +69,8 @@ function CalculatorResult() {
       <FinancialChart
         height={220}
         titleFontSize={16}
-        benefits={[cost.year1, cost.year2, cost.year3]}
-        costs={[
+        costs={[cost.year1, cost.year2, cost.year3]}
+        benefits={[
           benefits.year1 - cost.year1,
           benefits.year2 - cost.year2,
           benefits.year3 - cost.year3,
