@@ -1,7 +1,13 @@
 "use client";
 
 import { SelectedCountryType, UserInputDataType } from "@/utils/types";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 type StateType = UserInputDataType & {
   regionList: SelectedCountryType[];
@@ -43,13 +49,34 @@ const reducer = (state: StateType, action: Action): StateType => {
   }
 };
 
+const errorState = {
+  employeeCount: "",
+  locations: "",
+  hostingSites: "",
+};
+
+type ErrorType = {
+  employeeCount: string;
+  locations: string;
+  hostingSites: string;
+};
+
+type InputChangeHandlerOptionType = {
+  min?: number;
+  max?: number;
+  isNumber?: boolean;
+  message?: string;
+};
+
 // Define the context type
 interface UserInputContextType {
   state: StateType;
-  // changeHandler: (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  // ) => void;
+  inputChangeHandler: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    options?: InputChangeHandlerOptionType,
+  ) => void;
   dispatch: React.ActionDispatch<[action: Action]>;
+  error: ErrorType;
 }
 
 // Create context
@@ -64,6 +91,7 @@ export default function UserInputContextProvider({
   children: React.ReactNode;
 }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [error, setError] = useState(errorState);
 
   useEffect(() => {
     async function fetchListsData() {
@@ -95,8 +123,38 @@ export default function UserInputContextProvider({
     fetchListsData();
   }, []);
 
+  function inputChangeHandler(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    options?: {
+      min?: number;
+      max?: number;
+      isNumber?: boolean;
+      message?: string;
+    },
+  ) {
+    const { name, value } = e.target;
+    let parsedValue: string | number = value;
+
+    if (options?.isNumber) {
+      parsedValue = Number(value);
+      if (
+        isNaN(parsedValue) ||
+        (options.min !== undefined && parsedValue < options.min) ||
+        (options.max !== undefined && parsedValue > options.max)
+      ) {
+        setError((prev) => ({ ...prev, [name]: options.message }));
+        return;
+      }
+    }
+
+    setError((prev) => ({ ...prev, [name]: "" }));
+    dispatch({ type: "UPDATE_FIELD", payload: { name, value: parsedValue } });
+  }
+
   return (
-    <UserInputContext.Provider value={{ state, dispatch }}>
+    <UserInputContext.Provider
+      value={{ state, dispatch, error, inputChangeHandler }}
+    >
       {children}
     </UserInputContext.Provider>
   );

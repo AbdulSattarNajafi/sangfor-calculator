@@ -6,7 +6,6 @@ body {
   color: #171717;
   background: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
-  /* color: #94f5f0 */
 }
 
 @layer base {
@@ -51,18 +50,6 @@ body {
   }
 }
 
-.range-input {
-  /* position: relative;
-  width: 100%;
-  height: 8px;
-  -webkit-appearance: none;
-  outline: none;
-  background: transparent;
-  border-radius: 25px;
-  transform: translateY(-4px);
-  z-index: 8; */
-}
-
 .range-input::-webkit-slider-progress {
   -webkit-appearance: none;
   appearance: none;
@@ -77,14 +64,16 @@ body {
   background: #fff;
   height: 20px;
   width: 20px;
-  border: 6px solid #04be02;
+  border: 6px solid #0d6efd;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .range-input::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 8px #4a02;
+  box-shadow: 0 0 0 8px #0d6dfd58;
 }
 
 .tooltip-wrapper {
@@ -92,10 +81,6 @@ body {
   left: 0;
   top: calc(100% + 4px);
   width: calc(100% - 20px);
-}
-.range-input:hover ~ .tooltip-wrapper .range-input-tooltip {
-  visibility: visible;
-  opacity: 1;
 }
 
 .range-input-tooltip {
@@ -108,13 +93,11 @@ body {
   text-align: center;
   border-radius: 4px;
   white-space: nowrap;
-  color: #04be02;
+  color: #0d6efd;
   background-color: #fff;
   box-shadow: 0 0.25em 0.75em #0006;
   transition: 0.25s;
   transform: translateX(-50%);
-  visibility: hidden;
-  opacity: 0;
 }
 .range-input-tooltip::after {
   content: "";
@@ -125,4 +108,15 @@ body {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent #fff transparent;
+}
+
+.info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 168px;
+  margin-left: -5px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
 }

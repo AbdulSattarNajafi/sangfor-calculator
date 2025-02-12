@@ -13,8 +13,7 @@ function CheckboxInput({ label, ...props }: CheckboxInputProps) {
       <div className="relative flex cursor-pointer items-center">
         <input
           type="checkbox"
-          // checked
-          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-slate-300 shadow transition-all checked:border-green checked:bg-green hover:shadow-md"
+          className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-white shadow transition-all checked:border-blue checked:bg-blue hover:shadow-md"
           {...props}
         />
         <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">

@@ -1,4 +1,4 @@
-import { cn, shortenNumber } from "@/utils/helpers";
+import { cn, formatCompactCurrency } from "@/utils/helpers";
 import DonutChart from "./DonutChart";
 
 type RoiChartsProps = {
@@ -48,7 +48,7 @@ function RoiCharts({
         totalValue={100000}
       >
         <h5 className="-mt-8 text-4xl font-semibold text-[#00b0f0]">
-          {shortenNumber(breachRisk)}
+          {formatCompactCurrency(breachRisk)}
         </h5>
       </DonutChart>
       <DonutChart

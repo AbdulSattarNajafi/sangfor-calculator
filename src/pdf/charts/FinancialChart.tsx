@@ -24,9 +24,16 @@ ChartJS.register(
 type FinancialChartProps = {
   benefits: number[];
   costs: number[];
+  titleFontSize: number;
+  height?: number;
 };
 
-const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
+const FinancialChart = ({
+  benefits,
+  costs,
+  titleFontSize,
+  height,
+}: FinancialChartProps) => {
   // Define data for the chart
   const data = {
     labels: ["1", "2", "3"], // X-axis labels (e.g., quarters)
@@ -60,17 +67,18 @@ const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
         text: "Financial Analysis (Risk Adjusted)",
         padding: 20,
         font: {
-          size: 16,
+          size: titleFontSize,
           weight: 500,
         },
       },
-      // tooltip: {
-      //   callbacks: {
-      //     title: (index: any) => {
-      //       return "Year " + index[0].label;
-      //     },
-      //   },
-      // },
+      tooltip: {
+        callbacks: {
+          title: (index: { label: string }[]) => {
+            console.log(index, " chart index");
+            return "Year " + index[0].label;
+          },
+        },
+      },
     },
     scales: {
       x: {
@@ -97,7 +105,7 @@ const FinancialChart = ({ benefits, costs }: FinancialChartProps) => {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <Bar data={data} options={options} height={200} />
+      <Bar data={data} options={options} height={height ? height : ""} />
     </div>
   );
 };

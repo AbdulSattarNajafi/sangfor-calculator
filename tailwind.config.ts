@@ -18,8 +18,8 @@ export default {
         "color-gray": "#ededed",
       },
       backgroundImage: {
-        "section-bg": "url('/bg-1.webp')",
-        "section-bg-2": "url('/bg-2.webp')",
+        "section-bg": "url('/section-bg.webp')",
+        "not-found": "url('/not-found-bg.webp')",
       },
       boxShadow: {
         md: "0 0 12px 0px rgba(0, 0, 0, 0.2)",

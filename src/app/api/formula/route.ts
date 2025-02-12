@@ -4,14 +4,30 @@ import fs from "fs";
 import path from "path";
 import { toCamelCase } from "@/utils/helpers";
 
+interface DataRow {
+  [key: string]: [
+    { year1: string | number },
+    { year2: string | number },
+    { year3: string | number },
+  ];
+}
+
+interface Sections {
+  [sectionName: string]: DataRow;
+}
+
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), "public", "formula.xlsx");
-    const fileBuffer = fs.readFileSync(filePath);
-    const workbook = XLSX.read(fileBuffer, { type: "buffer" });
+    // Path to the Excel file inside the public folder
+    const filePath: string = path.join(process.cwd(), "public", "formula.xlsx");
 
-    const sheetName = "formula";
-    const worksheet = workbook.Sheets[sheetName];
+    // Read the file
+    const fileBuffer: Buffer = fs.readFileSync(filePath);
+    const workbook: XLSX.WorkBook = XLSX.read(fileBuffer, { type: "buffer" });
+
+    // Select the sheet named "formula"
+    const sheetName: string = "formula";
+    const worksheet: XLSX.WorkSheet | undefined = workbook.Sheets[sheetName];
 
     if (!worksheet) {
       return NextResponse.json(
@@ -20,36 +36,37 @@ export async function GET() {
       );
     }
 
-    // Convert sheet data to JSON
-    const rawData =
-      XLSX.utils.sheet_to_json<Record<string, string | number>>(worksheet);
+    // Convert sheet data to JSON as an array of arrays
+    const rawData: (string | number)[][] = XLSX.utils.sheet_to_json<
+      (string | number)[]
+    >(worksheet, { header: 1 });
 
-    // Transform the data into a single object
-    const jsonData: Record<
-      string,
-      { year1: string | number; year2: string | number; year3: string | number }
-    > = {};
+    let currentSection: string = ""; // Track which section we're in
+    const sections: Sections = {};
 
-    rawData.forEach((row) => {
-      const originalKey = row["Security & Networking Org Efficiency Gain"];
-      if (!originalKey) return;
+    rawData.forEach((row: (string | number)[]) => {
+      if (row.length === 0 || typeof row[0] !== "string" || !row[0].trim())
+        return; // Skip empty rows
 
-      let camelCaseKey = "";
-      if (typeof originalKey === "string") {
-        camelCaseKey = toCamelCase(originalKey);
+      if (row.length > 1 && row[1] === "Year 1") {
+        // New section detected
+        currentSection = toCamelCase(row[0]); // Convert section title to camelCase
+        sections[currentSection] = {};
+      } else if (currentSection && row.length >= 4) {
+        // Data row
+        const key: string = toCamelCase(String(row[0])); // Convert key to camelCase
+        sections[currentSection][key] = [
+          { year1: row[1] as string | number },
+          { year2: row[2] as string | number },
+          { year3: row[3] as string | number },
+        ];
       }
-
-      jsonData[camelCaseKey] = {
-        year1: row["Year 1"],
-        year2: row["Year 2"],
-        year3: row["Year 3"],
-      };
     });
 
-    return NextResponse.json(jsonData, { status: 200 });
+    return NextResponse.json(sections, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to process file", details: error },
+      { error: "Failed to process file", details: (error as Error).message },
       { status: 500 },
     );
   }

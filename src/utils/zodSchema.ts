@@ -2,13 +2,13 @@ import { z } from "zod";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const emailSchema = z
-  .string()
+  .string({ message: "Email is required" })
   .email("Invalid email format")
   .refine((email) => !email.endsWith("@example.com"), {
     message: "Invalid email domain",
   });
 
-const phoneSchema = z.string().refine(
+const phoneSchema = z.string({ message: "Phone number is required" }).refine(
   (phone) => {
     const parsedPhone = parsePhoneNumberFromString(phone);
     return parsedPhone && parsedPhone.isValid();
@@ -26,12 +26,12 @@ export const contactSchema = z.object({
   email: emailSchema,
   phone: phoneSchema,
   company: z
-    .string()
+    .string({ message: "Company name is required" })
     .min(2, { message: "Company name must be at least 2 characters long." }),
   jobTitle: z
-    .string()
+    .string({ message: "Job title is required" })
     .min(2, { message: "Job title must be at least 2 characters long." }),
   country: z
-    .string()
+    .string({ message: "Country is required" })
     .min(2, { message: "Country name must be at least 2 characters long." }),
 });

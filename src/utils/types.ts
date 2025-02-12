@@ -26,3 +26,57 @@ export type CostsPercentageType = {
 export type SecurityPercentageType = {
   efficiencyGains: number;
 };
+
+export type YearlyData = Record<"year1" | "year2" | "year3", number>;
+
+export type SecurityGainType = {
+  securityTeamPerEmployee: YearlyData[];
+  avgTimeSpendOnAdministration: YearlyData[];
+  efficiencyGainsDueToAccessSecure: YearlyData[];
+  timeTrackingAndRespondingToSecurity: YearlyData[];
+  sizeOfTheNetworkingOrg: YearlyData[];
+  timeSpendOnAdministration: YearlyData[];
+  productivityRecapture: YearlyData[];
+  riskAdjustment: YearlyData[];
+};
+
+export type ProductivityGainType = {
+  endUsersProductivityImpacted: YearlyData[];
+  productivityImprovement: YearlyData[];
+  productivityRecapture: YearlyData[];
+  riskAdjustment: YearlyData[];
+};
+
+export type BreachRiskType = {
+  averageNumberOfSecurity: YearlyData[];
+  averageCostOfDataBreach: YearlyData[];
+  reducedLikelihoodOfABreach: YearlyData[];
+  riskAdjustment: YearlyData[];
+};
+
+export type NerworkCostType = {
+  numberOfEmployeeCost: YearlyData[];
+  numberOfRemoteSites: YearlyData[];
+  dCs: YearlyData[];
+  percentageOfSavingsFromVendor: YearlyData[];
+  replacingExistingMPLSConnectivityCost: YearlyData[];
+  riskAdjustment: YearlyData[];
+};
+
+export type TotalCostType = {
+  numberOfFTEsRequired: YearlyData[];
+  timeSpentOnSangforSASEPerTeamMember: YearlyData[];
+  timeSpentOnMigrationOfLegacyInfraToSASE: YearlyData[];
+  percentageOfTimeSpentForOngoingManagement: YearlyData[];
+  costOfSASEConnector: YearlyData[];
+  costOfCrossBorderTrafficAcceleration: YearlyData[];
+  riskAdjustment: YearlyData[];
+};
+
+export type FormulaType = {
+  securityAndNetworkingOrgEfficiencyGain: SecurityGainType;
+  endUserProductivityGains: ProductivityGainType;
+  securityAndDataBreachRiskReduction: BreachRiskType;
+  securityAndNetworkingInfraCostReduction: NerworkCostType;
+  analysisOfCosts: TotalCostType;
+};

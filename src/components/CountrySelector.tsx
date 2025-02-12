@@ -12,7 +12,6 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
-import { cn } from "@/utils/helpers";
 
 type CountrySelectorProps = {
   data: ICountry[];
@@ -20,7 +19,6 @@ type CountrySelectorProps = {
   onChange: (countryCode: string) => void;
   name?: string;
   errorMessage?: string[];
-  labelClassName?: string;
 };
 
 function CountrySelector({
@@ -29,7 +27,6 @@ function CountrySelector({
   onChange,
   name,
   errorMessage,
-  labelClassName,
 }: CountrySelectorProps) {
   const [query, setQuery] = useState("");
 
@@ -44,14 +41,13 @@ function CountrySelector({
     <div className="w-full">
       <Combobox
         value={selected}
-        onChange={(county: ICountry) => onChange(county.isoCode)}
+        onChange={(county: ICountry) => {
+          if (county) onChange(county.isoCode);
+        }}
         onClose={() => setQuery("")}
       >
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="select-country"
-            className={cn("text-base", labelClassName)}
-          >
+          <label htmlFor="select-country" className="text-white">
             Country / Region
           </label>
           <div className="relative">
@@ -71,7 +67,7 @@ function CountrySelector({
             </ComboboxButton>
           </div>
           <p className="h-4 text-sm leading-tight text-red-500">
-            {errorMessage}
+            {!selected && errorMessage}
           </p>
         </div>
 
@@ -80,7 +76,7 @@ function CountrySelector({
           transition
           className={clsx(
             "w-[var(--input-width)] rounded border border-gray-200 bg-gray-200 p-1 [--anchor-gap:var(--spacing-1)] empty:invisible",
-            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
+            "z-10 transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
           )}
         >
           {filteredCountries.map((country) => (

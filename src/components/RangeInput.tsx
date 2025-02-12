@@ -4,38 +4,53 @@ import { ComponentProps } from "react";
 
 type RangeInputProps = ComponentProps<"input"> & {
   label: string;
+  formatter?: string;
 };
 
-function RangeInput({ label, ...props }: RangeInputProps) {
+function RangeInput({ label, formatter, ...props }: RangeInputProps) {
   const value = Number(props.value);
   const maxValue = Number(props.max);
 
   const ratio = value / maxValue;
+  const widthPercentage = value / (maxValue / 100);
   const marginLeft = value / (maxValue / 100) - ratio;
 
   return (
-    <div className="relative flex flex-col">
+    <div className="flex flex-col">
       <label htmlFor={props.id} className="text-white">
         {label}
       </label>
       <div className="relative -mt-1">
-        <input
-          className="range-input h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
-          id="hybridPercentage"
-          {...props}
-        />
+        <div className="relative">
+          <input
+            className="range-input h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
+            id="hybridPercentage"
+            {...props}
+          />
+          <div
+            className="absolute bottom-[7px] left-px z-0 h-[7px] w-10 rounded-full bg-blue"
+            style={{ width: `${widthPercentage}%` }}
+          ></div>
+        </div>
         <div className="tooltip-wrapper">
           <span
             className="range-input-tooltip text-xs"
             style={{ left: `${marginLeft}%` }}
           >
             {value}
+            {formatter}
           </span>
         </div>
       </div>
       <div className="flex justify-between px-1 text-xs text-white">
-        <p>{props.min}</p>
-        <p>{props.max}</p>
+        <p>
+          {props.min}
+          {formatter}
+        </p>
+        <p>
+          {props.max}
+          {formatter}
+        </p>
       </div>
     </div>
   );
