@@ -31,16 +31,19 @@ function ContactForm() {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // Security: Check if the message comes from the expected origin
-      if (event.origin !== "https://calculator-test-sandy.vercel.app/") return;
+      // Security: Ensure the message comes from the first app
+      if (event.origin !== "https://calculator-test-sandy.vercel.app") {
+        console.warn("Blocked message from unknown origin:", event.origin);
+        return;
+      }
 
-      // Extract data from message
+      // Extract and parse data
       const { key, value } = event.data;
       if (key === "_scs" && value) {
         try {
           const parsedData = JSON.parse(value);
           setUserData(parsedData);
-          localStorage.setItem("_scs", value); // Store it in Next.js localStorage if needed
+          localStorage.setItem("_scs", value); // Store in localStorage (if needed)
         } catch (error) {
           console.error("Failed to parse received data:", error);
         }
