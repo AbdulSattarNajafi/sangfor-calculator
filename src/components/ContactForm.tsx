@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { Country, ICountry } from "country-state-city";
+import { useForm } from "@conform-to/react";
 
 import Input from "./Input";
 import CountrySelector from "./CountrySelector";
@@ -9,39 +10,30 @@ import SubmitButton from "./SubmitButton";
 import { sendEmail } from "@/utils/actions";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import { omitKeys, storeUserInputData } from "@/utils/helpers";
-import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { ScsDataType } from "@/utils/types";
 
 function ContactForm() {
+  const [scs, setScs] = useState<ScsDataType | null>(null);
   const countiesData = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const { state, dispatch } = useUserInputContext();
-  const newState = omitKeys(state, ["regionList"]);
-  const [lastResult, action] = useActionState(
-    sendEmail.bind(null, newState),
-    undefined,
-  );
-
-  const [scs, setScs] = useState<ScsDataType | null>(null);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // https://calculator-test-sandy.vercel.app
       if (event.origin !== "https://calculator-test-sandy.vercel.app") {
         console.warn("Blocked message from unknown origin:", event.origin);
         return;
       }
 
-      // Extract and parse data
       const { key, value } = event.data;
       if (key === "_scs" && value) {
         try {
           const scsData = JSON.parse(value);
           setScs(scsData);
-          // localStorage.setItem("_scs", value); // Store in localStorage (if needed)
+          // localStorage.setItem("_scs", value);
         } catch (error) {
           console.error("Failed to parse received data:", error);
         }
@@ -55,7 +47,10 @@ function ContactForm() {
     };
   }, []);
 
-  console.log(scs, "-----------------scs");
+  const [lastResult, action] = useActionState(
+    sendEmail.bind(null, scs),
+    undefined,
+  );
 
   const [form, fields] = useForm({
     lastResult,
