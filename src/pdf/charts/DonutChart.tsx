@@ -34,32 +34,30 @@ function DonutChart({
   };
 
   const options = {
-    // responsive: true,
+    responsive: true,
     plugins: {
       legend: {
-        display: false, // Hide default legend
+        display: false,
       },
       tooltip: {
-        enabled: true, // Show tooltips
+        enabled: false,
       },
     },
-    cutout: "78%", // Size of the center hole
+    cutout: "78%",
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center">
-        <div className="relative h-[160px] w-[224px] px-8">
-          <Doughnut data={data} options={options} width={140} height={140} />
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            {children}
-          </div>
+    <div className="flex w-[220px] flex-col items-center justify-center">
+      <div className="relative h-[160px]">
+        <div className="h-[160px] w-[160px]">
+          <Doughnut data={data} options={options} />
         </div>
-        <p className="w-full max-w-[224px] text-center text-sm font-semibold">
-          {label}
-        </p>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {children}
+        </div>
       </div>
+      <p className="w-full text-center text-sm font-semibold">{label}</p>
     </div>
   );
 }

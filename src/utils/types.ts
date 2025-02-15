@@ -1,5 +1,11 @@
 export type UserInputDataType = {
   firstName: string;
+  email: string;
+  phone: string;
+  company: string;
+  jobTitle: string;
+  date: Date | string;
+  country: string;
   employeeCount: number;
   hybridPercentage: number;
   locations: number;

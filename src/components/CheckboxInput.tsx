@@ -6,11 +6,11 @@ type CheckboxInputProps = ComponentProps<"input"> & {
 
 function CheckboxInput({ label, ...props }: CheckboxInputProps) {
   return (
-    <div className="flex items-center gap-1.5">
+    <>
       <label htmlFor={props.id} className="text-sm text-white">
         {label}
       </label>
-      <div className="relative flex cursor-pointer items-center">
+      <span className="relative ms-2 inline-flex translate-y-1 cursor-pointer items-center">
         <input
           type="checkbox"
           className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-white shadow transition-all checked:border-blue checked:bg-blue hover:shadow-md"
@@ -32,8 +32,8 @@ function CheckboxInput({ label, ...props }: CheckboxInputProps) {
             ></path>
           </svg>
         </span>
-      </div>
-    </div>
+      </span>
+    </>
   );
 }
 

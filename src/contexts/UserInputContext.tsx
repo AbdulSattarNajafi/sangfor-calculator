@@ -13,14 +13,21 @@ type StateType = UserInputDataType & {
   regionList: SelectedCountryType[];
 };
 
-// Define action types
-type Action =
-  | { type: "UPDATE_FIELD"; payload: { name: string; value: number | string } }
+type ActionType =
+  | {
+      type: "UPDATE_FIELD";
+      payload: { name: string; value: number | string | Date };
+    }
   | { type: "UPDATE_REGION_LIST"; payload: { value: SelectedCountryType[] } };
 
-// Initial state
 const initialState: StateType = {
   firstName: "",
+  email: "",
+  phone: "",
+  company: "",
+  jobTitle: "",
+  date: "",
+  country: "",
   employeeCount: 5000,
   hybridPercentage: 50,
   locations: 5,
@@ -31,8 +38,7 @@ const initialState: StateType = {
   acceleration: 1,
 };
 
-// Reducer function
-const reducer = (state: StateType, action: Action): StateType => {
+const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case "UPDATE_FIELD":
       return {
@@ -68,23 +74,20 @@ type InputChangeHandlerOptionType = {
   message?: string;
 };
 
-// Define the context type
 interface UserInputContextType {
   state: StateType;
   inputChangeHandler: (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     options?: InputChangeHandlerOptionType,
   ) => void;
-  dispatch: React.ActionDispatch<[action: Action]>;
+  dispatch: React.ActionDispatch<[action: ActionType]>;
   error: ErrorType;
 }
 
-// Create context
 const UserInputContext = createContext<UserInputContextType | undefined>(
   undefined,
 );
 
-// Provider component
 export default function UserInputContextProvider({
   children,
 }: {

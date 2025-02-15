@@ -66,16 +66,18 @@ function CalculatorResult() {
         </BenefitsCard>
       </div>
 
-      <FinancialChart
-        height={220}
-        titleFontSize={16}
-        costs={[cost.year1, cost.year2, cost.year3]}
-        benefits={[
-          benefits.year1 - cost.year1,
-          benefits.year2 - cost.year2,
-          benefits.year3 - cost.year3,
-        ]}
-      />
+      <div className="mx-auto w-full max-w-6xl">
+        <FinancialChart
+          height={220}
+          titleFontSize={16}
+          costs={[cost.year1, cost.year2, cost.year3]}
+          benefits={[
+            benefits.year1 - cost.year1,
+            benefits.year2 - cost.year2,
+            benefits.year3 - cost.year3,
+          ]}
+        />
+      </div>
     </div>
   );
 }

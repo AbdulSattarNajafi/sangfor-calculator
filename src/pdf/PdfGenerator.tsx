@@ -1,25 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
+import { redirect } from "next/navigation";
 import { pdf } from "@react-pdf/renderer";
-import RoiCharts from "./charts/RoiCharts";
+
 import FinancialChart from "./charts/FinancialChart";
 import {
   captureChartAsImage,
   formatCompactCurrency,
   getUserInputData,
 } from "@/utils/helpers";
-
-import FincanceDonutCharts from "./charts/FincanceDonutCharts";
-import RiskCharts from "./charts/RiskCharts";
-import SavingCharts from "./charts/SavingCharts";
-import TotalSavingCharts from "./charts/TotalSavingCharts";
 import { FormulaType, UserInputDataType } from "@/utils/types";
 import { useUserInputContext } from "@/contexts/UserInputContext";
-import PDFDocument from "./components/PDFDocument";
 import { caclulationResult } from "./calculation/calculationResult";
-import { redirect } from "next/navigation";
+import DonutChart from "./charts/DonutChart";
+import PDFPages from "./components/PDFPages";
 
 function PdfGenerator() {
   const [formula, setFormula] = useState<FormulaType | null>(null);
@@ -51,19 +46,38 @@ function PdfGenerator() {
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
+
   const roiChartRef = useRef<HTMLDivElement>(null);
+  const npvChartRef = useRef<HTMLDivElement>(null);
+  const breachRiskChartRef = useRef<HTMLDivElement>(null);
+  const paybackChartRef = useRef<HTMLDivElement>(null);
+
   const financialChartRef = useRef<HTMLDivElement>(null);
-  const financeDonutChartsRef = useRef<HTMLDivElement>(null);
-  const riskChartsRef = useRef<HTMLDivElement>(null);
-  const savingChartsRef = useRef<HTMLDivElement>(null);
-  const totalSavingChartsRef = useRef<HTMLDivElement>(null);
+
+  const fteChartRef = useRef<HTMLDivElement>(null);
+  const businessChartRef = useRef<HTMLDivElement>(null);
+  const productivityChartRef = useRef<HTMLDivElement>(null);
+
+  const reducedChartRef = useRef<HTMLDivElement>(null);
+  const securityChartRef = useRef<HTMLDivElement>(null);
+  const riskChartRef = useRef<HTMLDivElement>(null);
+
+  const secOpsChartRef = useRef<HTMLDivElement>(null);
+  const strategicChartRef = useRef<HTMLDivElement>(null);
+  const savingChartRef = useRef<HTMLDivElement>(null);
+
+  const consolidationChartRef = useRef<HTMLDivElement>(null);
+  const infrastructureChartRef = useRef<HTMLDivElement>(null);
+  const mplsChartRef = useRef<HTMLDivElement>(null);
 
   const { state } = useUserInputContext();
 
   const selectedCountry = state.regionList.find(
     (region) => region.country === state.countryName,
   );
-  if (!selectedCountry || !formula || !data) return null;
+  if (!selectedCountry || !formula || !data) {
+    return null;
+  }
 
   const financeSummary = caclulationResult(formula, data, selectedCountry);
 
@@ -97,7 +111,7 @@ function PdfGenerator() {
 
   const inputTableResult = [
     {
-      label: "ROI",
+      label: "3-Year ROI",
       value: Math.round(financeSummary.roiPercentages.total) + "%",
     },
     {
@@ -161,33 +175,59 @@ function PdfGenerator() {
     setIsLoading(true);
 
     const roiChart = await captureChartAsImage(roiChartRef);
+    const npvChart = await captureChartAsImage(npvChartRef);
+    const breachRiskChart = await captureChartAsImage(breachRiskChartRef);
+    const paybackChart = await captureChartAsImage(paybackChartRef);
+
     const financialChart = await captureChartAsImage(financialChartRef);
-    const financeDonutCharts = await captureChartAsImage(financeDonutChartsRef);
-    const riskCharts = await captureChartAsImage(riskChartsRef);
-    const savingCharts = await captureChartAsImage(savingChartsRef);
-    const totalSavingCharts = await captureChartAsImage(totalSavingChartsRef);
+
+    const fteChart = await captureChartAsImage(fteChartRef);
+    const businessChart = await captureChartAsImage(businessChartRef);
+    const productivityChart = await captureChartAsImage(productivityChartRef);
+
+    const reducedChart = await captureChartAsImage(reducedChartRef);
+    const securityChart = await captureChartAsImage(securityChartRef);
+    const riskChart = await captureChartAsImage(riskChartRef);
+
+    const secOpsChart = await captureChartAsImage(secOpsChartRef);
+    const strategicChart = await captureChartAsImage(strategicChartRef);
+    const savingChart = await captureChartAsImage(savingChartRef);
+
+    const consolidationChart = await captureChartAsImage(consolidationChartRef);
+    const infrastructureChart = await captureChartAsImage(
+      infrastructureChartRef,
+    );
+    const mplsChart = await captureChartAsImage(mplsChartRef);
 
     const chartImages = {
       roiChart,
+      npvChart,
+      breachRiskChart,
+      paybackChart,
       financialChart,
-      financeDonutCharts,
-      riskCharts,
-      savingCharts,
-      totalSavingCharts,
+      fteChart,
+      businessChart,
+      productivityChart,
+      reducedChart,
+      securityChart,
+      riskChart,
+      secOpsChart,
+      strategicChart,
+      savingChart,
+      consolidationChart,
+      infrastructureChart,
+      mplsChart,
     };
 
-    // Generate the PDF as a blob
     const pdfBlob = await pdf(
-      <PDFDocument
+      <PDFPages
         images={chartImages}
-        firstName={data.firstName}
-        userInputData={userInputData}
+        userInput={data}
+        userInputTableData={userInputData}
         inputTableResult={inputTableResult}
         financeTableData={financeTableData}
       />,
     ).toBlob();
-
-    // await new Promise((res) => setTimeout(res, 3000));
 
     setIsLoading(false);
 
@@ -197,50 +237,250 @@ function PdfGenerator() {
 
   return (
     <>
-      <div className="absolute left-1/2 top-[180px] z-10 flex -translate-x-1/2 justify-center">
+      <div className="absolute left-1/2 top-[220px] z-10 flex -translate-x-1/2 justify-center xs:top-[200px] sm:top-[180px]">
         <button
           onClick={generatePDF}
           disabled={isLoading}
           className="rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
         >
-          {isLoading ? "loading..." : "View My Report"}
+          {isLoading ? "Generating..." : "View My Report"}
         </button>
       </div>
       <div className="mb-6 flex w-full flex-col gap-4 bg-white p-6">
-        <div ref={roiChartRef}>
-          <RoiCharts
-            roi={Math.round(financeSummary.roiPercentages.total)}
-            npv={financeSummary.benefits.npv / 1000000}
-            breachRisk={financeSummary.breachRisk.total}
-            paybackPeriod={Math.round(financeSummary.paybackPeriod.value)}
-          />
+        {/* --------- Page 2 Charts ---------- */}
+        <div className="flex flex-col items-center gap-4">
+          <div ref={roiChartRef}>
+            <DonutChart
+              background="#58c13d"
+              color="#b9e5ae"
+              label="3 Year ROI"
+              value={financeSummary.roiPercentages.total}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">
+                {financeSummary.roiPercentages.total}%
+              </h5>
+            </DonutChart>
+          </div>
+          <div ref={npvChartRef}>
+            <DonutChart
+              background="#0070c0"
+              color="#c7e0f1"
+              label="Net Present Value (NPV)"
+              value={financeSummary.benefits.npv}
+              totalValue={financeSummary.benefits.npv * 2}
+            >
+              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#0070c0]">
+                <span className="word break-words">
+                  {formatCompactCurrency(financeSummary.benefits.npv)}
+                </span>
+              </h5>
+            </DonutChart>
+          </div>
+          <div ref={breachRiskChartRef}>
+            <DonutChart
+              background="#00b0f0"
+              color="#c5edfc"
+              label="Security Breach Risk Reduction"
+              value={financeSummary.breachRisk.total}
+              totalValue={100000}
+            >
+              <h5 className="-mt-8 text-4xl font-semibold text-[#00b0f0]">
+                {formatCompactCurrency(financeSummary.breachRisk.total)}
+              </h5>
+            </DonutChart>
+          </div>
+          <div ref={paybackChartRef}>
+            <DonutChart
+              background="#d26e2a"
+              color="#f1a78a"
+              label="Payback Period"
+              value={financeSummary.paybackPeriod.value}
+              totalValue={36}
+            >
+              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#d26e2a]">
+                &lt; {financeSummary.paybackPeriod.value} <br /> months
+              </h5>
+            </DonutChart>
+          </div>
         </div>
-        <div ref={financeDonutChartsRef}>
-          <FincanceDonutCharts />
-        </div>
-        <div ref={riskChartsRef}>
-          <RiskCharts />
-        </div>
-        <div ref={savingChartsRef}>
-          <SavingCharts />
-        </div>
-        <div ref={totalSavingChartsRef}>
-          <TotalSavingCharts />
-        </div>
+
+        {/* --------- Financial Chart ---------- */}
         <div ref={financialChartRef}>
-          <FinancialChart
-            titleFontSize={24}
-            costs={[
-              financeSummary.cost.year1,
-              financeSummary.cost.year2,
-              financeSummary.cost.year3,
-            ]}
-            benefits={[
-              financeSummary.benefits.year1 - financeSummary.cost.year1,
-              financeSummary.benefits.year2 - financeSummary.cost.year2,
-              financeSummary.benefits.year3 - financeSummary.cost.year3,
-            ]}
-          />
+          <div className="mx-auto w-full max-w-6xl">
+            <FinancialChart
+              titleFontSize={24}
+              height={145}
+              costs={[
+                financeSummary.cost.year1,
+                financeSummary.cost.year2,
+                financeSummary.cost.year3,
+              ]}
+              benefits={[
+                financeSummary.benefits.year1 - financeSummary.cost.year1,
+                financeSummary.benefits.year2 - financeSummary.cost.year2,
+                financeSummary.benefits.year3 - financeSummary.cost.year3,
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* --------- Page 3 Charts ---------- */}
+        <div className="flex flex-col items-center gap-4">
+          <div ref={fteChartRef}>
+            <DonutChart
+              background="#58c13d"
+              color="#b9e5ae"
+              label="Number of FTEs Savings"
+              value={10}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">40</h5>
+            </DonutChart>
+          </div>
+
+          <div ref={businessChartRef}>
+            <DonutChart
+              background="#0070c0"
+              color="#c7e0f1"
+              label="Additional Business Value"
+              value={20}
+              totalValue={100}
+            >
+              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#0070c0]">
+                $ 3.32 <br /> million
+              </h5>
+            </DonutChart>
+          </div>
+
+          <div ref={productivityChartRef}>
+            <DonutChart
+              background="#00b0f0"
+              color="#c5edfc"
+              label="Lost Productivity Recovered"
+              value={30}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#00b0f0]">8%</h5>
+            </DonutChart>
+          </div>
+        </div>
+
+        {/* --------- Risk Charts ---------- */}
+        <div className="flex flex-col items-center gap-4">
+          <div ref={reducedChartRef}>
+            <DonutChart
+              background="#61993e"
+              color="#a1c490"
+              label="Reduced Likelihood of Data Breach"
+              value={10}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#61993e]">75%</h5>
+            </DonutChart>
+          </div>
+          <div ref={securityChartRef}>
+            <DonutChart
+              background="#ed7d32"
+              color="#ffc100"
+              label="Cost of Securtiy"
+              value={20}
+              totalValue={100}
+            >
+              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#ed7d32]">
+                $ 1.2 <br /> million
+              </h5>
+            </DonutChart>
+          </div>
+          <div ref={riskChartRef}>
+            <DonutChart
+              background="#5b9bd5"
+              color="#a5a5a5"
+              label="Risk adjust cost reduction"
+              value={30}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#5b9bd5]">715K</h5>
+            </DonutChart>
+          </div>
+        </div>
+
+        {/* --------- Efficiency Gain Charts ---------- */}
+        <div className="flex flex-col items-center gap-4">
+          <div ref={secOpsChartRef}>
+            <DonutChart
+              background="#71ad47"
+              color="#4472c4"
+              label="NetOps and SecOps Efficiency Gains"
+              value={10}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#71ad47]">75%</h5>
+            </DonutChart>
+          </div>
+          <div ref={strategicChartRef}>
+            <DonutChart
+              background="#ffd184"
+              color="#e2aa01"
+              label="Additional FTEs on strategic projects"
+              value={20}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#ffd184]">03</h5>
+            </DonutChart>
+          </div>
+          <div ref={savingChartRef}>
+            <DonutChart
+              background="#97b9df"
+              color="#4f89bc"
+              label="Administrative Overhead Savings"
+              value={30}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#97b9df]">452K</h5>
+            </DonutChart>
+          </div>
+        </div>
+
+        {/* --------- Cost Reduction Charts ---------- */}
+        <div className="flex flex-col items-center gap-4">
+          <div ref={consolidationChartRef}>
+            <DonutChart
+              background="#61993e"
+              color="#a1c490"
+              label="Savings from Vendor Consolidation"
+              value={10}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#61993e]">30%</h5>
+            </DonutChart>
+          </div>
+          <div ref={infrastructureChartRef}>
+            <DonutChart
+              background="#3a64ad"
+              color="#90a2d4"
+              label="Total Infrastructure cost savings"
+              value={20}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-center text-4xl font-bold text-[#3a64ad]">
+                336K
+              </h5>
+            </DonutChart>
+          </div>
+          <div ref={mplsChartRef}>
+            <DonutChart
+              background="#5f5f5f"
+              color="#b3b3b3"
+              label="SD-WAN and MPLS Cost Savings"
+              value={30}
+              totalValue={100}
+            >
+              <h5 className="-mt-8 text-4xl font-bold text-[#5f5f5f]">
+                ~ 200K
+              </h5>
+            </DonutChart>
+          </div>
         </div>
       </div>
     </>

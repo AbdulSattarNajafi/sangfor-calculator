@@ -47,7 +47,10 @@ function CountrySelector({
         onClose={() => setQuery("")}
       >
         <div className="flex flex-col gap-1">
-          <label htmlFor="select-country" className="text-white">
+          <label
+            htmlFor="select-country"
+            className="text-sm text-white sm:text-base"
+          >
             Country / Region
           </label>
           <div className="relative">

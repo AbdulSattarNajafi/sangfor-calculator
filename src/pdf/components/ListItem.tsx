@@ -2,7 +2,7 @@ import { Text, StyleSheet, View } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   list: {
-    marginBottom: 5,
+    marginBottom: 6,
     paddingLeft: 10,
     paddingRight: 10,
   },

@@ -23,9 +23,18 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
-    dateStyle: "long",
-  }).format(new Date(date));
+  // return new Intl.DateTimeFormat("en-US", {
+  //   dateStyle: "short",
+  //   timeStyle: "short",
+  // }).format(new Date(date));
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 }
 
 export async function captureChartAsImage(
@@ -91,12 +100,12 @@ export const extractYearlyData = (data: YearlyData[]) => {
   };
 };
 
-export function downloadFile(url: string, fileName: string) {
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
+// export function downloadFile(url: string, fileName: string) {
+//   const link = document.createElement("a");
+//   link.href = url;
+//   link.download = fileName;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+//   URL.revokeObjectURL(url);
+// }

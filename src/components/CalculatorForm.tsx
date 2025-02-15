@@ -16,11 +16,11 @@ function CalculatorForm() {
   }
 
   return (
-    <div className="mb-7 border-b border-slate-700 pb-7">
-      <h3 className="mb-4 text-2xl font-bold text-white">
+    <div>
+      <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
         Lorem ipsum dolor sit amet
       </h3>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+      <div className="flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4">
         <Select
           label="Region"
           id="countryName"
@@ -88,23 +88,25 @@ function CalculatorForm() {
           }
           errorMessage={error.hostingSites}
         />
-        <RangeInput
-          formatter="%"
-          label="Percentage of Remote/Hybrid Employees"
-          id="hybridPercentage"
-          name="hybridPercentage"
-          type="range"
-          min={0}
-          max={100}
-          value={state.hybridPercentage}
-          onChange={(e) =>
-            inputChangeHandler(e, {
-              min: 0,
-              max: 100,
-              isNumber: true,
-            })
-          }
-        />
+        <div className="mb-4 md:mb-0">
+          <RangeInput
+            formatter="%"
+            label="% of Remote/Hybrid Employees"
+            id="hybridPercentage"
+            name="hybridPercentage"
+            type="range"
+            min={0}
+            max={100}
+            value={state.hybridPercentage}
+            onChange={(e) =>
+              inputChangeHandler(e, {
+                min: 0,
+                max: 100,
+                isNumber: true,
+              })
+            }
+          />
+        </div>
         <RangeInput
           label="Number of Countries"
           id="countries"

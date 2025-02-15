@@ -17,7 +17,7 @@ function RangeInput({ label, formatter, ...props }: RangeInputProps) {
 
   return (
     <div className="flex flex-col">
-      <label htmlFor={props.id} className="text-white">
+      <label htmlFor={props.id} className="text-sm text-white sm:text-base">
         {label}
       </label>
       <div className="relative -mt-1">

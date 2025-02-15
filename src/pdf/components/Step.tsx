@@ -27,16 +27,12 @@ const styles = StyleSheet.create({
   cardBody: {
     display: "flex",
     flexDirection: "row",
-    // backgroundColor: "#e6f2ff",
     border: "1px solid #0070c0",
     borderRadius: 4,
     borderTopLeftRadius: 0,
     padding: 10,
     marginTop: -1,
     zIndex: -1,
-  },
-  cardBodyText: {
-    // color: "#444444",
   },
 });
 

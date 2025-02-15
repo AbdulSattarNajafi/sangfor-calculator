@@ -19,7 +19,7 @@ function Input({
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-2">
         <label
-          className="flex items-center gap-1 text-base text-white"
+          className="flex items-center gap-1 text-sm text-white sm:text-base"
           htmlFor={props.id}
         >
           <span className="inline-block">{label}</span>

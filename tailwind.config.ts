@@ -9,6 +9,12 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "388px",
+        sm: "576px",
+        md: "768px",
+        lg: "992px",
+      },
       colors: {
         green: "#04be02",
         blue: "#0d6efd",

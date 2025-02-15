@@ -1,9 +1,11 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { contactSchema } from "./zodSchema";
 import { parseWithZod } from "@conform-to/zod";
+import { redirect } from "next/navigation";
 import { UserInputDataType } from "./types";
+
+const API_URL = "https://secure.p06.eloqua.com/API/REST/2.0/data/form/172";
 
 export async function sendEmail(
   state: UserInputDataType,
@@ -18,24 +20,32 @@ export async function sendEmail(
     return submission.reply();
   }
 
-  const data = Object.fromEntries(formData.entries());
+  // const data = Object.fromEntries(formData.entries());
 
-  const payloadData = {
-    first_name: data.firstName,
-    email_address: data.email,
-    business_phone: data.phone,
-    company: data.company,
-    job_title: data.jobTitle,
-    country_region: data.country,
-    user_consent: data.receiveUpdates === "on" ? true : false,
-  };
+  // const {
+  //   firstName,
+  //   email,
+  //   phone,
+  //   company,
+  //   jobTitle,
+  //   country,
+  //   requestDemo,
+  //   receiveUpdates,
+  // } = data;
 
-  console.log(payloadData, "----------Payload Data");
+  // const payloadData = {
+  //   first_name: data.firstName,
+  //   email_address: data.email,
+  //   business_phone: data.phone,
+  //   company: data.company,
+  //   job_title: data.jobTitle,
+  //   country_region: data.country,
+  //   user_consent: data.receiveUpdates === "on" ? true : false,
+  //   landing_page_url: "https://calculator-test-sandy.vercel.app/",
+  //   form_page_url: "https://calculator-test-sandy.vercel.app/",
+  //   pdf_report_url: "https://calculator-test-sandy.vercel.app/",
+  // };
 
-  //  const  payloadDatas  = {
-  //   landing_page_url: string;
-  //   form_page_url: string;
-  //   pdf_report_url: string;
   //   utm_source?: string;
   //   utm_medium?: string;
   //   utm_campaign?: string;
@@ -45,44 +55,132 @@ export async function sendEmail(
   //   gclid?: string;
   //   gBraid?: string;
   //   gdpr_checkbox?: boolean;
-  // }
-
-  // const API_URL = "https://secure.p06.eloqua.com/API/REST/2.0/data/form/172";
 
   // const payload = {
   //   type: "FormData",
-  //   fieldValues: Object.entries(data).map(([key, value], index) => ({
+  //   fieldValues: Object.entries(payloadData).map(([key, value], index) => ({
   //     type: "FieldValue",
-  //     id: String(2436 + index), // Assuming IDs are sequential; update as needed
+  //     id: String(2436 + index),
   //     name: key,
   //     value: value || "",
   //   })),
   // };
 
-  // const authToken = Buffer.from(
-  //   "SANGFORTECHNOLOGIES\\Mario.Robertus:StevEJobs$$207Apple!phone3",
-  // ).toString("base64"); // Replace with actual credentials
-
-  // try {
-  //   const response = await fetch(API_URL, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "*/*",
-  //       Authorization: `Basic ${authToken}`,
+  // const payloadData = {
+  //   type: "FormData",
+  //   fieldValues: [
+  //     {
+  //       type: "FieldValue",
+  //       id: "2436",
+  //       name: "first_name",
+  //       value: "firstName",
   //     },
-  //     body: JSON.stringify(payload),
-  //   });
+  //     {
+  //       type: "FieldValue",
+  //       id: "2437",
+  //       name: "email_address",
+  //       value: "john@example.com",
+  //     },
+  //     {
+  //       type: "FieldValue",
+  //       id: "2438",
+  //       name: "business_phone",
+  //       value: "+6282284488062",
+  //     },
+  //     { type: "FieldValue", id: "2439", name: "company", value: "company" },
+  //     {
+  //       type: "FieldValue",
+  //       id: "2440",
+  //       name: "job_title",
+  //       value: "jobTitle",
+  //     },
+  //     {
+  //       type: "FieldValue",
+  //       id: "2441",
+  //       name: "country_region",
+  //       value: "country",
+  //     },
+  //     {
+  //       type: "FieldValue",
+  //       id: "2445",
+  //       name: "lead_source",
+  //       value: "SASE TCO ROI Calculator",
+  //     },
+  //     {
+  //       type: "FieldValue",
+  //       id: "2446",
+  //       name: "marketing_campaign",
+  //       value: "SASE TCO ROI Calculator Marketing Campaign",
+  //     },
+  //   ],
+  // };
 
-  //   if (!response.ok) {
-  //     throw new Error(`Failed to submit form: ${response.statusText}`);
-  //   }
+  const credentials = btoa(
+    "SANGFORTECHNOLOGIES\\Drupal.Eloqua:SteveJobs$$$888M@cb00kProDEAT*latm1",
+  );
 
-  //   return { success: true, message: "Form submitted successfully!" };
-  // } catch (error) {
-  //   console.error("Error submitting form:", error);
-  //   return { success: false, message: "Failed to submit form." };
-  // }
+  const payloadData = {
+    type: "FormData",
+    fieldValues: [
+      {
+        type: "FieldValue",
+        id: "2436",
+        name: "first_name",
+        value: "firstName",
+      },
+      {
+        type: "FieldValue",
+        id: "2437",
+        name: "email_address",
+        value: "john@example.com",
+      },
+      {
+        type: "FieldValue",
+        id: "2438",
+        name: "business_phone",
+        value: "+6282284488062",
+      },
+      { type: "FieldValue", id: "2439", name: "company", value: "company" },
+      {
+        type: "FieldValue",
+        id: "2440",
+        name: "job_title",
+        value: "jobTitle",
+      },
+      {
+        type: "FieldValue",
+        id: "2441",
+        name: "country_region",
+        value: "country",
+      },
+      {
+        type: "FieldValue",
+        id: "2445",
+        name: "lead_source",
+        value: "SASE TCO ROI Calculator",
+      },
+      {
+        type: "FieldValue",
+        id: "2446",
+        name: "marketing_campaign",
+        value: "SASE TCO ROI Calculator Marketing Campaign",
+      },
+    ],
+  };
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Basic ${credentials}`,
+    },
+    body: JSON.stringify(payloadData),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to submit form: ${response.statusText}`);
+  }
 
   redirect("/report");
 }

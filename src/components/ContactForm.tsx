@@ -31,7 +31,7 @@ function ContactForm() {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // Security: Ensure the message comes from the first app
+      // https://calculator-test-sandy.vercel.app
       if (event.origin !== "https://calculator-test-sandy.vercel.app") {
         console.warn("Blocked message from unknown origin:", event.origin);
         return;
@@ -57,8 +57,6 @@ function ContactForm() {
     };
   }, []);
 
-  console.log(userData, "------------------receivedData");
-
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -70,14 +68,10 @@ function ContactForm() {
       const newState = omitKeys(state, ["regionList"]);
       storeUserInputData(newState);
       setSelectedCountry(null);
-
-      const storedValue = localStorage.getItem("_scs");
-
-      if (storedValue) {
-        console.log(JSON.parse(storedValue), "---------------- SCS Data");
-      } else {
-        console.log("-------------- Cant Read SCS data");
-      }
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "date", value: new Date() },
+      });
     },
   });
 
@@ -85,6 +79,10 @@ function ContactForm() {
     const country = Country.getCountryByCode(countryCode);
     if (country) {
       setSelectedCountry(country);
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "country", value: country.name },
+      });
     }
   }
 
@@ -101,10 +99,10 @@ function ContactForm() {
       action={action}
       onSubmit={form.onSubmit}
     >
-      <h3 className="mb-4 text-2xl font-bold text-white">
+      <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
         Get Your Complete Report {userData?.name}
       </h3>
-      <div className="mb-6 grid grid-cols-2 gap-x-4 gap-y-1">
+      <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4">
         <Input
           label="First Name"
           id="userName"
@@ -124,16 +122,18 @@ function ContactForm() {
           name={fields.email.name}
           defaultValue={fields.email.initialValue}
           errorMessage={fields.email.errors}
+          onChange={changeHandler}
         />
 
         <Input
           label="Business Phone"
           id="phone"
-          placeholder="Business Phone"
+          placeholder="+CC (AAA) XXX-XXXX"
           key={fields.phone.key}
           name={fields.phone.name}
           defaultValue={fields.phone.initialValue}
           errorMessage={fields.phone.errors}
+          onChange={changeHandler}
         />
         <Input
           label="Company"
@@ -143,6 +143,7 @@ function ContactForm() {
           name={fields.company.name}
           defaultValue={fields.company.initialValue}
           errorMessage={fields.company.errors}
+          onChange={changeHandler}
         />
         <Input
           label="Job Title"
@@ -152,6 +153,7 @@ function ContactForm() {
           name={fields.jobTitle.name}
           defaultValue={fields.jobTitle.initialValue}
           errorMessage={fields.jobTitle.errors}
+          onChange={changeHandler}
         />
 
         <CountrySelector
