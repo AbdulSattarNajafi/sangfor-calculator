@@ -13,6 +13,7 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
+import { ScsDataType } from "@/utils/types";
 
 function ContactForm() {
   const countiesData = Country.getAllCountries();
@@ -24,10 +25,7 @@ function ContactForm() {
     undefined,
   );
 
-  const [userData, setUserData] = useState<{
-    name: string;
-    age: number;
-  } | null>(null);
+  const [scs, setScs] = useState<ScsDataType | null>(null);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -41,9 +39,9 @@ function ContactForm() {
       const { key, value } = event.data;
       if (key === "_scs" && value) {
         try {
-          const parsedData = JSON.parse(value);
-          setUserData(parsedData);
-          localStorage.setItem("_scs", value); // Store in localStorage (if needed)
+          const scsData = JSON.parse(value);
+          setScs(scsData);
+          // localStorage.setItem("_scs", value); // Store in localStorage (if needed)
         } catch (error) {
           console.error("Failed to parse received data:", error);
         }
@@ -56,6 +54,8 @@ function ContactForm() {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
+  console.log(scs, "-----------------scs");
 
   const [form, fields] = useForm({
     lastResult,
@@ -100,7 +100,7 @@ function ContactForm() {
       onSubmit={form.onSubmit}
     >
       <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
-        Get Your Complete Report {userData?.name}
+        Get Your Complete Report {scs?.default.utm.name}
       </h3>
       <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4">
         <Input

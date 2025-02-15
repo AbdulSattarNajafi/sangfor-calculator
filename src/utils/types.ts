@@ -86,3 +86,28 @@ export type FormulaType = {
   securityAndNetworkingInfraCostReduction: NerworkCostType;
   analysisOfCosts: TotalCostType;
 };
+
+type UTMValue = {
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
+  utm_id: string | null;
+  landing_url: string | null;
+  gBraid: string | null;
+  gclid: string | null;
+  gdpr_checkbox: boolean | null;
+};
+
+type UTMData = {
+  name: "utm";
+  expiration: string;
+  value: UTMValue;
+};
+
+export type ScsDataType = {
+  default: {
+    utm: UTMData;
+  };
+};
