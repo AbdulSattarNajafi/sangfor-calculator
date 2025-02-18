@@ -4,7 +4,7 @@ export type UserInputDataType = {
   phone: string;
   company: string;
   jobTitle: string;
-  date: Date | string;
+  date: Date | null;
   country: string;
   employeeCount: number;
   hybridPercentage: number;

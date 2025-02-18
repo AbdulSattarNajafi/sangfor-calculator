@@ -170,9 +170,11 @@ function PDFPages({
           <ListItem>
             <View style={styles.userInfoRow}>
               <Text style={styles.userInfo}>Submission Date & Time:</Text>
-              <Text style={styles.userInfoText}>
-                {formatDate(new Date(userInput.date))}
-              </Text>
+              {userInput.date && (
+                <Text style={styles.userInfoText}>
+                  {formatDate(new Date(userInput.date))}
+                </Text>
+              )}
             </View>
           </ListItem>
         </View>

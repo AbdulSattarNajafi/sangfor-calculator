@@ -60,13 +60,13 @@ function ContactForm() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onSubmit: () => {
+      // dispatch({
+      //   type: "UPDATE_FIELD",
+      //   payload: { name: "date", value: new Date() },
+      // });
       const newState = omitKeys(state, ["regionList"]);
       storeUserInputData(newState);
       setSelectedCountry(null);
-      dispatch({
-        type: "UPDATE_FIELD",
-        payload: { name: "date", value: new Date() },
-      });
     },
   });
 
@@ -77,6 +77,10 @@ function ContactForm() {
       dispatch({
         type: "UPDATE_FIELD",
         payload: { name: "country", value: country.name },
+      });
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "date", value: new Date() },
       });
     }
   }
