@@ -15,8 +15,7 @@ import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { ScsDataType } from "@/utils/types";
 
-const Calculator_Url =
-  "https://live-sangfor.pantheonsite.io/cloud-and-infrastructure/products/sangfor-kubernetes-engine-ske-draft";
+const Calculator_Url = "https://live-sangfor.pantheonsite.io";
 
 function ContactForm() {
   const [scs, setScs] = useState<ScsDataType | null>(null);

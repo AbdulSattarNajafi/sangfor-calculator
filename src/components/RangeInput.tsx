@@ -28,7 +28,7 @@ function RangeInput({ label, formatter, ...props }: RangeInputProps) {
             {...props}
           />
           <div
-            className="absolute bottom-[7px] left-px z-0 h-[7px] w-10 rounded-full bg-blue"
+            className="absolute bottom-[6.5px] left-0 z-0 h-2 w-10 rounded-full bg-blue"
             style={{ width: `${widthPercentage}%` }}
           ></div>
         </div>
