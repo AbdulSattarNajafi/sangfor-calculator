@@ -15,6 +15,9 @@ import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { ScsDataType } from "@/utils/types";
 
+const Calculator_Url =
+  "https://live-sangfor.pantheonsite.io/cloud-and-infrastructure/products/sangfor-kubernetes-engine-ske-draft";
+
 function ContactForm() {
   const [scs, setScs] = useState<ScsDataType | null>(null);
   const countiesData = Country.getAllCountries();
@@ -23,7 +26,7 @@ function ContactForm() {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== "https://calculator-test-sandy.vercel.app") {
+      if (event.origin !== Calculator_Url) {
         console.warn("Blocked message from unknown origin:", event.origin);
         return;
       }
