@@ -97,7 +97,7 @@ function ContactForm() {
       <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
         Get Your Complete Report {scs?.default.utm.name}
       </h3>
-      <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4">
+      <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
         <Input
           label="First Name"
           id="userName"

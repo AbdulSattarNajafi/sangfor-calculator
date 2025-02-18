@@ -5,44 +5,69 @@ import { formatCompactCurrency } from "@/utils/helpers";
 import FinancialChart from "@/pdf/charts/FinancialChart";
 import BenefitsCard from "./BenefitsCard";
 import { useEffect, useState } from "react";
-import { caclulationResult } from "@/pdf/calculation/calculationResult";
+import { calculationResult } from "@/pdf/calculation/calculationResult";
 import { FormulaType } from "@/utils/types";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import Spinner from "./Spinner";
 
 function CalculatorResult() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formula, setFormula] = useState<FormulaType | null>(null);
   const { state, error } = useUserInputContext();
   const selectedCountry = state.regionList.find(
     (region) => region.country === state.countryName,
   );
+  const width = useWindowWidth();
 
   useEffect(() => {
+    if (formula) return;
+
     async function fetchData() {
       try {
+        setIsLoading(true);
         const res = await fetch("/api/formula");
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const json = await res.json();
         setFormula(json);
       } catch (err) {
-        throw new Error(
-          err instanceof Error ? err.message : "Failed to fetch formula",
-        );
+        console.error(err);
+        // throw new Error(
+        //   err instanceof Error ? err.message : "Failed to fetch formula",
+        // );
+      } finally {
+        setIsLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [formula]);
 
-  if (!selectedCountry || !formula) {
+  if (isLoading) {
     return (
       <div className="flex w-full flex-1 items-center justify-center">
-        <div className="spinner"></div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!selectedCountry) {
+    return (
+      <div className="p-4 text-center">
+        <p>Country not found.</p>
+      </div>
+    );
+  }
+  if (!formula) {
+    return (
+      <div className="p-4 text-center">
+        <p>Formula data missing.</p>
       </div>
     );
   }
 
   const hasError = Object.values(error).some((msg) => msg !== "");
   const { roiPercentages, benefits, paybackPeriod, avgYearlyBenefits, cost } =
-    caclulationResult(formula, state, selectedCountry);
+    calculationResult(formula, state, selectedCountry);
 
   return (
     <div className="flex-1">
@@ -68,8 +93,8 @@ function CalculatorResult() {
 
       <div className="mx-auto w-full max-w-6xl">
         <FinancialChart
-          height={220}
-          titleFontSize={16}
+          height={width < 576 ? 280 : width > 576 && width < 992 ? 180 : 220}
+          titleFontSize={width > 576 ? 16 : 14}
           costs={[cost.year1, cost.year2, cost.year3]}
           benefits={[
             benefits.year1 - cost.year1,

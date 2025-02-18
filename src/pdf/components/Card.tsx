@@ -29,15 +29,11 @@ function Card({ label, labelWidth, text }: CardProps) {
     cardBody: {
       display: "flex",
       backgroundColor: "#e6f2ff",
-      // border: "1px solid #0070c0",
       borderRadius: 4,
       borderTopLeftRadius: 0,
       padding: 10,
       marginTop: -1,
       zIndex: -1,
-    },
-    cardBodyText: {
-      // color: "#444444",
     },
   });
 
@@ -47,7 +43,7 @@ function Card({ label, labelWidth, text }: CardProps) {
         <Text style={styles.cardLabelText}>{label}</Text>
       </View>
       <View style={styles.cardBody}>
-        <Text style={styles.cardBodyText}>{text}</Text>
+        <Text>{text}</Text>
       </View>
     </View>
   );

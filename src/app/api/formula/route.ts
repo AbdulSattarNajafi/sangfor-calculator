@@ -18,14 +18,11 @@ interface Sections {
 
 export async function GET() {
   try {
-    // Path to the Excel file inside the public folder
     const filePath: string = path.join(process.cwd(), "public", "formula.xlsx");
 
-    // Read the file
     const fileBuffer: Buffer = fs.readFileSync(filePath);
     const workbook: XLSX.WorkBook = XLSX.read(fileBuffer, { type: "buffer" });
 
-    // Select the sheet named "formula"
     const sheetName: string = "formula";
     const worksheet: XLSX.WorkSheet | undefined = workbook.Sheets[sheetName];
 
@@ -36,12 +33,11 @@ export async function GET() {
       );
     }
 
-    // Convert sheet data to JSON as an array of arrays
     const rawData: (string | number)[][] = XLSX.utils.sheet_to_json<
       (string | number)[]
     >(worksheet, { header: 1 });
 
-    let currentSection: string = ""; // Track which section we're in
+    let currentSection: string = "";
     const sections: Sections = {};
 
     rawData.forEach((row: (string | number)[]) => {
@@ -50,11 +46,11 @@ export async function GET() {
 
       if (row.length > 1 && row[1] === "Year 1") {
         // New section detected
-        currentSection = toCamelCase(row[0]); // Convert section title to camelCase
+        currentSection = toCamelCase(row[0]);
         sections[currentSection] = {};
       } else if (currentSection && row.length >= 4) {
         // Data row
-        const key: string = toCamelCase(String(row[0])); // Convert key to camelCase
+        const key: string = toCamelCase(String(row[0]));
         sections[currentSection][key] = [
           { year1: row[1] as string | number },
           { year2: row[2] as string | number },

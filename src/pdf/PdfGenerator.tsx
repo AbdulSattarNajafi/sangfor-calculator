@@ -12,7 +12,7 @@ import {
 } from "@/utils/helpers";
 import { FormulaType, UserInputDataType } from "@/utils/types";
 import { useUserInputContext } from "@/contexts/UserInputContext";
-import { caclulationResult } from "./calculation/calculationResult";
+import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
 import PDFPages from "./components/PDFPages";
 
@@ -79,7 +79,7 @@ function PdfGenerator() {
     return null;
   }
 
-  const financeSummary = caclulationResult(formula, data, selectedCountry);
+  const financeSummary = calculationResult(formula, data, selectedCountry);
 
   const userInputData = [
     { label: "Total Number of Employees", value: data.employeeCount },

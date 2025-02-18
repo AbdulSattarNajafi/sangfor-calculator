@@ -17,7 +17,7 @@ function calculateNPV(cashFlows: number[]) {
   return npv;
 }
 
-export const caclulationResult = (
+export const calculationResult = (
   formula: FormulaType,
   userInput: UserInputDataType,
   selectedCountry: SelectedCountryType,

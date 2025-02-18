@@ -8,9 +8,13 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <main className="flex flex-col items-center justify-center gap-6">
-      <h1 className="text-3xl font-semibold">Something went wrong!</h1>
-      <p className="text-lg">{error.message}</p>
+    <section className="flex flex-col items-center justify-center gap-6 py-14 md:py-16 lg:py-20">
+      <div>
+        <h1 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
+          Something went wrong!
+        </h1>
+        <p className="lg:text-lg">{error.message}</p>
+      </div>
 
       <button
         onClick={reset}
@@ -18,6 +22,6 @@ export default function Error({
       >
         Try again
       </button>
-    </main>
+    </section>
   );
 }

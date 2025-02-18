@@ -49,7 +49,7 @@ function CountrySelector({
         <div className="flex flex-col gap-1">
           <label
             htmlFor="select-country"
-            className="text-sm text-white sm:text-base"
+            className="text-sm text-white xl:text-base"
           >
             Country / Region
           </label>

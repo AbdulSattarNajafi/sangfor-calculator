@@ -8,7 +8,7 @@ type SelectProps = ComponentProps<"select"> & {
 function Select({ label, ...props }: SelectProps) {
   return (
     <div className="mb-4 flex flex-col gap-1">
-      <label htmlFor={props.id} className="text-white">
+      <label htmlFor={props.id} className="text-sm text-white xl:text-base">
         {label}
       </label>
       <select

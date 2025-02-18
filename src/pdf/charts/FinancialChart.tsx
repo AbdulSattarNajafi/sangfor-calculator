@@ -71,7 +71,6 @@ const FinancialChart = ({
       tooltip: {
         callbacks: {
           title: (index: { label: string }[]) => {
-            console.log(index, " chart index");
             return "Year " + index[0].label;
           },
         },
@@ -89,7 +88,7 @@ const FinancialChart = ({
           display: false,
           text: "Amount ($)",
         },
-        fontSixe: 26,
+        fontSixe: 16,
         beginAtZero: true,
         ticks: {
           callback: function (value: string | number) {
