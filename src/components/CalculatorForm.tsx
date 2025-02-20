@@ -18,7 +18,7 @@ function CalculatorForm() {
   return (
     <div>
       <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
-        Lorem ipsum dolor sit amet
+        Enter Company Data for ROI Calculation
       </h3>
       <div className="flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
         <Select

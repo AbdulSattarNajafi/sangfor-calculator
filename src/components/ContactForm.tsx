@@ -35,7 +35,6 @@ function ContactForm() {
         try {
           const scsData = JSON.parse(value);
           setScs(scsData);
-          // localStorage.setItem("_scs", value);
         } catch (error) {
           console.error("Failed to parse received data:", error);
         }
@@ -62,10 +61,6 @@ function ContactForm() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onSubmit: () => {
-      // dispatch({
-      //   type: "UPDATE_FIELD",
-      //   payload: { name: "date", value: new Date() },
-      // });
       const newState = omitKeys(state, ["regionList"]);
       storeUserInputData(newState);
       setSelectedCountry(null);
@@ -101,7 +96,7 @@ function ContactForm() {
       onSubmit={form.onSubmit}
     >
       <h3 className="mb-4 text-xl font-bold text-white md:text-2xl">
-        Get Your Complete Report {scs?.default.utm.name}
+        Get Your Complete Report
       </h3>
       <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
         <Input

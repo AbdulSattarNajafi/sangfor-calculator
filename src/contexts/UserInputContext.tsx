@@ -26,7 +26,7 @@ const initialState: StateType = {
   phone: "",
   company: "",
   jobTitle: "",
-  date: null,
+  date: new Date(),
   country: "",
   employeeCount: 5000,
   hybridPercentage: 50,

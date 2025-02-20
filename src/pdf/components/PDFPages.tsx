@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Page,
   Text,
@@ -10,12 +12,13 @@ import {
 import Card from "./Card";
 import InputTable from "../Tables/InputTable";
 import FinanceTable from "../Tables/FinanceTable";
-import Step from "./Step";
 import ListItem from "./ListItem";
 import Logo from "./Logo";
-import { formatDate } from "@/utils/helpers";
+import { formatCompactCurrency, formatLongDate } from "@/utils/helpers";
 import { UserInputDataType } from "@/utils/types";
 import BoldText from "./BoldText";
+import KpiCard from "./KpiCard";
+import Steps from "./Steps";
 
 type InputDataType = { label: string; value: string | number };
 
@@ -50,20 +53,26 @@ type ChartImageType = {
 
 const styles = StyleSheet.create({
   page: {
-    fontSize: 10,
+    fontSize: 11,
     lineHeight: 1.5,
   },
-  heading: {
-    fontSize: 14,
+  pageTitle: {
+    fontSize: 30,
+    textAlign: "center",
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 40,
+    color: "#0b2651",
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
     color: "#0b2651",
   },
   subHeading: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 10,
     color: "#0b2651",
   },
   userInfo: {
@@ -83,11 +92,11 @@ const styles = StyleSheet.create({
   },
   text: {
     display: "flex",
-    marginBottom: 5,
+    marginBottom: 8,
   },
   smallText: {
-    fontSize: 8,
-    marginBottom: 5,
+    display: "flex",
+    fontSize: 10,
   },
   link: {
     color: "#0070c0",
@@ -110,6 +119,19 @@ type PDFPagesProps = {
   userInputTableData: InputDataType[];
   inputTableResult: InputDataType[];
   financeTableData: FinanceTableDataType[];
+  userDetailData: InputDataType[];
+  totalProductivityRecover: number;
+  additionalBusinessValue: number;
+  lostProductivityRecovered: number;
+  reduceLikelihoodOfDataBreach: number;
+  totalCostOfSecurityAndDataRisk: number;
+  riskAdjustedCostReduction: number;
+  netOps: number;
+  additionalFTE: number;
+  administrativeOverheadSavings: number;
+  savingsFromVendor: number;
+  totalInfrastructureCost: number;
+  sdwan: number;
 };
 
 function PDFPages({
@@ -118,133 +140,107 @@ function PDFPages({
   userInputTableData,
   inputTableResult,
   financeTableData,
+  userDetailData,
+  totalProductivityRecover,
+  additionalBusinessValue,
+  lostProductivityRecovered,
+  reduceLikelihoodOfDataBreach,
+  totalCostOfSecurityAndDataRisk,
+  riskAdjustedCostReduction,
+  netOps,
+  additionalFTE,
+  administrativeOverheadSavings,
+  savingsFromVendor,
+  totalInfrastructureCost,
+  sdwan,
 }: PDFPagesProps) {
   return (
     <Document>
       {/* ========= Page 1 =============== */}
-      <Page size="A4" style={{ fontSize: 10, lineHeight: 1.5 }}>
+      <Page size="A4" style={styles.page}>
         <Logo />
 
-        <View style={{ paddingHorizontal: 30, marginBottom: 15 }}>
-          <Text style={styles.subHeading}>SASE ROI Analysis Report</Text>
-
-          <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 5 }}>
-            Personal Details Provided in the Form:
+        <View style={{ paddingHorizontal: 30, paddingTop: 20 }}>
+          <Text style={styles.pageTitle}>Sangfor Technologies </Text>
+          <Text
+            style={{
+              display: "flex",
+              fontSize: 22,
+              fontWeight: "bold",
+              marginBottom: 15,
+              paddingLeft: 85,
+            }}
+          >
+            ROI Analysis Report of
           </Text>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>First Name:</Text>
-              <Text style={styles.userInfoText}>{userInput.firstName}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Email Address:</Text>
-              <Text style={styles.userInfoText}>{userInput.email}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Business Phone:</Text>
-              <Text style={styles.userInfoText}>{userInput.phone}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Company:</Text>
-              <Text style={styles.userInfoText}>{userInput.company}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Job Title:</Text>
-              <Text style={styles.userInfoText}>{userInput.jobTitle}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Country / Region:</Text>
-              <Text style={styles.userInfoText}>{userInput.country}</Text>
-            </View>
-          </ListItem>
-          <ListItem>
-            <View style={styles.userInfoRow}>
-              <Text style={styles.userInfo}>Submission Date & Time:</Text>
-              {userInput.date && (
-                <Text style={styles.userInfoText}>
-                  {formatDate(new Date(userInput.date))}
-                </Text>
-              )}
-            </View>
-          </ListItem>
-        </View>
-
-        <View style={{ paddingHorizontal: 30, marginBottom: 5 }}>
-          <Text style={{ lineHeight: 1.1, display: "flex" }}>
-            <BoldText>Sangfor Access Secure:</BoldText>
-            Sangfor Access Secure is a comprehensive Secure Access Service Edge
-            (SASE) solution that combines SD-WAN and Secure Service Edge (SSE)
-            capabilities, including Zero Trust Network Access (ZTNA), Secure Web
-            Gateway (SWG), Firewall as a Service (FWaaS), Endpoint Detection and
-            Response (EDR), and Data Loss Prevention (DLP), delivered through a
-            unified cloud platform. The following are the key benefits of
-            Sangfor Access Secure:
+          <Text
+            style={{
+              display: "flex",
+              textAlign: "center",
+              fontSize: 22,
+              fontWeight: "bold",
+              marginBottom: 20,
+            }}
+          >
+            Sangfor Access Secure
           </Text>
-        </View>
-
-        <View style={{ paddingVertical: 10, paddingHorizontal: 30 }}>
-          <Card
-            label="Simplified Management"
-            labelWidth={126}
-            text="To better understand the benefits, costs, and savings associated with the SASE
-              investment, Sangfor has developed this customized report specific to your business
-              environment. It is meant to help you determine high-level estimates of the costs,"
-          />
-          <Card
-            label="Cloud-Native Security"
-            labelWidth={116}
-            text="To better understand the benefits, costs, and savings associated with the SASE
-              investment, Sangfor has developed this customized report specific to your business
-              environment. It is meant to help you determine high-level estimates of the costs,"
-          />
-          <Card
-            label="AI-Powered Threat Detection"
-            labelWidth={148}
-            text="To better understand the benefits, costs, and savings associated with the SASE
-              investment, Sangfor has developed this customized report specific to your business
-              environment. It is meant to help you determine high-level estimates of the costs,"
-          />
-          <Card
-            label="Unparalleled Visibility"
-            labelWidth={115}
-            text="To better understand the benefits, costs, and savings associated with the SASE
-              investment, Sangfor has developed this customized report specific to your business
-              environment. It is meant to help you determine high-level estimates of the costs,"
-          />
+          {userInput.date && (
+            <Text style={{ textAlign: "center", fontSize: 12 }}>
+              {formatLongDate(userInput.date)}
+            </Text>
+          )}
         </View>
       </Page>
 
       {/* ========= Page 2 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+
+        <View style={{ paddingHorizontal: 30, marginBottom: 15 }}>
+          <Text style={styles.heading}>EXECUTIVE SUMMARY</Text>
+          <Text style={styles.text}>
+            In today’s rapidly evolving digital landscape, organizations face
+            increasing pressure to secure their networks while optimizing
+            performance and reducing costs. The rise of hybrid work models and
+            cloud adoption has made Secure Access Service Edge (SASE) a critical
+            framework for modern IT infrastructure.
+          </Text>
+          <Text style={styles.text}>
+            To help you evaluate the financial and operational impact of
+            implementing Sangfor Access Secure, we have created a customized
+            report tailored to your business environment. This report provides
+            high-level estimates of the costs and business benefits of your
+            investment.
+          </Text>
+          <Text style={[styles.text, { marginBottom: 20 }]}>
+            To ensure accuracy and relevance, the results are derived from
+            insights gained through real-world deployments and validated by
+            measurable outcomes, delivering a clear understanding of the
+            tangible value Access Secure can bring to your organization.
+          </Text>
+          <InputTable
+            title="Your Organization’s Details"
+            data={userInputTableData}
+          />
+          <InputTable title="Your Details" data={userDetailData} />
+        </View>
+      </Page>
+
+      {/* ========= Page 3 =============== */}
       <Page size="A4" style={[styles.page, { paddingBottom: 0 }]}>
         <Logo />
         <View style={{ paddingHorizontal: 30 }}>
-          <Text
-            style={{
-              lineHeight: 1.1,
-              marginTop: 5,
-              marginBottom: 10,
-              display: "flex",
-            }}
-          >
-            To better understand the benefits, costs, and savings associated
-            with the SASE investment, Sangfor has developed this customized
-            report specific to your business environment. It is meant to help
-            you determine high-level estimates of the costs, benefits,
-            flexibility, and risk factors associated with your Access Secure
-            Investment.
+          <Text style={[styles.heading, { marginBottom: 30 }]}>
+            FINANCIAL SUMMARY
           </Text>
+          <InputTable
+            title="Consolidated 3-Year Risk-Adjusted Metrics"
+            data={inputTableResult}
+          />
 
-          <View style={styles.chartContainer}>
+          <View
+            style={[styles.chartContainer, { marginTop: 20, marginBottom: 30 }]}
+          >
             {images.roiChart && (
               <Image style={styles.donutChart} src={images.roiChart} />
             )}
@@ -262,50 +258,99 @@ function PDFPages({
             )}
           </View>
 
-          <InputTable
-            title="You provided the following information to describe your environment:"
-            data={userInputTableData}
-          />
-          <InputTable
-            title="FINANCIAL SUMMARY – CONSOLIDATED 3 Year Risk Adjusted Metrics"
-            data={inputTableResult}
-          />
-        </View>
-      </Page>
-
-      {/* ========= Page 3 =============== */}
-      <Page size="A4" style={styles.page}>
-        <Logo />
-        <View style={{ paddingHorizontal: 30 }}>
           <View style={styles.chartContainer}>
             {images.financialChart && (
               <Image
-                style={{ width: "520px", height: "auto" }}
+                style={{ width: 440, height: "auto" }}
                 src={images.financialChart}
               />
             )}
           </View>
+        </View>
+      </Page>
+
+      {/* ========= Page 4 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+        <View style={{ paddingHorizontal: 30 }}>
+          <Text style={styles.heading}>SANGFOR ACCESS SECURE OVERVIEW</Text>
+          <Text style={[styles.text, { marginBottom: 15 }]}>
+            Sangfor Access Secure is one of the few single-vendor SASE solutions
+            that combines SD-WAN capabilities with advanced security features,
+            including Zero Trust Network Access (ZTNA), Secure Web Gateway
+            (SWG), Firewall as a Service (FWaaS), Endpoint Detection and
+            Response (EDR), and Data Loss Prevention (DLP)—delivered through a
+            unified cloud platform.
+          </Text>
+
+          <Text style={styles.subHeading}>Key Features & Capabilities</Text>
+          <View style={{ marginTop: 5 }}>
+            <Card
+              label="Simplified Management"
+              labelWidth={146}
+              text="Access Secure’s centralized console simplifies configuration, monitoring, and control, enabling IT teams to focus on strategic initiatives."
+            />
+            <Card
+              label="Cloud-Native Security"
+              labelWidth={136}
+              text="Access Secure’s cloud-native architecture ensures fast, reliable zero-trust access to internet and intranet resources—whether hosted in the cloud or on-premises."
+            />
+            <Card
+              label="AI-Powered Threat Detection"
+              labelWidth={172}
+              text="Access Secure leverages Sangfor Engine Zero, an AI-driven malware detection engine, ensuring accurate threat prevention to safeguard critical assets."
+            />
+            <Card
+              label="Unparalleled Visibility"
+              labelWidth={134}
+              text="With granular visibility and real-time analytics for applications, networks, and users, Access Secure enables admins to make confident, data-driven decisions."
+            />
+          </View>
+        </View>
+      </Page>
+
+      {/* ========= Page 5 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+        <View style={{ paddingHorizontal: 30 }}>
+          <Text style={styles.heading}>BREAKDOWN OF TOTAL BENEFITS</Text>
+          <Text style={styles.text}>
+            The following section provides a detailed breakdown of the total
+            benefits of implementing Sangfor Access Secure across four key
+            dimensions: Workforce Productivity Gains, Security and Data Breach
+            Risk Reduction Cost Savings, Security & Networking Operational
+            Efficiency Gains, and Security and Networking Infrastructure Cost
+            Savings.
+          </Text>
 
           <FinanceTable data={financeTableData} />
-          <Text style={styles.text}>
-            <BoldText>Workforce Productivity Gains:</BoldText>
-            The modern workforce is increasingly mobile, with employees
-            requiring access to critical applications and resources from
-            anywhere, anytime. With Sangfor Access Secure, business users
-            experience fewer interruptions, less downtime, and improved latency
-            while accessing on-prem and cloud resources, fostering a more
-            empowered and efficient workforce.
-          </Text>
-          <Text style={[styles.text, { marginBottom: 10 }]}>
-            By enabling business users to work without interruptions or lag,
-            whether at home, in the office, or on the move, existing Sangfor
-            Access Secure customers have historically benefitted from improved
-            average end-user productivity per year by more than 8%, directly
-            influencing organizational efficiency, innovation, and
-            profitability.
-          </Text>
 
-          <View style={styles.chartContainer}>
+          <Text style={styles.subHeading}>Workforce Productivity Gains </Text>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 6,
+            }}
+          >
+            <KpiCard
+              label="Number of FTEs Savings"
+              value={totalProductivityRecover}
+            />
+            <KpiCard
+              label="Additional Business Value"
+              value={formatCompactCurrency(additionalBusinessValue)}
+            />
+            <KpiCard
+              label="Lost Productivity Recovered"
+              value={Math.round(lostProductivityRecovered) + "%"}
+            />
+          </View>
+
+          {/* <View style={styles.chartContainer}>
             {images.fteChart && (
               <Image style={styles.donutChart} src={images.fteChart} />
             )}
@@ -315,30 +360,67 @@ function PDFPages({
             {images.productivityChart && (
               <Image style={styles.donutChart} src={images.productivityChart} />
             )}
-          </View>
+          </View> */}
         </View>
       </Page>
 
-      {/* ========= Page 4 =============== */}
+      {/* ========= Page 6 =============== */}
       <Page size={"A4"} style={styles.page}>
         <Logo />
         <View style={{ paddingHorizontal: 30 }}>
-          <Text style={styles.heading}>
-            Security and Data Breach Risk Reduction:
+          <Text style={styles.text}>
+            The modern workforce is increasingly mobile, with employees
+            requiring access to critical applications and resources from
+            anywhere, at any time. Sangfor Access Secure ensures business users
+            experience fewer interruptions, reduced downtime, and improved
+            latency when accessing both on-premises and cloud resources,
+            fostering a more empowered and efficient workforce.
           </Text>
-          <Text style={[styles.text, { marginBottom: 20 }]}>
-            The average cost of a security and data breach is *USD 53.00 per
-            employee, and a typical enterprise experiences an average of *3.2
-            security or data breaches per year. By minimizing attack surface
-            through Zero Trust, enforcing real-time threat intelligence,
-            improving network traffic visibility powered by AI algorithms, and
-            granular DLP capabilities, Sangfor Access Secure has reported more
-            than a 75% reduction in security and data breaches historically.
+
+          <Text style={styles.text}>
+            By enabling seamless productivity without interruptions or
+            lag—whether at home, in the office, or on the go—existing Access
+            Secure customers have historically achieved an average end-user
+            productivity improvement of over 8% annually. This directly enhances
+            organizational efficiency, innovation, and profitability.
           </Text>
-          <Text style={[styles.smallText, { marginBottom: 10 }]}>
-            *Source: Forrester Consulting Cost of A Cybersecurity Breach Survey
+          <Text style={[styles.smallText, { marginBottom: 20 }]}>
+            *Assumption: 20% of end-user productivity is impacted by system
+            disruptions during remote work.
           </Text>
-          <View style={styles.chartContainer}>
+
+          <Text style={styles.subHeading}>
+            Security and Data Breach Risk Reduction Cost Savings
+          </Text>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 6,
+              marginBottom: 15,
+            }}
+          >
+            <KpiCard
+              label="Reduced Likelihood of Data Breach"
+              value={Math.round(reduceLikelihoodOfDataBreach) + "%"}
+            />
+            <KpiCard
+              label="Cost of Securtiy"
+              value={formatCompactCurrency(totalCostOfSecurityAndDataRisk)}
+            />
+            <KpiCard
+              label="Risk adjust cost reduction"
+              value={formatCompactCurrency(riskAdjustedCostReduction)}
+            />
+            {/* <Text>{reduceLikelihoodOfDataBreach}</Text>
+            <Text>{totalCostOfSecurityAndDataRisk}</Text>
+            <Text>{riskAdjustedCostReduction}</Text> */}
+          </View>
+
+          {/* <View style={styles.chartContainer}>
             {images.reducedChart && (
               <Image style={styles.donutChart} src={images.reducedChart} />
             )}
@@ -348,21 +430,57 @@ function PDFPages({
             {images.riskChart && (
               <Image style={styles.donutChart} src={images.riskChart} />
             )}
-          </View>
+          </View> */}
 
-          <Text style={[styles.text, { marginBottom: 10 }]}>
-            <BoldText>Security & Networking Org Efficiency Gain:</BoldText>
-            IT Teams spend a considerable amount of time and effort on managing
-            software updates, patching servers, resolving mundane support
-            tickets, and administering a siloed policy infrastructure, which
-            prevents them from tackling a variety of strategic projects.
-            Existing Access Secure customers were able to reduce their
-            administrative overhead and benefitted from simplified networking
-            and security administration, automated updates, centralized
-            monitoring, and proactive threat prevention.
+          <Text style={styles.text}>
+            The financial impact of security breaches is significant, with
+            enterprises experiencing 3.2 breaches annually at an average cost of
+            USD$53 per employee**. Sangfor Access Secure reduces these risks
+            through zero trust principles, real-time threat intelligence,
+            AI-powered visibility, and granular DLP.
+          </Text>
+          <Text style={styles.text}>
+            Organizations adopting Access Secure have achieved a 75% reduction
+            in breaches, significantly lowering the likelihood of costly
+            incidents.
+          </Text>
+          <Text style={[styles.smallText, { marginBottom: 20 }]}>
+            **Source: Forrester Consulting Cost of A Cybersecurity Breach Survey
           </Text>
 
-          <View style={styles.chartContainer}>
+          <Text style={styles.subHeading}>
+            Security and Networking Operational Efficiency Gains
+          </Text>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 6,
+            }}
+          >
+            <KpiCard
+              label="NetOps and SecOps Efficiency Gains"
+              value={Math.round(netOps) + "%"}
+            />
+            <KpiCard
+              label="Additional FTEs on strategic projects"
+              value={additionalFTE < 10 ? "0" + additionalFTE : additionalFTE}
+            />
+            <KpiCard
+              label="Administrative Overhead Savings"
+              value={formatCompactCurrency(administrativeOverheadSavings)}
+            />
+            {/* <Text> {netOps}</Text> */}
+            {/* <Text>
+              {additionalFTE < 10 ? "0" + additionalFTE : additionalFTE}
+            </Text> */}
+            {/* <Text>{administrativeOverheadSavings}</Text> */}
+          </View>
+
+          {/* <View style={styles.chartContainer}>
             {images.secOpsChart && (
               <Image style={styles.donutChart} src={images.secOpsChart} />
             )}
@@ -372,31 +490,62 @@ function PDFPages({
             {images.savingChart && (
               <Image style={styles.donutChart} src={images.savingChart} />
             )}
-          </View>
+          </View> */}
+        </View>
+      </Page>
 
+      {/* ========= Page 7 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+        <View style={{ paddingHorizontal: 30 }}>
           <Text style={styles.text}>
-            Additional administrative overhead savings are unlocked by Access
-            Secure through reduced number of investigations, faster
-            mean-time-to-resolution and automated scaling of networking and
+            IT teams often spend considerable time managing software updates,
+            patching servers, resolving routine support tickets, and
+            administering policies. These tasks divert resources from strategic
+            initiatives that drive innovation and growth.
+          </Text>
+          <Text style={styles.text}>
+            Sangfor Access Secure simplifies operations through centralized
+            monitoring, automated updates, proactive threat prevention, and
+            streamlined policy management. Additional administrative overhead
+            savings are unlocked by a reduced number of investigations, faster
+            mean-time-to-resolution, and automated scaling of networking and
             security infrastructure.
           </Text>
-          <Text style={styles.text}>
-            <BoldText>Security & Networking Infra Cost Reduction:</BoldText>
-            With Sangfor Access Secure, customers have significantly reduced
-            their annual security and networking tech spend by replacing
-            expensive hardware appliances such as VPNs, SWGs, FWs, Edge
-            Security, DLP, SD-WAN, Web Proxy and MPLS connections. The unified
-            Access secure platform eliminates vendor management expenses,
-            upfront hardware expenditures, licensing fees, and ongoing
-            maintenance costs of physical infrastructure.
-          </Text>
-          <Text style={[styles.text, { marginBottom: 10 }]}>
-            For SD-WAN deployments, organizations save money on both hardware
-            and WAN connectivity costs by leveraging cross border traffic
-            acceleration.
+          <Text style={styles.subHeading}>
+            Security and Networking Infrastructure Cost Savings
           </Text>
 
-          <View style={styles.chartContainer}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 6,
+              marginBottom: 15,
+            }}
+          >
+            <KpiCard
+              label="Savings from Vendor Consolidation"
+              value={Math.round(savingsFromVendor) + "%"}
+            />
+            <KpiCard
+              label="Total Infrastructure cost savings"
+              value={formatCompactCurrency(totalInfrastructureCost)}
+            />
+            {userInput.acceleration === 1 && (
+              <KpiCard
+                label="SD-WAN and MPLS Cost Savings"
+                value={"~" + formatCompactCurrency(sdwan)}
+              />
+            )}
+
+            {/* <Text>{savingsFromVendor}</Text>
+            <Text>{totalInfrastructureCost}</Text>
+            {userInput.acceleration === 1 && <Text>{sdwan}</Text>} */}
+          </View>
+          {/* <View style={styles.chartContainer}>
             {images.consolidationChart && (
               <Image
                 style={styles.donutChart}
@@ -412,78 +561,123 @@ function PDFPages({
             {images.mplsChart && (
               <Image style={styles.donutChart} src={images.mplsChart} />
             )}
-          </View>
+          </View> */}
+
+          <Text style={styles.text}>
+            Sangfor Access Secure customers have significantly reduced their
+            annual security and networking technology spend by replacing
+            expensive hardware appliances, such as VPNs, SWGs, firewalls, DLP,
+            SD-WAN, web proxies, and MPLS connections.
+          </Text>
+          <Text style={styles.text}>
+            The unified Access Secure platform eliminates vendor management
+            expenses, upfront hardware costs, licensing fees, and ongoing
+            maintenance expenses for physical infrastructure. For SD-WAN
+            deployments, organizations save on both hardware and WAN
+            connectivity costs by leveraging cross-border traffic acceleration.{" "}
+          </Text>
         </View>
       </Page>
 
-      {/* ========= Page 5 =============== */}
+      {/* ========= Page 8 =============== */}
       <Page size="A4" style={styles.page}>
         <Logo />
         <View style={{ paddingHorizontal: 30 }}>
-          <Text style={styles.heading}>
-            Next Five Steps to define for your Access Secure implementation
-            roadmap
-          </Text>
+          <Text style={[styles.heading, { marginBottom: 20 }]}>NEXT STEPS</Text>
 
-          <Step step="1">
+          <Steps
+            step="1"
+            title="Determine What You Need from Sangfor Access Secure"
+          >
             <Text>
-              Determine what you need from Access Secure? Sangfor Access Secure
-              offer a broad range of solutions. It is recommended to identify
-              the key challenges and use cases that you would like to tap first.
+              Sangfor Access Secure offers a wide range of solutions. Start by
+              identifying the key challenges and use cases you want to address
+              first.
             </Text>
-          </Step>
+          </Steps>
 
-          <Step step="2">
+          <Steps
+            step="2"
+            title="Understand the Capabilities of Access Secure in Detail"
+          >
             <Text>
-              Understand the capabilities of Sangfor Access Secure in detail?
-              Discover the value Sangfor Access Secure can add to your
+              Discover how Sangfor Access Secure can add value to your
               organization’s specific needs. Schedule a meeting with us for a
-              customized discussion by filling in this web form.&nbsp;
-              <Link src="https://github.com" style={styles.link}>
-                web form
-              </Link>
+              tailored discussion by filling out our web form.
             </Text>
-          </Step>
+          </Steps>
 
-          <Step step="3">
+          <Steps step="3" title="Learn the Access Secure Environment">
             <Text>
-              Learn the Access Secure environment&nbsp;
-              <Link src="https://github.com" style={styles.link}>
-                Sign up for a free PoC
-              </Link>
-              &nbsp; with Sangfor Access Secure and play around with the
-              capabilities we offer. Get a clear understanding of configuring
-              security policies, monitoring performance, responding to security
-              alerts, installing clients etc. Engage with Sangfor experts for
-              best practices and unlock optimized configurations.
+              <BoldText>Sign up for a free PoC </BoldText>
+              with Access Secure and explore its capabilities. Gain a clear
+              understanding of configuring security policies, monitoring
+              performance, responding to security alerts, installing clients,
+              and more. Engage with Sangfor experts for best practices and
+              optimized configurations..
             </Text>
-          </Step>
+          </Steps>
 
-          <Step step="4">
+          <Steps step="4" title="Implement Access Secure Incrementally">
             <Text>
-              Implement Access Secure Incrementally Pilot test your PoC
-              environment on a single, small network first to see how the Access
-              Secure is working and how it integrates with your other security
-              software. This gives you an opportunity to see where adjustments
-              and modifications might be needed. This will also include creating
-              more stringent access controls based on the identified
-              relationships between users, applications, and data sources.
+              Begin by piloting your PoC on a small, single network to evaluate
+              how Access Secure performs and integrates with your existing
+              security tools. This allows you to identify areas for adjustments
+              and modifications. Additionally, establish stricter access
+              controls based on the identified relationships between users,
+              applications, and data sources.
             </Text>
-          </Step>
+          </Steps>
 
-          <Step step="5">
+          <Steps step="5" title="Review Your Configurations and Expand">
             <Text>
-              Review your configurations and expand Gradually configure Access
-              Secure for additional networks and users, one at a time to
-              accurately picture how Access Secure will affect the people using
-              your systems every day. Once they are comfortable, consider using
-              Access Secure for additional use cases.
+              Gradually expand Access Secure to additional networks and users,
+              one step at a time. This approach helps you accurately assess how
+              Access Secure impacts the people using your systems every day.
+              Once they are comfortable, consider applying Access Secure to
+              additional use cases.
             </Text>
-          </Step>
+          </Steps>
+        </View>
+      </Page>
 
-          <Text style={[styles.heading, { marginTop: 10 }]}>
-            Check out our additional resources
+      {/* ========= Page 9 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+
+        <View style={{ paddingHorizontal: 30 }}>
+          <Text
+            style={[
+              styles.heading,
+              { marginBottom: 8, lineHeight: 1.25, letterSpacing: "1px" },
+            ]}
+          >
+            FUTURE-PROOF YOUR BUSINESS WITH SANGFOR ACCESS SECURE
           </Text>
+          <Text style={styles.text}>
+            Sangfor Access Secure offers significant business benefits and cost
+            savings across various aspects, including hardware, security, and
+            administration. By consolidating features like ZTNA, SWG, and SD-WAN
+            into one unified, cloud-native platform, it simplifies management
+            and ensures secure and fast access to essential resources for
+            distributed workforces.
+          </Text>
+          <Text style={styles.text}>
+            With Access Secure, businesses future-proof their security and
+            network infrastructure, enabling seamless support for digital
+            transformation initiatives. Its scalable and adaptive architecture
+            ensures that organizations are equipped to handle evolving security
+            threats and network demands, empowering them to innovate and grow
+            with confidence.
+          </Text>
+          <Text style={[styles.text, { marginBottom: 20 }]}>
+            Visit www.sangfor.com to learn how Access Secure can help your
+            organization. Fill out the web form in the link above to schedule a
+            meeting with our team to discuss the best solutions for your needs.
+          </Text>
+
+          <Text style={styles.heading}>ADDITIONAL RESOURCES</Text>
+
           <ListItem>
             <Text>
               Learn more about &nbsp;
@@ -497,7 +691,7 @@ function PDFPages({
           </ListItem>
           <ListItem>
             <Text>
-              Learn more about Access Secure recent recognition - &nbsp;
+              Sangfor Access Secure recognized in &nbsp;
               <Link
                 src="https://connect.sangfor.com/frost-radar-sase-2023?utm_source=Website&utm_medium=Sangfor"
                 style={styles.link}
@@ -508,15 +702,26 @@ function PDFPages({
           </ListItem>
           <ListItem>
             <Text>
-              Learn in detail about &nbsp;
+              Explore &nbsp;
               <Link
                 src="https://www.sangfor.com/cybersecurity/solutions/zero-trust-guard-ztna"
                 style={styles.link}
               >
-                Sangfor’s Zero Trust Guard
+                Sangfor Zero Trust Guard
               </Link>
-              &nbsp; Capabilities, which is the flagship ZTNA module as part of
-              Access Secure Platform.
+              , the ZTNA module of Access Secure.
+            </Text>
+          </ListItem>
+          <ListItem>
+            <Text>
+              Access Secure &nbsp;
+              <Link
+                src="https://www.sangfor.com/success-stories/sangfor-access-secure-case-study-leading-singaporean-management-consultancy-firm"
+                style={styles.link}
+              >
+                success story
+              </Link>
+              &nbsp;of a leading Singaporean management consultancy firm
             </Text>
           </ListItem>
         </View>

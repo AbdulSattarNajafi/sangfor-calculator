@@ -23,10 +23,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date) {
-  // return new Intl.DateTimeFormat("en-US", {
-  //   dateStyle: "short",
-  //   timeStyle: "short",
-  // }).format(new Date(date));
   return new Date(date).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "long",
@@ -35,6 +31,12 @@ export function formatDate(date: Date) {
     minute: "2-digit",
     hour12: false,
   });
+}
+
+export function formatLongDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "long",
+  }).format(new Date(date));
 }
 
 export async function captureChartAsImage(

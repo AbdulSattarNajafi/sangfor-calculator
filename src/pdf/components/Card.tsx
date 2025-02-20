@@ -14,7 +14,7 @@ function Card({ label, labelWidth, text }: CardProps) {
     cardLabel: {
       backgroundColor: "#0070c0",
       display: "flex",
-      fontSize: 10,
+      fontSize: 12,
       fontWeight: 600,
       lineHeight: 1.2,
       width: labelWidth,
@@ -31,7 +31,8 @@ function Card({ label, labelWidth, text }: CardProps) {
       backgroundColor: "#e6f2ff",
       borderRadius: 4,
       borderTopLeftRadius: 0,
-      padding: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 12,
       marginTop: -1,
       zIndex: -1,
     },

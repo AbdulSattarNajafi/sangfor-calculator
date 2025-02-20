@@ -4,7 +4,7 @@ export type UserInputDataType = {
   phone: string;
   company: string;
   jobTitle: string;
-  date: Date | null;
+  date: Date;
   country: string;
   employeeCount: number;
   hybridPercentage: number;
@@ -110,4 +110,39 @@ export type ScsDataType = {
   default: {
     utm: UTMData;
   };
+};
+
+// Stored Data Types
+export type dataType = {
+  userId: string;
+  firstName: string;
+  emailAddress: string;
+  businessPhone: string;
+  companyName: string;
+  jobTitle: string;
+  submissionDate: Date;
+  countryName: string;
+  userConsent: boolean;
+  demoRequest: boolean;
+  region: string;
+  totalEmployees: number;
+  locations: number;
+  hostingSites: number;
+  hybridPercentage: number;
+  countries: number;
+  acceleration: boolean;
+  lead_source: string;
+  marketing_campaign: string;
+  landing_page_url: string;
+  form_page_url: string;
+  pdf_report_url: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_id: string;
+  utm_term: string;
+  utm_content: string;
+  gBraid: string;
+  gclid: string;
+  gdpr_checkbox: boolean;
 };

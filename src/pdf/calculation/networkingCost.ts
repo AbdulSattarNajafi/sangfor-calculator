@@ -1,5 +1,4 @@
 // 4- Security and Networking Infra Cost Reduction
-
 import { extractYearlyData } from "@/utils/helpers";
 import { NerworkCostType, UserInputDataType, YearlyData } from "@/utils/types";
 
@@ -55,7 +54,7 @@ export class NetworkingCost {
   }
 
   // Calculate connectivity cost
-  private getConnectivityCost() {
+  public getConnectivityCost() {
     return {
       year1: this.trafficAcceleration
         ? this.numCountries * this.replacingExistingMPLSConnectivityCost.year1

@@ -31,9 +31,6 @@ function CalculatorResult() {
         setFormula(json);
       } catch (err) {
         console.error(err);
-        // throw new Error(
-        //   err instanceof Error ? err.message : "Failed to fetch formula",
-        // );
       } finally {
         setIsLoading(false);
       }
@@ -93,7 +90,7 @@ function CalculatorResult() {
 
       <div className="mx-auto w-full max-w-6xl">
         <FinancialChart
-          height={width < 576 ? 280 : width > 576 && width < 992 ? 180 : 220}
+          height={width < 576 ? 280 : width >= 576 && width < 992 ? 180 : 220}
           titleFontSize={width > 576 ? 16 : 14}
           costs={[cost.year1, cost.year2, cost.year3]}
           benefits={[

@@ -34,21 +34,43 @@ export const calculationResult = (
     selectedCountry,
   ).getOrgEfficiencyGain();
 
+  const additionalFte = new SecurityGain(
+    formula.securityAndNetworkingOrgEfficiencyGain,
+    userInput,
+    selectedCountry,
+  ).getAdditionalFte();
+
   const productivityGain = new UserProductivityGain(
     formula.endUserProductivityGains,
     userInput,
     selectedCountry,
   ).getProductivityGain();
 
+  const totalProductivityRecover = new UserProductivityGain(
+    formula.endUserProductivityGains,
+    userInput,
+    selectedCountry,
+  ).getTotalProductivityRecover();
+
   const breachRisk = new BreachRisk(
     formula.securityAndDataBreachRiskReduction,
     userInput,
   ).getBreachRisck();
 
+  const costOfSecurityRisk = new BreachRisk(
+    formula.securityAndDataBreachRiskReduction,
+    userInput,
+  ).getTotalCostOfSecurityRisk();
+
   const networkCost = new NetworkingCost(
     formula.securityAndNetworkingInfraCostReduction,
     userInput,
   ).getNetworkCost();
+
+  const connectivityCost = new NetworkingCost(
+    formula.securityAndNetworkingInfraCostReduction,
+    userInput,
+  ).getConnectivityCost();
 
   const totalCost = new CostAnalysis(
     formula.analysisOfCosts,
@@ -175,6 +197,26 @@ export const calculationResult = (
     avgYearlyBenefits: {
       label: "Avg Yearly Benefit",
       value: (benefitsTotal - costsTotal) / 3,
+    },
+    totalProductivityRecover: {
+      year1: totalProductivityRecover.year1,
+      year2: totalProductivityRecover.year2,
+      year3: totalProductivityRecover.year3,
+    },
+    totalCostOfSecurityAndDataRisk: {
+      value:
+        costOfSecurityRisk.year1 +
+        costOfSecurityRisk.year2 +
+        costOfSecurityRisk.year3,
+    },
+    additionalFte: {
+      value: additionalFte,
+    },
+    sdwan: {
+      value:
+        connectivityCost.year1 +
+        connectivityCost.year2 +
+        connectivityCost.year3,
     },
   };
 };

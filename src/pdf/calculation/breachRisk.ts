@@ -1,5 +1,4 @@
 // 3- Security and Data Breach Risk Reduction
-
 import { extractYearlyData } from "@/utils/helpers";
 import { BreachRiskType, UserInputDataType, YearlyData } from "@/utils/types";
 
@@ -29,7 +28,7 @@ export class BreachRisk {
   }
 
   // Calculate total cost of security risk
-  private getTotalCostOfSecurityRisk() {
+  public getTotalCostOfSecurityRisk() {
     return {
       year1:
         this.averageNumberOfSecurity.year1 *

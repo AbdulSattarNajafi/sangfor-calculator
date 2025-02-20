@@ -33,7 +33,6 @@ export async function sendEmail(
     receiveUpdates,
   } = data;
 
-  const landingPageUrl = "";
   const formPageUrl = "";
   const pdfReportURL = "";
 
@@ -86,7 +85,7 @@ export async function sendEmail(
         type: "FieldValue",
         id: "2447",
         name: "landing_page_url",
-        value: landingPageUrl,
+        value: scs?.default.utm.value.landing_url,
       },
       {
         type: "FieldValue",

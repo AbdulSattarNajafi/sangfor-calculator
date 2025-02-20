@@ -8,6 +8,7 @@ import FinancialChart from "./charts/FinancialChart";
 import {
   captureChartAsImage,
   formatCompactCurrency,
+  formatDate,
   getUserInputData,
 } from "@/utils/helpers";
 import { FormulaType, UserInputDataType } from "@/utils/types";
@@ -15,10 +16,16 @@ import { useUserInputContext } from "@/contexts/UserInputContext";
 import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
 import PDFPages from "./components/PDFPages";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 function PdfGenerator() {
   const [formula, setFormula] = useState<FormulaType | null>(null);
   const [data, setData] = useState<UserInputDataType | null>(null);
+  const width = useWindowWidth();
+
+  const chartTitleFontSize = width < 1200 ? (width / 1000) * 24 : 32;
+  const chartHeight =
+    width < 1200 ? Math.min(220, 145 + (1200 - width) / 7) : 145;
 
   useEffect(() => {
     const storedData = getUserInputData();
@@ -82,36 +89,46 @@ function PdfGenerator() {
   const financeSummary = calculationResult(formula, data, selectedCountry);
 
   const userInputData = [
+    { label: "Organization Name", value: data.company },
     { label: "Total Number of Employees", value: data.employeeCount },
     {
-      label: "Percentage of Remote/Hybrid Employees ",
+      label: "Percentage of Remote/Hybrid Employees",
       value: data.hybridPercentage + "%",
     },
     {
-      label:
-        "Number of locations/sites (Inclu des HQ, Datacentres, Cloud, Branch, Retail, Manufacturing Plants) ",
+      label: "Number of Locations/Sites",
       value: data.locations,
     },
     {
-      label:
-        "Number of countries (if multiple sites are in one country, count them as one) ",
+      label: "Number of Countries",
       value: data.countries,
     },
     {
-      label:
-        "Number of Application Hosting Sites. Number of locations where applications servers are hosted. Please include public/private cloud locations as well. ",
+      label: "Number of Application Hosting Sites",
       value: data.hostingSites,
     },
-    { label: "Region (Country)", value: data.countryName },
+    { label: "Country/Region", value: data.countryName },
     {
-      label: "Replace existing MPLS with SASE Traffic Acceleration",
+      label: "Replace MPLS With SASE Traffic Acceleration?",
       value: data.acceleration === 1 ? "Yes" : "No",
+    },
+  ];
+
+  const userDetailData = [
+    { label: "Name", value: data.firstName },
+    { label: "Email Address", value: data.email },
+    { label: "Business Phone", value: data.phone },
+    { label: "Job Title", value: data.jobTitle },
+    { label: "Country/Region ", value: data.country },
+    {
+      label: "Submission Date & Time",
+      value: formatDate(new Date(data.date)),
     },
   ];
 
   const inputTableResult = [
     {
-      label: "3-Year ROI",
+      label: "Return of Investment (ROI)",
       value: Math.round(financeSummary.roiPercentages.total) + "%",
     },
     {
@@ -119,7 +136,7 @@ function PdfGenerator() {
       value: `Less than ${Math.round(financeSummary.paybackPeriod.value)} months`,
     },
     {
-      label: "Total Benefits (NPV)",
+      label: "Total Benefits (measure by Net Present Value)",
       value: `${formatCompactCurrency(financeSummary.benefits.npv)} USD`,
     },
     {
@@ -131,43 +148,43 @@ function PdfGenerator() {
   const financeTableData = [
     {
       label: "Workforce Productivity Gains",
-      year1: financeSummary.productivity.year1,
-      year2: financeSummary.productivity.year2,
-      year3: financeSummary.productivity.year3,
-      total: financeSummary.productivity.total,
-      presentValue: financeSummary.productivity.npv,
+      year1: Math.round(financeSummary.productivity.year1),
+      year2: Math.round(financeSummary.productivity.year2),
+      year3: Math.round(financeSummary.productivity.year3),
+      total: Math.round(financeSummary.productivity.total),
+      presentValue: Math.round(financeSummary.productivity.npv),
     },
     {
-      label: "Security and Data Breach Risk Reduction",
-      year1: financeSummary.breachRisk.year1,
-      year2: financeSummary.breachRisk.year2,
-      year3: financeSummary.breachRisk.year3,
-      total: financeSummary.breachRisk.total,
-      presentValue: financeSummary.breachRisk.npv,
+      label: "Security and Data Breach Risk Reduction Cost Savings",
+      year1: Math.round(financeSummary.breachRisk.year1),
+      year2: Math.round(financeSummary.breachRisk.year2),
+      year3: Math.round(financeSummary.breachRisk.year3),
+      total: Math.round(financeSummary.breachRisk.total),
+      presentValue: Math.round(financeSummary.breachRisk.npv),
     },
     {
-      label: "Security & Networking Org Efficiency Gain",
-      year1: financeSummary.orgEfficiencyGain.year1,
-      year2: financeSummary.orgEfficiencyGain.year2,
-      year3: financeSummary.orgEfficiencyGain.year3,
-      total: financeSummary.orgEfficiencyGain.total,
-      presentValue: financeSummary.orgEfficiencyGain.npv,
+      label: "Security & Networking Operational Efficiency Gains",
+      year1: Math.round(financeSummary.orgEfficiencyGain.year1),
+      year2: Math.round(financeSummary.orgEfficiencyGain.year2),
+      year3: Math.round(financeSummary.orgEfficiencyGain.year3),
+      total: Math.round(financeSummary.orgEfficiencyGain.total),
+      presentValue: Math.round(financeSummary.orgEfficiencyGain.npv),
     },
     {
-      label: "Security & Networking Infra Cost Reduction",
-      year1: financeSummary.networking.year1,
-      year2: financeSummary.networking.year2,
-      year3: financeSummary.networking.year3,
-      total: financeSummary.networking.total,
-      presentValue: financeSummary.networking.npv,
+      label: "Security and Networking Infrastructure Cost Savings",
+      year1: Math.round(financeSummary.networking.year1),
+      year2: Math.round(financeSummary.networking.year2),
+      year3: Math.round(financeSummary.networking.year3),
+      total: Math.round(financeSummary.networking.total),
+      presentValue: Math.round(financeSummary.networking.npv),
     },
     {
-      label: "Total Benefits (Risk Adjusted)",
-      year1: financeSummary.benefits.year1,
-      year2: financeSummary.benefits.year2,
-      year3: financeSummary.benefits.year3,
-      total: financeSummary.benefits.total,
-      presentValue: financeSummary.benefits.npv,
+      label: "Total Benefits (Risk-Adjusted)",
+      year1: Math.round(financeSummary.benefits.year1),
+      year2: Math.round(financeSummary.benefits.year2),
+      year3: Math.round(financeSummary.benefits.year3),
+      total: Math.round(financeSummary.benefits.total),
+      presentValue: Math.round(financeSummary.benefits.npv),
     },
   ];
 
@@ -226,6 +243,33 @@ function PdfGenerator() {
         userInputTableData={userInputData}
         inputTableResult={inputTableResult}
         financeTableData={financeTableData}
+        userDetailData={userDetailData}
+        totalProductivityRecover={financeSummary.totalProductivityRecover.year3}
+        additionalBusinessValue={financeSummary.productivity.total}
+        lostProductivityRecovered={
+          formula.endUserProductivityGains.productivityImprovement[0].year1 *
+          100
+        }
+        reduceLikelihoodOfDataBreach={
+          formula.securityAndDataBreachRiskReduction
+            .reducedLikelihoodOfABreach[0].year1 * 100
+        }
+        totalCostOfSecurityAndDataRisk={
+          financeSummary.totalCostOfSecurityAndDataRisk.value
+        }
+        riskAdjustedCostReduction={financeSummary.breachRisk.total}
+        netOps={
+          formula.securityAndNetworkingOrgEfficiencyGain
+            .efficiencyGainsDueToAccessSecure[2].year3 * 100
+        }
+        additionalFTE={financeSummary.additionalFte.value}
+        administrativeOverheadSavings={financeSummary.security.total}
+        savingsFromVendor={
+          formula.securityAndNetworkingInfraCostReduction
+            .percentageOfSavingsFromVendor[2].year3 * 100
+        }
+        totalInfrastructureCost={financeSummary.networking.total}
+        sdwan={financeSummary.sdwan.value}
       />,
     ).toBlob();
 
@@ -241,9 +285,9 @@ function PdfGenerator() {
         <button
           onClick={generatePDF}
           disabled={isLoading}
-          className="rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
+          className="whitespace-nowrap rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
         >
-          {isLoading ? "Generating..." : "View My Report"}
+          {isLoading ? "Preparing Your Report..." : "View My Report"}
         </button>
       </div>
       <div className="mb-6 flex w-full flex-col gap-4 bg-white p-6">
@@ -270,8 +314,8 @@ function PdfGenerator() {
               value={financeSummary.benefits.npv}
               totalValue={financeSummary.benefits.npv * 2}
             >
-              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#0070c0]">
-                <span className="word break-words">
+              <h5 className="-mt-8 text-center text-4xl font-bold leading-tight text-[#0070c0]">
+                <span className="break-words">
                   {formatCompactCurrency(financeSummary.benefits.npv)}
                 </span>
               </h5>
@@ -298,19 +342,20 @@ function PdfGenerator() {
               value={financeSummary.paybackPeriod.value}
               totalValue={36}
             >
-              <h5 className="-mt-4 text-center text-2xl font-bold leading-tight text-[#d26e2a]">
-                &lt; {financeSummary.paybackPeriod.value} <br /> months
+              <h5 className="-mt-5 text-center text-4xl font-bold leading-none text-[#d26e2a]">
+                &lt; {financeSummary.paybackPeriod.value} <br />
+                <span className="text-2xl">months</span>
               </h5>
             </DonutChart>
           </div>
         </div>
 
         {/* --------- Financial Chart ---------- */}
-        <div ref={financialChartRef}>
-          <div className="mx-auto w-full max-w-6xl">
+        <div className="mx-auto w-full max-w-6xl">
+          <div ref={financialChartRef}>
             <FinancialChart
-              titleFontSize={24}
-              height={145}
+              titleFontSize={chartTitleFontSize}
+              height={chartHeight}
               costs={[
                 financeSummary.cost.year1,
                 financeSummary.cost.year2,

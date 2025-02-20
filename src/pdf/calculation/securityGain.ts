@@ -1,5 +1,4 @@
 // 1- Security and Networking Org Efficiency Gain
-
 import { extractYearlyData } from "@/utils/helpers";
 import {
   SecurityGainType,
@@ -168,6 +167,13 @@ export class SecurityGain {
       year2: this.networkSalary * administrationTimeSaving.year2,
       year3: this.networkSalary * administrationTimeSaving.year3,
     };
+  }
+
+  public getAdditionalFte() {
+    const totalTimeSaving = this.getTotalTimeSaving();
+    const totalTimeSavingInTracking = this.getTotalTimeSavingInTracking();
+
+    return totalTimeSaving.year3 + totalTimeSavingInTracking.year3;
   }
 
   // D38

@@ -1,5 +1,4 @@
 // 2- End User Productivity Gains
-
 import { extractYearlyData } from "@/utils/helpers";
 import {
   ProductivityGainType,
@@ -58,7 +57,7 @@ export class UserProductivityGain {
   }
 
   // Calculate total productivity recovery
-  private getTotalProductivityRecover() {
+  public getTotalProductivityRecover() {
     const totalEndUserProductivity = this.getTotalEndUserProductivity();
 
     return {

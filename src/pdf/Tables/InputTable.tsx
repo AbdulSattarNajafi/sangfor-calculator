@@ -11,22 +11,18 @@ type InputTableProps = {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 12,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#0b2651",
-  },
   table: {
     width: "100%",
-    marginBottom: 30,
+    marginBottom: 20,
     borderRadius: 4,
     overflow: "hidden",
   },
   tableHeader: {
-    fontSize: 12,
+    flex: 1,
+    fontSize: 14,
     fontWeight: "bold",
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
     color: "#fff",
   },
   tableHeaderRow: {
@@ -34,29 +30,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#0070c0",
   },
-  tableHeaderValue: {
-    fontSize: 12,
-    fontWeight: "bold",
-    textAlign: "center",
-    width: 160,
-    padding: 8,
-    color: "#fff",
-  },
   tableRow: {
     display: "flex",
     flexDirection: "row",
     borderBottom: "1px solid #fff",
   },
   tableCell: {
-    padding: 8,
-    fontSize: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    lineHeight: 1,
+    fontSize: 11,
     backgroundColor: "#e6f2ff",
   },
   tableCellValue: {
     width: 160,
     paddingHorizontal: 2,
     paddingVertical: 8,
-    fontSize: 10,
+    lineHeight: 1,
+    fontSize: 11,
     fontWeight: "bold",
     textAlign: "center",
     backgroundColor: "#d6f5d6",
@@ -64,23 +55,19 @@ const styles = StyleSheet.create({
   },
 });
 
-function InputTable({ data, title }: InputTableProps) {
+function InputTable({ title, data }: InputTableProps) {
   return (
-    <>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.table}>
-        <View style={styles.tableHeaderRow}>
-          <Text style={[styles.tableHeader, { flex: 1 }]}>Metric</Text>
-          <Text style={styles.tableHeaderValue}>Input Value</Text>
-        </View>
-        {data.map((row, index) => (
-          <View key={index} style={styles.tableRow}>
-            <Text style={[styles.tableCell, { flex: 1 }]}>{row.label}</Text>
-            <Text style={styles.tableCellValue}>{row.value}</Text>
-          </View>
-        ))}
+    <View style={styles.table}>
+      <View style={styles.tableHeaderRow}>
+        <Text style={styles.tableHeader}>{title}</Text>
       </View>
-    </>
+      {data.map((row, index) => (
+        <View key={index} style={styles.tableRow}>
+          <Text style={[styles.tableCell, { flex: 1 }]}>{row.label}</Text>
+          <Text style={styles.tableCellValue}>{row.value}</Text>
+        </View>
+      ))}
+    </View>
   );
 }
 
