@@ -1,14 +1,17 @@
 "use server";
 
-import { contactSchema } from "./zodSchema";
+import { MarketingDataTypes } from "@/utils/types";
+import { contactSchema } from "@/utils/zodSchema";
 import { parseWithZod } from "@conform-to/zod";
 import { redirect } from "next/navigation";
-import { MarketingDataTypes } from "./types";
 
-const API_URL = "https://secure.p06.eloqua.com/API/REST/2.0/data/form/172";
+type PayloadType = {
+  scs: MarketingDataTypes;
+  id: string;
+};
 
-export async function sendEmail(
-  scs: MarketingDataTypes,
+export async function createEloquaEmail(
+  payload: PayloadType,
   prevState: unknown,
   formData: FormData,
 ) {
@@ -20,24 +23,28 @@ export async function sendEmail(
     return submission.reply();
   }
 
+  const { scs } = payload;
+  const API_URL = "https://secure.p06.eloqua.com/API/REST/2.0/data/form/172";
+
   const data = Object.fromEntries(formData.entries());
 
   const {
     firstName,
-    email,
-    phone,
-    company,
+    emailAddress,
+    businessPhone,
+    companyName,
     jobTitle,
-    country,
-    requestDemo,
-    receiveUpdates,
+    countryName,
+    demoRequest,
+    userConsent,
   } = data;
 
+  // const formPageUrl = `https://www.sangfor.com/en/sase-tco-roi-calculator/${id}`;
   const formPageUrl = "";
   const pdfReportURL = "";
 
-  const demoRequest = requestDemo === "on" ? true : false;
-  const receiveUpdate = receiveUpdates === "on" ? true : false;
+  const requestDemo = demoRequest === "on" ? true : false;
+  const receiveUpdate = userConsent === "on" ? true : false;
 
   const credentials = btoa(
     "SANGFORTECHNOLOGIES\\Drupal.Eloqua:SteveJobs$$$888M@cb00kProDEAT*latm1",
@@ -47,21 +54,31 @@ export async function sendEmail(
     type: "FormData",
     fieldValues: [
       { type: "FieldValue", id: "2436", name: "first_name", value: firstName },
-      { type: "FieldValue", id: "2437", name: "email_address", value: email },
-      { type: "FieldValue", id: "2438", name: "business_phone", value: phone },
-      { type: "FieldValue", id: "2439", name: "company", value: company },
+      {
+        type: "FieldValue",
+        id: "2437",
+        name: "email_address",
+        value: emailAddress,
+      },
+      {
+        type: "FieldValue",
+        id: "2438",
+        name: "business_phone",
+        value: businessPhone,
+      },
+      { type: "FieldValue", id: "2439", name: "company", value: companyName },
       { type: "FieldValue", id: "2440", name: "job_title", value: jobTitle },
       {
         type: "FieldValue",
         id: "2441",
         name: "country_region",
-        value: country,
+        value: countryName,
       },
       {
         type: "FieldValue",
         id: "2442",
         name: "Do you want to Request a Demo for Sangfor SASE?",
-        value: demoRequest,
+        value: requestDemo,
       },
       {
         type: "FieldValue",

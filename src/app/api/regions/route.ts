@@ -31,7 +31,7 @@ export async function GET() {
       ),
     );
 
-    return NextResponse.json({ listsData: cleanedData });
+    return NextResponse.json({ regions: cleanedData });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },

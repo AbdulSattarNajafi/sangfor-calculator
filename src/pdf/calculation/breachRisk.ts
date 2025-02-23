@@ -1,6 +1,6 @@
 // 3- Security and Data Breach Risk Reduction
 import { extractYearlyData } from "@/utils/helpers";
-import { BreachRiskType, UserInputDataType, YearlyData } from "@/utils/types";
+import { BreachRiskType, CustomerDataType, YearlyData } from "@/utils/types";
 
 export class BreachRisk {
   private averageNumberOfSecurity: YearlyData;
@@ -11,7 +11,7 @@ export class BreachRisk {
   private numEmployees: number;
   private hybridEmployeePercentage: number;
 
-  constructor(formula: BreachRiskType, userInput: UserInputDataType) {
+  constructor(formula: BreachRiskType, userInput: CustomerDataType) {
     this.averageNumberOfSecurity = extractYearlyData(
       formula.averageNumberOfSecurity,
     );
@@ -23,7 +23,7 @@ export class BreachRisk {
     );
     this.riskAdjustment = extractYearlyData(formula.riskAdjustment);
 
-    this.numEmployees = userInput.employeeCount;
+    this.numEmployees = userInput.totalEmployees;
     this.hybridEmployeePercentage = userInput.hybridPercentage / 100;
   }
 

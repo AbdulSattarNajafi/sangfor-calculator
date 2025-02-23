@@ -1,9 +1,9 @@
 // 1- Security and Networking Org Efficiency Gain
 import { extractYearlyData } from "@/utils/helpers";
 import {
+  CustomerDataType,
   SecurityGainType,
   SelectedCountryType,
-  UserInputDataType,
   YearlyData,
 } from "@/utils/types";
 
@@ -23,7 +23,7 @@ export class SecurityGain {
 
   constructor(
     formula: SecurityGainType,
-    userInput: UserInputDataType,
+    userInput: CustomerDataType,
     selectedCountry: SelectedCountryType,
   ) {
     this.securityTeamPerEmployee = extractYearlyData(
@@ -49,7 +49,7 @@ export class SecurityGain {
     );
     this.riskAdjustment = extractYearlyData(formula.riskAdjustment);
 
-    this.numEmployees = userInput.employeeCount;
+    this.numEmployees = userInput.totalEmployees;
     this.securitySalary = selectedCountry.securityEmployeeSalary;
     this.networkSalary = selectedCountry.networkEmployeeSalary;
   }

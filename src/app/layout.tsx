@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Calculator",
-  description: "Sangfor ROI Calculator",
+  description: "Sangfor Sase ROI Calculator",
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
 // 4- Security and Networking Infra Cost Reduction
 import { extractYearlyData } from "@/utils/helpers";
-import { NerworkCostType, UserInputDataType, YearlyData } from "@/utils/types";
+import { CustomerDataType, NerworkCostType, YearlyData } from "@/utils/types";
 
 export class NetworkingCost {
   private numberOfEmployeeCost: YearlyData;
@@ -16,7 +16,7 @@ export class NetworkingCost {
   private trafficAcceleration: boolean;
   private numCountries: number;
 
-  constructor(formula: NerworkCostType, userInput: UserInputDataType) {
+  constructor(formula: NerworkCostType, userInput: CustomerDataType) {
     this.numberOfEmployeeCost = extractYearlyData(formula.numberOfEmployeeCost);
     this.numberOfRemoteSites = extractYearlyData(formula.numberOfRemoteSites);
     this.dcs = extractYearlyData(formula.dCs);
@@ -28,7 +28,7 @@ export class NetworkingCost {
     );
     this.riskAdjustment = extractYearlyData(formula.riskAdjustment);
 
-    this.numEmployees = userInput.employeeCount;
+    this.numEmployees = userInput.totalEmployees;
     this.numLocations = userInput.locations;
     this.applicationSites = userInput.hostingSites;
     this.trafficAcceleration = Boolean(userInput.acceleration);

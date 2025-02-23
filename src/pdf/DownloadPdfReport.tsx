@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRef, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
 import {
   captureChartAsImage,
+  downloadFile,
   formatCompactCurrency,
-  getUserInputData,
 } from "@/utils/helpers";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import { calculationResult } from "./calculation/calculationResult";
@@ -17,17 +16,22 @@ import PDFPages from "./components/PDFPages";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import useFormula from "@/hooks/useFormula";
 import Spinner from "@/components/Spinner";
-import { useCustomerInfo } from "@/hooks/useCustomer";
 import useRegions from "@/hooks/useRegions";
+import { useCustomerInfo } from "@/hooks/useCustomer";
+import { redirect } from "next/navigation";
 
-function PdfGenerator() {
-  const [id, setId] = useState("");
+function DownloadPdfReport({ id }: { id: string }) {
+  const { customer, customerIsLoading } = useCustomerInfo(id);
+
+  if (!customer) {
+    redirect("/");
+  }
+
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useUserInputContext();
   const { formula, formulaIsLoading } = useFormula();
   const { regions, regionsIsLoading } = useRegions();
   const width = useWindowWidth();
-  const { customer, customerError, customerIsLoading } = useCustomerInfo(id);
 
   const roiChartRef = useRef<HTMLDivElement>(null);
   const npvChartRef = useRef<HTMLDivElement>(null);
@@ -39,14 +43,6 @@ function PdfGenerator() {
     (region) => region.country === state.region,
   );
 
-  useEffect(() => {
-    const storedData = getUserInputData();
-    if (!storedData) {
-      redirect("/");
-    }
-    setId(storedData);
-  }, []);
-
   if (regionsIsLoading || formulaIsLoading || customerIsLoading) {
     return (
       <div className="flex h-dvh items-center justify-center">
@@ -55,7 +51,7 @@ function PdfGenerator() {
     );
   }
 
-  if (!selectedCountry || !formula || !customer || customerError) {
+  if (!selectedCountry || !formula || !customer) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <p className="text-center">Something Went wrong!</p>
@@ -111,7 +107,7 @@ function PdfGenerator() {
     setIsLoading(false);
 
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, "_blank");
+    downloadFile(pdfUrl, "Sangfor-TCO-ROI-Report.pdf");
   };
 
   return (
@@ -131,7 +127,7 @@ function PdfGenerator() {
               disabled={isLoading}
               className="whitespace-nowrap rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
             >
-              {isLoading ? "Preparing Your Report..." : "View My Report"}
+              {isLoading ? "Downloading..." : "Download My Report"}
             </button>
           </div>
         </div>
@@ -190,7 +186,8 @@ function PdfGenerator() {
               totalValue={36}
             >
               <h5 className="-mt-5 text-center text-4xl font-bold leading-none text-[#d26e2a]">
-                &lt; {financeSummary.otherCalculation.paybackPeriod} <br />
+                &lt; {financeSummary.otherCalculation.paybackPeriod}
+                <br />
                 <span className="text-2xl">months</span>
               </h5>
             </DonutChart>
@@ -213,4 +210,4 @@ function PdfGenerator() {
   );
 }
 
-export default PdfGenerator;
+export default DownloadPdfReport;

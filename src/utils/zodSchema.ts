@@ -23,15 +23,15 @@ export const contactSchema = z.object({
     .string({ message: "First Name is required" })
     .min(3, { message: "First name must be at least 3 characters long." })
     .max(30, { message: "First name must not exceed 30 characters." }),
-  email: emailSchema,
-  phone: phoneSchema,
-  company: z
+  emailAddress: emailSchema,
+  businessPhone: phoneSchema,
+  companyName: z
     .string({ message: "Company name is required" })
     .min(2, { message: "Company name must be at least 2 characters long." }),
   jobTitle: z
     .string({ message: "Job title is required" })
     .min(2, { message: "Job title must be at least 2 characters long." }),
-  country: z
+  countryName: z
     .string({ message: "Country is required" })
     .min(2, { message: "Country name must be at least 2 characters long." }),
 });

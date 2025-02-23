@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { FinancialData } from "@/utils/types";
 
 ChartJS.register(
   CategoryScale,
@@ -21,8 +22,8 @@ ChartJS.register(
 );
 
 type FinancialChartProps = {
-  benefits: number[];
-  costs: number[];
+  benefits: FinancialData;
+  costs: FinancialData;
   titleFontSize: number;
   height?: number;
 };
@@ -33,19 +34,27 @@ const FinancialChart = ({
   titleFontSize,
   height,
 }: FinancialChartProps) => {
+  const benefit = [
+    benefits.year1 - costs.year1,
+    benefits.year2 - costs.year2,
+    benefits.year3 - costs.year3,
+  ];
+
+  const cost = [costs.year1, costs.year2, costs.year3];
+
   const data = {
     labels: ["1", "2", "3"],
     datasets: [
       {
         label: "Total Benefits",
-        data: benefits,
+        data: benefit,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
       {
         label: "Total Costs",
-        data: costs, // Example cost data
+        data: cost, // Example cost data
         backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,

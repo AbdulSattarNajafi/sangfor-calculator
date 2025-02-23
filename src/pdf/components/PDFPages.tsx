@@ -14,22 +14,15 @@ import InputTable from "../Tables/InputTable";
 import FinanceTable from "../Tables/FinanceTable";
 import ListItem from "./ListItem";
 import Logo from "./Logo";
-import { formatCompactCurrency, formatLongDate } from "@/utils/helpers";
-import { UserInputDataType } from "@/utils/types";
+import {
+  formatCompactCurrency,
+  formatDate,
+  formatLongDate,
+} from "@/utils/helpers";
+import { CustomerDataType, FinancialData } from "@/utils/types";
 import BoldText from "./BoldText";
 import KpiCard from "./KpiCard";
 import Steps from "./Steps";
-
-type InputDataType = { label: string; value: string | number };
-
-type FinanceTableDataType = {
-  label: string;
-  year1: number;
-  year2: number;
-  year3: number;
-  total: number;
-  presentValue: number;
-};
 
 type ChartImageType = {
   roiChart: string | null;
@@ -37,18 +30,41 @@ type ChartImageType = {
   breachRiskChart: string | null;
   paybackChart: string | null;
   financialChart: string | null;
-  fteChart: string | null;
-  businessChart: string | null;
-  productivityChart: string | null;
-  reducedChart: string | null;
-  securityChart: string | null;
-  riskChart: string | null;
-  secOpsChart: string | null;
-  strategicChart: string | null;
-  savingChart: string | null;
-  consolidationChart: string | null;
-  infrastructureChart: string | null;
-  mplsChart: string | null;
+};
+
+type OtherCalculationType = {
+  paybackPeriod: number;
+  avgYearlyBenefits: number;
+  totalCostOfSecurityAndDataRisk: number;
+  additionalFte: number;
+  sdwan: number;
+};
+
+type CalculationData = {
+  security: FinancialData;
+  orgEfficiencyGain: FinancialData;
+  productivity: FinancialData;
+  breachRisk: FinancialData;
+  networking: FinancialData;
+  benefits: FinancialData;
+  cost: FinancialData;
+  roiPercentages: FinancialData;
+  totalProductivityRecover: FinancialData;
+  otherCalculation: OtherCalculationType;
+};
+
+type OperationalSavingsType = {
+  lostProductivityRecovered: number;
+  reduceLikelihoodOfDataBreach: number;
+  netOps: number;
+  savingsFromVendor: number;
+};
+
+type PDFPagesProps = {
+  images: ChartImageType;
+  userInput: CustomerDataType;
+  calculationData: CalculationData;
+  operationalSavings: OperationalSavingsType;
 };
 
 const styles = StyleSheet.create({
@@ -113,47 +129,124 @@ const styles = StyleSheet.create({
   donutChart: { width: "100px", height: "auto" },
 });
 
-type PDFPagesProps = {
-  userInput: UserInputDataType;
-  images: ChartImageType;
-  userInputTableData: InputDataType[];
-  inputTableResult: InputDataType[];
-  financeTableData: FinanceTableDataType[];
-  userDetailData: InputDataType[];
-  totalProductivityRecover: number;
-  additionalBusinessValue: number;
-  lostProductivityRecovered: number;
-  reduceLikelihoodOfDataBreach: number;
-  totalCostOfSecurityAndDataRisk: number;
-  riskAdjustedCostReduction: number;
-  netOps: number;
-  additionalFTE: number;
-  administrativeOverheadSavings: number;
-  savingsFromVendor: number;
-  totalInfrastructureCost: number;
-  sdwan: number;
-};
-
 function PDFPages({
-  userInput,
   images,
-  userInputTableData,
-  inputTableResult,
-  financeTableData,
-  userDetailData,
-  totalProductivityRecover,
-  additionalBusinessValue,
-  lostProductivityRecovered,
-  reduceLikelihoodOfDataBreach,
-  totalCostOfSecurityAndDataRisk,
-  riskAdjustedCostReduction,
-  netOps,
-  additionalFTE,
-  administrativeOverheadSavings,
-  savingsFromVendor,
-  totalInfrastructureCost,
-  sdwan,
+  userInput,
+  calculationData,
+  operationalSavings,
 }: PDFPagesProps) {
+  const {
+    security,
+    orgEfficiencyGain,
+    productivity,
+    breachRisk,
+    networking,
+    benefits,
+    roiPercentages,
+    totalProductivityRecover,
+    otherCalculation,
+  } = calculationData;
+
+  const organizationDetailTableData = [
+    { label: "Organization Name", value: userInput.companyName },
+    { label: "Total Number of Employees", value: userInput.totalEmployees },
+    {
+      label: "Percentage of Remote/Hybrid Employees",
+      value: userInput.hybridPercentage + "%",
+    },
+    {
+      label: "Number of Locations/Sites",
+      value: userInput.locations,
+    },
+    {
+      label: "Number of Countries",
+      value: userInput.countries,
+    },
+    {
+      label: "Number of Application Hosting Sites",
+      value: userInput.hostingSites,
+    },
+    { label: "Country/Region", value: userInput.region },
+    {
+      label: "Replace MPLS With SASE Traffic Acceleration?",
+      value: userInput.acceleration ? "Yes" : "No",
+    },
+  ];
+
+  const userDetailTableData = [
+    { label: "Name", value: userInput.firstName },
+    { label: "Email Address", value: userInput.emailAddress },
+    { label: "Business Phone", value: userInput.businessPhone },
+    { label: "Job Title", value: userInput.jobTitle },
+    { label: "Country/Region ", value: userInput.countryName },
+    {
+      label: "Submission Date & Time",
+      value: formatDate(new Date(userInput.submissionDate)),
+    },
+  ];
+
+  const riskAdjustedTableData = [
+    {
+      label: "Return of Investment (ROI)",
+      value: Math.round(roiPercentages.total) + "%",
+    },
+    {
+      label: "Payback Period",
+      value: `Less than ${Math.round(otherCalculation.paybackPeriod)} months`,
+    },
+    {
+      label: "Total Benefits (measure by Net Present Value)",
+      value: `${formatCompactCurrency(benefits.npv)} USD`,
+    },
+    {
+      label: "Average Yearly Benefit",
+      value: `${formatCompactCurrency(otherCalculation.avgYearlyBenefits)} USD`,
+    },
+  ];
+
+  const financeTableData = [
+    {
+      label: "Workforce Productivity Gains",
+      year1: Math.round(productivity.year1),
+      year2: Math.round(productivity.year2),
+      year3: Math.round(productivity.year3),
+      total: Math.round(productivity.total),
+      presentValue: Math.round(productivity.npv),
+    },
+    {
+      label: "Security and Data Breach Risk Reduction Cost Savings",
+      year1: Math.round(breachRisk.year1),
+      year2: Math.round(breachRisk.year2),
+      year3: Math.round(breachRisk.year3),
+      total: Math.round(breachRisk.total),
+      presentValue: Math.round(breachRisk.npv),
+    },
+    {
+      label: "Security & Networking Operational Efficiency Gains",
+      year1: Math.round(orgEfficiencyGain.year1),
+      year2: Math.round(orgEfficiencyGain.year2),
+      year3: Math.round(orgEfficiencyGain.year3),
+      total: Math.round(orgEfficiencyGain.total),
+      presentValue: Math.round(orgEfficiencyGain.npv),
+    },
+    {
+      label: "Security and Networking Infrastructure Cost Savings",
+      year1: Math.round(networking.year1),
+      year2: Math.round(networking.year2),
+      year3: Math.round(networking.year3),
+      total: Math.round(networking.total),
+      presentValue: Math.round(networking.npv),
+    },
+    {
+      label: "Total Benefits (Risk-Adjusted)",
+      year1: Math.round(benefits.year1),
+      year2: Math.round(benefits.year2),
+      year3: Math.round(benefits.year3),
+      total: Math.round(benefits.total),
+      presentValue: Math.round(benefits.npv),
+    },
+  ];
+
   return (
     <Document>
       {/* ========= Page 1 =============== */}
@@ -184,9 +277,9 @@ function PDFPages({
           >
             Sangfor Access Secure
           </Text>
-          {userInput.date && (
+          {userInput.submissionDate && (
             <Text style={{ textAlign: "center", fontSize: 12 }}>
-              {formatLongDate(userInput.date)}
+              {formatLongDate(new Date(userInput.submissionDate))}
             </Text>
           )}
         </View>
@@ -220,9 +313,9 @@ function PDFPages({
           </Text>
           <InputTable
             title="Your Organization’s Details"
-            data={userInputTableData}
+            data={organizationDetailTableData}
           />
-          <InputTable title="Your Details" data={userDetailData} />
+          <InputTable title="Your Details" data={userDetailTableData} />
         </View>
       </Page>
 
@@ -235,7 +328,7 @@ function PDFPages({
           </Text>
           <InputTable
             title="Consolidated 3-Year Risk-Adjusted Metrics"
-            data={inputTableResult}
+            data={riskAdjustedTableData}
           />
 
           <View
@@ -338,29 +431,19 @@ function PDFPages({
           >
             <KpiCard
               label="Number of FTEs Savings"
-              value={totalProductivityRecover}
+              value={totalProductivityRecover.year3}
             />
             <KpiCard
               label="Additional Business Value"
-              value={formatCompactCurrency(additionalBusinessValue)}
+              value={formatCompactCurrency(productivity.total)}
             />
             <KpiCard
               label="Lost Productivity Recovered"
-              value={Math.round(lostProductivityRecovered) + "%"}
+              value={
+                Math.round(operationalSavings.lostProductivityRecovered) + "%"
+              }
             />
           </View>
-
-          {/* <View style={styles.chartContainer}>
-            {images.fteChart && (
-              <Image style={styles.donutChart} src={images.fteChart} />
-            )}
-            {images.businessChart && (
-              <Image style={styles.donutChart} src={images.businessChart} />
-            )}
-            {images.productivityChart && (
-              <Image style={styles.donutChart} src={images.productivityChart} />
-            )}
-          </View> */}
         </View>
       </Page>
 
@@ -405,32 +488,22 @@ function PDFPages({
           >
             <KpiCard
               label="Reduced Likelihood of Data Breach"
-              value={Math.round(reduceLikelihoodOfDataBreach) + "%"}
+              value={
+                Math.round(operationalSavings.reduceLikelihoodOfDataBreach) +
+                "%"
+              }
             />
             <KpiCard
               label="Cost of Securtiy"
-              value={formatCompactCurrency(totalCostOfSecurityAndDataRisk)}
+              value={formatCompactCurrency(
+                otherCalculation.totalCostOfSecurityAndDataRisk,
+              )}
             />
             <KpiCard
               label="Risk adjust cost reduction"
-              value={formatCompactCurrency(riskAdjustedCostReduction)}
+              value={formatCompactCurrency(breachRisk.total)}
             />
-            {/* <Text>{reduceLikelihoodOfDataBreach}</Text>
-            <Text>{totalCostOfSecurityAndDataRisk}</Text>
-            <Text>{riskAdjustedCostReduction}</Text> */}
           </View>
-
-          {/* <View style={styles.chartContainer}>
-            {images.reducedChart && (
-              <Image style={styles.donutChart} src={images.reducedChart} />
-            )}
-            {images.securityChart && (
-              <Image style={styles.donutChart} src={images.securityChart} />
-            )}
-            {images.riskChart && (
-              <Image style={styles.donutChart} src={images.riskChart} />
-            )}
-          </View> */}
 
           <Text style={styles.text}>
             The financial impact of security breaches is significant, with
@@ -463,34 +536,21 @@ function PDFPages({
           >
             <KpiCard
               label="NetOps and SecOps Efficiency Gains"
-              value={Math.round(netOps) + "%"}
+              value={Math.round(operationalSavings.netOps) + "%"}
             />
             <KpiCard
               label="Additional FTEs on strategic projects"
-              value={additionalFTE < 10 ? "0" + additionalFTE : additionalFTE}
+              value={
+                otherCalculation.additionalFte < 10
+                  ? "0" + otherCalculation.additionalFte
+                  : otherCalculation.additionalFte
+              }
             />
             <KpiCard
               label="Administrative Overhead Savings"
-              value={formatCompactCurrency(administrativeOverheadSavings)}
+              value={formatCompactCurrency(security.total)}
             />
-            {/* <Text> {netOps}</Text> */}
-            {/* <Text>
-              {additionalFTE < 10 ? "0" + additionalFTE : additionalFTE}
-            </Text> */}
-            {/* <Text>{administrativeOverheadSavings}</Text> */}
           </View>
-
-          {/* <View style={styles.chartContainer}>
-            {images.secOpsChart && (
-              <Image style={styles.donutChart} src={images.secOpsChart} />
-            )}
-            {images.strategicChart && (
-              <Image style={styles.donutChart} src={images.strategicChart} />
-            )}
-            {images.savingChart && (
-              <Image style={styles.donutChart} src={images.savingChart} />
-            )}
-          </View> */}
         </View>
       </Page>
 
@@ -528,40 +588,19 @@ function PDFPages({
           >
             <KpiCard
               label="Savings from Vendor Consolidation"
-              value={Math.round(savingsFromVendor) + "%"}
+              value={Math.round(operationalSavings.savingsFromVendor) + "%"}
             />
             <KpiCard
               label="Total Infrastructure cost savings"
-              value={formatCompactCurrency(totalInfrastructureCost)}
+              value={formatCompactCurrency(networking.total)}
             />
-            {userInput.acceleration === 1 && (
+            {userInput.acceleration && (
               <KpiCard
                 label="SD-WAN and MPLS Cost Savings"
-                value={"~" + formatCompactCurrency(sdwan)}
+                value={"~" + formatCompactCurrency(otherCalculation.sdwan)}
               />
             )}
-
-            {/* <Text>{savingsFromVendor}</Text>
-            <Text>{totalInfrastructureCost}</Text>
-            {userInput.acceleration === 1 && <Text>{sdwan}</Text>} */}
           </View>
-          {/* <View style={styles.chartContainer}>
-            {images.consolidationChart && (
-              <Image
-                style={styles.donutChart}
-                src={images.consolidationChart}
-              />
-            )}
-            {images.infrastructureChart && (
-              <Image
-                style={styles.donutChart}
-                src={images.infrastructureChart}
-              />
-            )}
-            {images.mplsChart && (
-              <Image style={styles.donutChart} src={images.mplsChart} />
-            )}
-          </View> */}
 
           <Text style={styles.text}>
             Sangfor Access Secure customers have significantly reduced their

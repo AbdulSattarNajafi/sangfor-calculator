@@ -1,8 +1,8 @@
 import { SecurityGain } from "@/pdf/calculation/securityGain";
 import {
+  CustomerDataType,
   FormulaType,
   SelectedCountryType,
-  UserInputDataType,
 } from "@/utils/types";
 import { UserProductivityGain } from "./userProductivityGain";
 import { BreachRisk } from "./breachRisk";
@@ -19,7 +19,7 @@ function calculateNPV(cashFlows: number[]) {
 
 export const calculationResult = (
   formula: FormulaType,
-  userInput: UserInputDataType,
+  userInput: CustomerDataType,
   selectedCountry: SelectedCountryType,
 ) => {
   const securityGain = new SecurityGain(
@@ -98,8 +98,8 @@ export const calculationResult = (
   const costsTotal = totalCost.year1 + totalCost.year2 + totalCost.year3;
 
   return {
+    // Security & Networking Org Efficiency Gain
     security: {
-      label: "Security & Networking Org Efficiency Gain",
       year1: securityGain.year1,
       year2: securityGain.year2,
       year3: securityGain.year3,
@@ -110,8 +110,8 @@ export const calculationResult = (
         securityGain.year3,
       ]),
     },
+    // Total value of Security organization efficiency gain
     orgEfficiencyGain: {
-      label: "Total value of Security organization efficiency gain (A4+A7)*A8",
       year1: orgEfficiencyGain.year1,
       year2: orgEfficiencyGain.year2,
       year3: orgEfficiencyGain.year3,
@@ -125,8 +125,8 @@ export const calculationResult = (
         orgEfficiencyGain.year3,
       ]),
     },
+    // End User Productivity Gains
     productivity: {
-      label: "End User Productivity Gains",
       year1: productivityGain.year1,
       year2: productivityGain.year2,
       year3: productivityGain.year3,
@@ -140,16 +140,16 @@ export const calculationResult = (
         productivityGain.year3,
       ]),
     },
+    // Security and Data Breach Risk Reduction
     breachRisk: {
-      label: "Security and Data Breach Risk Reduction",
       year1: breachRisk.year1,
       year2: breachRisk.year2,
       year3: breachRisk.year3,
       total: breachRisk.year1 + breachRisk.year2 + breachRisk.year3,
       npv: calculateNPV([breachRisk.year1, breachRisk.year2, breachRisk.year3]),
     },
+    // Security & Networking Infra Cost Reduction
     networking: {
-      label: "Security & Networking Infra Cost Reduction",
       year1: networkCost.year1,
       year2: networkCost.year2,
       year3: networkCost.year3,
@@ -160,23 +160,24 @@ export const calculationResult = (
         networkCost.year3,
       ]),
     },
+    // Total Benefits
     benefits: {
-      label: "Total Benefits",
       year1: benefitsYear1,
       year2: benefitsYear2,
       year3: benefitsYear3,
       total: benefitsTotal,
       npv: calculateNPV([benefitsYear1, benefitsYear2, benefitsYear3]),
     },
+    // Total Cost
     cost: {
-      label: "Total Cost",
       year1: totalCost.year1,
       year2: totalCost.year2,
       year3: totalCost.year3,
       total: costsTotal,
+      npv: calculateNPV([totalCost.year1, totalCost.year2, totalCost.year3]),
     },
+    // ROI
     roiPercentages: {
-      label: "ROI",
       year1: Math.round(
         ((benefitsYear1 - totalCost.year1) / totalCost.year1) * 100,
       ),
@@ -187,36 +188,33 @@ export const calculationResult = (
         ((benefitsYear3 - totalCost.year3) / totalCost.year3) * 100,
       ),
       total: Math.round(((benefitsTotal - costsTotal) / costsTotal) * 100),
+      npv: 0,
     },
-    paybackPeriod: {
-      label: "Payback Period (In Months)",
-      value: Math.round(
-        (totalCost.year1 / (benefitsYear1 - totalCost.year1)) * 12,
-      ),
-    },
-    avgYearlyBenefits: {
-      label: "Avg Yearly Benefit",
-      value: (benefitsTotal - costsTotal) / 3,
-    },
+    // Total Productivity Recover
     totalProductivityRecover: {
       year1: totalProductivityRecover.year1,
       year2: totalProductivityRecover.year2,
       year3: totalProductivityRecover.year3,
+      total:
+        totalProductivityRecover.year1 +
+        totalProductivityRecover.year2 +
+        totalProductivityRecover.year3,
+      npv: 0,
     },
-    totalCostOfSecurityAndDataRisk: {
-      value:
+    otherCalculation: {
+      paybackPeriod: Math.round(
+        (totalCost.year1 / (benefitsYear1 - totalCost.year1)) * 12,
+      ),
+      avgYearlyBenefits: (benefitsTotal - costsTotal) / 3,
+      totalCostOfSecurityAndDataRisk:
         costOfSecurityRisk.year1 +
         costOfSecurityRisk.year2 +
         costOfSecurityRisk.year3,
-    },
-    additionalFte: {
-      value: additionalFte,
-    },
-    sdwan: {
-      value:
+      sdwan:
         connectivityCost.year1 +
         connectivityCost.year2 +
         connectivityCost.year3,
+      additionalFte,
     },
   };
 };

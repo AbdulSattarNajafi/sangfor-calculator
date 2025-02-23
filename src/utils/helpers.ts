@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { UserInputDataType, YearlyData } from "./types";
+import { YearlyData } from "./types";
 import { RefObject } from "react";
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
@@ -68,12 +68,12 @@ export function formatNumber(number: number) {
   return NUMBER_FORMATTER.format(number);
 }
 
-export function storeUserInputData(data: UserInputDataType) {
-  localStorage.setItem("sangforPdfData", JSON.stringify(data));
+export function storeUserInputData(id: string) {
+  localStorage.setItem("report_id", JSON.stringify(id));
 }
 
 export function getUserInputData() {
-  const storedValue = localStorage.getItem("sangforPdfData");
+  const storedValue = localStorage.getItem("report_id");
 
   return storedValue ? JSON.parse(storedValue) : null;
 }
@@ -102,12 +102,12 @@ export const extractYearlyData = (data: YearlyData[]) => {
   };
 };
 
-// export function downloadFile(url: string, fileName: string) {
-//   const link = document.createElement("a");
-//   link.href = url;
-//   link.download = fileName;
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-//   URL.revokeObjectURL(url);
-// }
+export function downloadFile(url: string, fileName: string) {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}

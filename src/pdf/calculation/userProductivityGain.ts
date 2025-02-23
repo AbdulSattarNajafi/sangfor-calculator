@@ -1,9 +1,9 @@
 // 2- End User Productivity Gains
 import { extractYearlyData } from "@/utils/helpers";
 import {
+  CustomerDataType,
   ProductivityGainType,
   SelectedCountryType,
-  UserInputDataType,
   YearlyData,
 } from "@/utils/types";
 
@@ -19,7 +19,7 @@ export class UserProductivityGain {
 
   constructor(
     formula: ProductivityGainType,
-    unserInput: UserInputDataType,
+    unserInput: CustomerDataType,
     selectedCountry: SelectedCountryType,
   ) {
     this.endUsersProductivityImpacted = extractYearlyData(
@@ -33,7 +33,7 @@ export class UserProductivityGain {
     );
     this.riskAdjustment = extractYearlyData(formula.riskAdjustment);
 
-    this.numEmployees = unserInput.employeeCount;
+    this.numEmployees = unserInput.totalEmployees;
     this.hybridEmployeePercentage = unserInput.hybridPercentage / 100;
     this.avgNationalSalary = selectedCountry.avgNationalSalary;
   }

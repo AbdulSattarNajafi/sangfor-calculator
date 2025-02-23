@@ -4,42 +4,23 @@ import { useUserInputContext } from "@/contexts/UserInputContext";
 import { formatCompactCurrency } from "@/utils/helpers";
 import FinancialChart from "@/pdf/charts/FinancialChart";
 import BenefitsCard from "./BenefitsCard";
-import { useEffect, useState } from "react";
 import { calculationResult } from "@/pdf/calculation/calculationResult";
-import { FormulaType } from "@/utils/types";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import Spinner from "./Spinner";
+import useFormula from "@/hooks/useFormula";
+import useRegions from "@/hooks/useRegions";
 
 function CalculatorResult() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [formula, setFormula] = useState<FormulaType | null>(null);
-  const { state, error } = useUserInputContext();
-  const selectedCountry = state.regionList.find(
-    (region) => region.country === state.countryName,
-  );
+  const { regions, regionsIsLoading } = useRegions();
+  const { formula, formulaIsLoading } = useFormula();
   const width = useWindowWidth();
+  const { state, error } = useUserInputContext();
 
-  useEffect(() => {
-    if (formula) return;
+  const selectedCountry = regions?.find(
+    (region) => region.country === state.region,
+  );
 
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const res = await fetch("/api/formula");
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        const json = await res.json();
-        setFormula(json);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [formula]);
-
-  if (isLoading) {
+  if (formulaIsLoading || regionsIsLoading) {
     return (
       <div className="flex w-full flex-1 items-center justify-center">
         <Spinner />
@@ -63,7 +44,8 @@ function CalculatorResult() {
   }
 
   const hasError = Object.values(error).some((msg) => msg !== "");
-  const { roiPercentages, benefits, paybackPeriod, avgYearlyBenefits, cost } =
+
+  const { roiPercentages, benefits, otherCalculation, cost } =
     calculationResult(formula, state, selectedCountry);
 
   return (
@@ -74,7 +56,7 @@ function CalculatorResult() {
         </BenefitsCard>
         <BenefitsCard title="Payback Period">
           <span>
-            {hasError ? "" : Math.round(paybackPeriod.value)}
+            {hasError ? "" : Math.round(otherCalculation.paybackPeriod)}
             &nbsp;Months
           </span>
         </BenefitsCard>
@@ -83,7 +65,9 @@ function CalculatorResult() {
         </BenefitsCard>
         <BenefitsCard title="Avg Yearly Benefit">
           <span>
-            {hasError ? "0" : formatCompactCurrency(avgYearlyBenefits.value)}
+            {hasError
+              ? "0"
+              : formatCompactCurrency(otherCalculation.avgYearlyBenefits)}
           </span>
         </BenefitsCard>
       </div>
@@ -92,12 +76,8 @@ function CalculatorResult() {
         <FinancialChart
           height={width < 576 ? 280 : width >= 576 && width < 992 ? 180 : 220}
           titleFontSize={width > 576 ? 16 : 14}
-          costs={[cost.year1, cost.year2, cost.year3]}
-          benefits={[
-            benefits.year1 - cost.year1,
-            benefits.year2 - cost.year2,
-            benefits.year3 - cost.year3,
-          ]}
+          costs={cost}
+          benefits={benefits}
         />
       </div>
     </div>

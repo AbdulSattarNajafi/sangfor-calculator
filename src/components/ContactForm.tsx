@@ -1,55 +1,112 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { Country, ICountry } from "country-state-city";
 import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { nanoid } from "nanoid";
 
 import Input from "./Input";
 import CountrySelector from "./CountrySelector";
 import SubmitButton from "./SubmitButton";
-import { sendEmail } from "@/utils/actions";
 import { useUserInputContext } from "@/contexts/UserInputContext";
-import { omitKeys, storeUserInputData } from "@/utils/helpers";
-import { parseWithZod } from "@conform-to/zod";
+import { storeUserInputData } from "@/utils/helpers";
 import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
-import { ScsDataType } from "@/utils/types";
-
-const Calculator_Url = "https://live-sangfor.pantheonsite.io";
+import { createEloquaEmail } from "@/app/actions/contactForm";
+import { useScsData } from "@/hooks/useScsData";
+import { addCustomer } from "@/hooks/useCustomer";
 
 function ContactForm() {
-  const [scs, setScs] = useState<ScsDataType | null>(null);
+  const uniqueId = nanoid();
+  const scs = useScsData();
   const countiesData = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const { state, dispatch } = useUserInputContext();
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== Calculator_Url) {
-        console.warn("Blocked message from unknown origin:", event.origin);
-        return;
-      }
+  function handleCountryChange(countryCode: string) {
+    const country = Country.getCountryByCode(countryCode);
+    if (country) {
+      setSelectedCountry(country);
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "countryName", value: country.name },
+      });
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "submissionDate", value: new Date() },
+      });
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: { name: "userId", value: uniqueId },
+      });
+    }
+  }
 
-      const { key, value } = event.data;
-      if (key === "_scs" && value) {
-        try {
-          const scsData = JSON.parse(value);
-          setScs(scsData);
-        } catch (error) {
-          console.error("Failed to parse received data:", error);
-        }
-      }
+  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    dispatch({ type: "UPDATE_FIELD", payload: { name, value } });
+  }
+
+  function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    const numValue = value === "on" ? 1 : 0;
+    dispatch({ type: "UPDATE_FIELD", payload: { name, value: numValue } });
+  }
+
+  async function createCustomer() {
+    // let scsData;
+
+    // if (scs?.default.utm.value) {
+    //   const {
+    //     utm_source,
+    //     utm_medium,
+    //     utm_campaign,
+    //     utm_id,
+    //     utm_term,
+    //     utm_content,
+    //     gBraid,
+    //     gclid,
+    //     gdpr_checkbox,
+    //   } = scs?.default.utm.value;
+    //   scsData = {
+    //     utm_source: !utm_source ? "" : utm_source,
+    //     utm_medium: !utm_medium ? "" : utm_medium,
+    //     utm_campaign: !utm_campaign ? "" : utm_campaign,
+    //     utm_id: !utm_id ? "" : utm_id,
+    //     utm_term: !utm_term ? "" : utm_term,
+    //     utm_content: !utm_content ? "" : utm_content,
+    //     gBraid: !gBraid ? "" : gBraid,
+    //     gclid: !gclid ? "" : gclid,
+    //     gdpr_checkbox: !gdpr_checkbox ? false : gdpr_checkbox,
+    //   };
+    // } else {
+    //   scsData = {
+    //     utm_source: "",
+    //     utm_medium: "",
+    //     utm_campaign: "",
+    //     utm_id: "",
+    //     utm_term: "",
+    //     utm_content: "",
+    //     gBraid: "",
+    //     gclid: "",
+    //     gdpr_checkbox: false,
+    //   };
+    // }
+
+    const landingPageInfo = {
+      lead_source: "Sangfor SASE TCO/ROI Calculator",
+      marketing_campaign: "Sangfor SASE TCO/ROI Calculator Marketing Campaign",
+      form_page_url: "",
+      pdf_report_url: "",
+      landing_page_url: "",
     };
 
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+    await addCustomer(state, landingPageInfo, scs);
+  }
 
   const [lastResult, action] = useActionState(
-    sendEmail.bind(null, scs),
+    createEloquaEmail.bind(null, { scs, id: uniqueId }),
     undefined,
   );
 
@@ -61,32 +118,13 @@ function ContactForm() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onSubmit: () => {
-      const newState = omitKeys(state, ["regionList"]);
-      storeUserInputData(newState);
+      storeUserInputData(uniqueId);
       setSelectedCountry(null);
+
+      // Submit the Data to the Backend
+      createCustomer();
     },
   });
-
-  function handleCountryChange(countryCode: string) {
-    const country = Country.getCountryByCode(countryCode);
-    if (country) {
-      setSelectedCountry(country);
-      dispatch({
-        type: "UPDATE_FIELD",
-        payload: { name: "country", value: country.name },
-      });
-      dispatch({
-        type: "UPDATE_FIELD",
-        payload: { name: "date", value: new Date() },
-      });
-    }
-  }
-
-  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-
-    dispatch({ type: "UPDATE_FIELD", payload: { name, value } });
-  }
 
   return (
     <form
@@ -101,7 +139,7 @@ function ContactForm() {
       <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
         <Input
           label="First Name"
-          id="userName"
+          id="firstName"
           placeholder="First Name"
           key={fields.firstName.key}
           name={fields.firstName.name}
@@ -114,36 +152,36 @@ function ContactForm() {
           label="Email Address"
           id="email"
           placeholder="Email Address"
-          key={fields.email.key}
-          name={fields.email.name}
-          defaultValue={fields.email.initialValue}
-          errorMessage={fields.email.errors}
+          key={fields.emailAddress.key}
+          name={fields.emailAddress.name}
+          defaultValue={fields.emailAddress.initialValue}
+          errorMessage={fields.emailAddress.errors}
           onChange={changeHandler}
         />
 
         <Input
           label="Business Phone"
-          id="phone"
+          id="businessPhone"
           placeholder="+CC (AAA) XXX-XXXX"
-          key={fields.phone.key}
-          name={fields.phone.name}
-          defaultValue={fields.phone.initialValue}
-          errorMessage={fields.phone.errors}
+          key={fields.businessPhone.key}
+          name={fields.businessPhone.name}
+          defaultValue={fields.businessPhone.initialValue}
+          errorMessage={fields.businessPhone.errors}
           onChange={changeHandler}
         />
         <Input
           label="Company"
-          id="company-name"
+          id="companyName"
           placeholder="Company"
-          key={fields.company.key}
-          name={fields.company.name}
-          defaultValue={fields.company.initialValue}
-          errorMessage={fields.company.errors}
+          key={fields.companyName.key}
+          name={fields.companyName.name}
+          defaultValue={fields.companyName.initialValue}
+          errorMessage={fields.companyName.errors}
           onChange={changeHandler}
         />
         <Input
           label="Job Title"
-          id="job-title"
+          id="jobTitle"
           placeholder="Job Title"
           key={fields.jobTitle.key}
           name={fields.jobTitle.name}
@@ -156,16 +194,17 @@ function ContactForm() {
           data={countiesData}
           selected={selectedCountry}
           onChange={handleCountryChange}
-          key={fields.country.key}
-          name={fields.country.name}
-          errorMessage={fields.country.errors}
+          key={fields.countryName.key}
+          name={fields.countryName.name}
+          errorMessage={fields.countryName.errors}
         />
 
         <div>
           <CheckboxInput
             label="Do you want to Request a Demo for Sangfor SASE?"
             id="request-demo"
-            name="requestDemo"
+            name="demoRequest"
+            onChange={handleCheckboxChange}
           />
         </div>
 
@@ -173,7 +212,8 @@ function ContactForm() {
           <CheckboxInput
             label="Receive Updates User Consent"
             id="receive-updates"
-            name="receiveUpdates"
+            name="userConsent"
+            onChange={handleCheckboxChange}
           />
         </div>
       </div>

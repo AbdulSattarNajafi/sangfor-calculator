@@ -1,9 +1,9 @@
 // 5- Analysis Of Costs
 import { extractYearlyData } from "@/utils/helpers";
 import {
+  CustomerDataType,
   SelectedCountryType,
   TotalCostType,
-  UserInputDataType,
   YearlyData,
 } from "@/utils/types";
 
@@ -25,7 +25,7 @@ export class CostAnalysis {
 
   constructor(
     formula: TotalCostType,
-    userInput: UserInputDataType,
+    userInput: CustomerDataType,
     selectedCountry: SelectedCountryType,
   ) {
     this.numberOfFTEsRequired = extractYearlyData(formula.numberOfFTEsRequired);
@@ -44,7 +44,7 @@ export class CostAnalysis {
     );
     this.riskAdjustment = extractYearlyData(formula.riskAdjustment);
 
-    this.numEmployees = userInput.employeeCount;
+    this.numEmployees = userInput.totalEmployees;
     this.applicationSites = userInput.hostingSites;
     this.trafficAcceleration = Boolean(userInput.acceleration);
     this.numCountries = userInput.countries;

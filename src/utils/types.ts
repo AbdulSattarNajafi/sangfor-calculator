@@ -1,18 +1,21 @@
 export type UserInputDataType = {
+  userId: string;
   firstName: string;
-  email: string;
-  phone: string;
-  company: string;
+  emailAddress: string;
+  businessPhone: string;
+  companyName: string;
   jobTitle: string;
-  date: Date;
-  country: string;
-  employeeCount: number;
+  submissionDate: string;
+  region: string;
+  totalEmployees: number;
   hybridPercentage: number;
   locations: number;
   countries: number;
   hostingSites: number;
   countryName: string;
   acceleration: number;
+  demoRequest: number;
+  userConsent: number;
 };
 
 export type SelectedCountryType = {
@@ -31,6 +34,14 @@ export type CostsPercentageType = {
 
 export type SecurityPercentageType = {
   efficiencyGains: number;
+};
+
+export type FinancialData = {
+  year1: number;
+  year2: number;
+  year3: number;
+  total: number;
+  npv: number;
 };
 
 export type YearlyData = Record<"year1" | "year2" | "year3", number>;
@@ -87,50 +98,30 @@ export type FormulaType = {
   analysisOfCosts: TotalCostType;
 };
 
-type UTMValue = {
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  utm_term: string | null;
-  utm_content: string | null;
-  utm_id: string | null;
-  landing_url: string | null;
-  gBraid: string | null;
-  gclid: string | null;
-  gdpr_checkbox: boolean | null;
+export type PageInfoDataType = {
+  lead_source: string;
+  marketing_campaign: string;
+  form_page_url: string;
+  pdf_report_url: string;
+  landing_page_url: string;
 };
 
-type UTMData = {
-  name: "utm";
-  expiration: string;
-  value: UTMValue;
+export type MarketingDataTypes = {
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_id: string;
+  utm_term: string;
+  utm_content: string;
+  gBraid: string;
+  gclid: string;
+  gdpr_checkbox: boolean;
+  landing_url: string;
 };
 
-export type ScsDataType = {
-  default: {
-    utm: UTMData;
-  };
-};
-
-// Stored Data Types
-export type dataType = {
+type MarketingDetails = {
+  id: number;
   userId: string;
-  firstName: string;
-  emailAddress: string;
-  businessPhone: string;
-  companyName: string;
-  jobTitle: string;
-  submissionDate: Date;
-  countryName: string;
-  userConsent: boolean;
-  demoRequest: boolean;
-  region: string;
-  totalEmployees: number;
-  locations: number;
-  hostingSites: number;
-  hybridPercentage: number;
-  countries: number;
-  acceleration: boolean;
   lead_source: string;
   marketing_campaign: string;
   landing_page_url: string;
@@ -144,5 +135,30 @@ export type dataType = {
   utm_content: string;
   gBraid: string;
   gclid: string;
-  gdpr_checkbox: boolean;
+  gdpr_checkbox: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CustomerDataType = {
+  userId: string;
+  firstName: string;
+  emailAddress: string;
+  businessPhone: string;
+  companyName: string;
+  jobTitle: string;
+  submissionDate: string;
+  countryName: string;
+  demoRequest: number;
+  userConsent: number;
+  region: string;
+  totalEmployees: number;
+  locations: number;
+  hostingSites: number;
+  hybridPercentage: number;
+  countries: number;
+  acceleration: number;
+  created_at?: string;
+  updated_at?: string;
+  marketing_details?: MarketingDetails;
 };

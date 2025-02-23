@@ -5,9 +5,11 @@ import Input from "./Input";
 import Switch from "./Switch";
 import RangeInput from "./RangeInput";
 import { useUserInputContext } from "@/contexts/UserInputContext";
+import useRegions from "@/hooks/useRegions";
 
 function CalculatorForm() {
   const { state, dispatch, inputChangeHandler, error } = useUserInputContext();
+  const { regions, regionsError, regionsIsLoading } = useRegions();
 
   function switchChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
@@ -21,25 +23,33 @@ function CalculatorForm() {
         Enter Company Data for ROI Calculation
       </h3>
       <div className="flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
-        <Select
-          label="Region"
-          id="countryName"
-          name="countryName"
-          value={state.countryName}
-          onChange={inputChangeHandler}
-        >
-          {state.regionList.map((region) => (
-            <option key={region.country} value={region.country}>
-              {region.country}
-            </option>
-          ))}
-        </Select>
+        {regionsError && (
+          <div className="flex items-center justify-center text-red-500">
+            <p className="text-center">Regions not Found!</p>
+          </div>
+        )}
+        {regionsIsLoading && <Input label="Region" />}
+        {!regionsIsLoading && !regionsError && (
+          <Select
+            label="Region"
+            id="region"
+            name="region"
+            value={state.countryName}
+            onChange={inputChangeHandler}
+          >
+            {regions?.map((region) => (
+              <option key={region.country} value={region.country}>
+                {region.country}
+              </option>
+            ))}
+          </Select>
+        )}
         <Input
           label="Total Number of Employees"
-          id="employeeCount"
-          name="employeeCount"
+          id="totalEmployees"
+          name="totalEmployees"
           type="number"
-          defaultValue={state.employeeCount}
+          defaultValue={state.totalEmployees}
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
@@ -47,7 +57,7 @@ function CalculatorForm() {
               message: "Number of Employees is rquired",
             })
           }
-          errorMessage={error.employeeCount}
+          errorMessage={error.totalEmployees}
         />
         <Input
           label="Number of locations/sites"
@@ -91,7 +101,7 @@ function CalculatorForm() {
         <div className="mb-4 md:mb-0">
           <RangeInput
             formatter="%"
-            label="% of Remote/Hybrid Employees"
+            label="Percentage of Remote/Hybrid Employees"
             id="hybridPercentage"
             name="hybridPercentage"
             type="range"
@@ -128,7 +138,6 @@ function CalculatorForm() {
             label="Replace existing MPLS with SASE Traffic Acceleration"
             name="acceleration"
             id="acceleration"
-            value={state.acceleration}
             checked={state.acceleration === 1}
             onChange={switchChangeHandler}
           />
