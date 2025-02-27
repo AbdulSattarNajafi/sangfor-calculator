@@ -23,10 +23,6 @@ import { redirect } from "next/navigation";
 function DownloadPdfReport({ id }: { id: string }) {
   const { customer, customerIsLoading } = useCustomerInfo(id);
 
-  if (!customer) {
-    redirect("/");
-  }
-
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useUserInputContext();
   const { formula, formulaIsLoading } = useFormula();
@@ -57,6 +53,10 @@ function DownloadPdfReport({ id }: { id: string }) {
         <p className="text-center">Something Went wrong!</p>
       </div>
     );
+  }
+
+  if (!customer) {
+    redirect("/");
   }
 
   const chartTitleFontSize = width < 1200 ? (width / 1000) * 24 : 32;

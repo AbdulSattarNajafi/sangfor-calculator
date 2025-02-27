@@ -1,12 +1,8 @@
-import {
-  CustomerDataType,
-  MarketingDataTypes,
-  PageInfoDataType,
-  UserInputDataType,
-} from "@/utils/types";
+import { CustomerDataType } from "@/utils/types";
 import useSWR from "swr";
 
-const API_URL = "https://yourdomain.com/api/customer";
+const API_URL =
+  "https://event.sangfor.com/sase-roi-calculator/public/api/customer";
 
 export interface ApiResponse<T> {
   data: T;
@@ -45,26 +41,4 @@ export const useCustomerInfo = (userID: string) => {
   );
 
   return { customer, customerError, customerIsLoading };
-};
-
-// =========== Create a new customer
-export const addCustomer = async (
-  userData: UserInputDataType,
-  landingPageData: PageInfoDataType,
-  scs: MarketingDataTypes,
-) => {
-  const customerData = { ...userData, ...landingPageData, ...scs };
-  const response = await fetch(`${API_URL}/add`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(customerData),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to add customer");
-  }
-
-  return response.json();
 };

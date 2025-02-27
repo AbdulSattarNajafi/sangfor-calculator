@@ -1,9 +1,15 @@
 import PdfGenerator from "@/pdf/PdfGenerator";
 
-function ResultPage() {
+async function ResultPage({
+  params,
+}: {
+  params: Promise<{ resultId: string }>;
+}) {
+  const id = (await params).resultId;
+
   return (
     <section className="relative h-dvh overflow-hidden">
-      <PdfGenerator />
+      <PdfGenerator id={id} />
     </section>
   );
 }

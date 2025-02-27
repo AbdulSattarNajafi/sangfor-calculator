@@ -1,6 +1,6 @@
 import DownloadPdfReport from "@/pdf/DownloadPdfReport";
 
-async function ReportDetailPage({
+async function ReportPage({
   params,
 }: {
   params: Promise<{ reportId: string }>;
@@ -14,4 +14,4 @@ async function ReportDetailPage({
   );
 }
 
-export default ReportDetailPage;
+export default ReportPage;

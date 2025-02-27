@@ -147,6 +147,8 @@ function PDFPages({
     otherCalculation,
   } = calculationData;
 
+  const createdDate = userInput.created_at;
+
   const organizationDetailTableData = [
     { label: "Organization Name", value: userInput.companyName },
     { label: "Total Number of Employees", value: userInput.totalEmployees },
@@ -181,7 +183,7 @@ function PDFPages({
     { label: "Country/Region ", value: userInput.countryName },
     {
       label: "Submission Date & Time",
-      value: formatDate(new Date(userInput.submissionDate)),
+      value: formatDate(new Date(createdDate)),
     },
   ];
 
@@ -279,7 +281,7 @@ function PDFPages({
           </Text>
           {userInput.submissionDate && (
             <Text style={{ textAlign: "center", fontSize: 12 }}>
-              {formatLongDate(new Date(userInput.submissionDate))}
+              {formatLongDate(new Date(createdDate))}
             </Text>
           )}
         </View>

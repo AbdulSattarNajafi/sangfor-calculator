@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRef, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
-import {
-  captureChartAsImage,
-  formatCompactCurrency,
-  getUserInputData,
-} from "@/utils/helpers";
+import { captureChartAsImage, formatCompactCurrency } from "@/utils/helpers";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
@@ -20,14 +15,14 @@ import Spinner from "@/components/Spinner";
 import { useCustomerInfo } from "@/hooks/useCustomer";
 import useRegions from "@/hooks/useRegions";
 
-function PdfGenerator() {
-  const [id, setId] = useState("");
+function PdfGenerator({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useUserInputContext();
   const { formula, formulaIsLoading } = useFormula();
   const { regions, regionsIsLoading } = useRegions();
   const width = useWindowWidth();
-  const { customer, customerError, customerIsLoading } = useCustomerInfo(id);
+
+  const { customer, customerIsLoading } = useCustomerInfo(id);
 
   const roiChartRef = useRef<HTMLDivElement>(null);
   const npvChartRef = useRef<HTMLDivElement>(null);
@@ -39,14 +34,6 @@ function PdfGenerator() {
     (region) => region.country === state.region,
   );
 
-  useEffect(() => {
-    const storedData = getUserInputData();
-    if (!storedData) {
-      redirect("/");
-    }
-    setId(storedData);
-  }, []);
-
   if (regionsIsLoading || formulaIsLoading || customerIsLoading) {
     return (
       <div className="flex h-dvh items-center justify-center">
@@ -55,7 +42,7 @@ function PdfGenerator() {
     );
   }
 
-  if (!selectedCountry || !formula || !customer || customerError) {
+  if (!selectedCountry || !formula || !customer) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <p className="text-center">Something Went wrong!</p>

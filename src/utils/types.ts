@@ -103,7 +103,6 @@ export type PageInfoDataType = {
   marketing_campaign: string;
   form_page_url: string;
   pdf_report_url: string;
-  landing_page_url: string;
 };
 
 export type MarketingDataTypes = {
@@ -158,7 +157,7 @@ export type CustomerDataType = {
   hybridPercentage: number;
   countries: number;
   acceleration: number;
-  created_at?: string;
+  created_at: string;
   updated_at?: string;
   marketing_details?: MarketingDetails;
 };

@@ -15,7 +15,6 @@ import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { createEloquaEmail } from "@/app/actions/contactForm";
 import { useScsData } from "@/hooks/useScsData";
-import { addCustomer } from "@/hooks/useCustomer";
 
 function ContactForm() {
   const uniqueId = nanoid();
@@ -34,12 +33,13 @@ function ContactForm() {
       });
       dispatch({
         type: "UPDATE_FIELD",
-        payload: { name: "submissionDate", value: new Date() },
+        payload: { name: "submissionDate", value: new Date().toISOString() },
       });
       dispatch({
         type: "UPDATE_FIELD",
         payload: { name: "userId", value: uniqueId },
       });
+      storeUserInputData(state.userId);
     }
   }
 
@@ -54,59 +54,8 @@ function ContactForm() {
     dispatch({ type: "UPDATE_FIELD", payload: { name, value: numValue } });
   }
 
-  async function createCustomer() {
-    // let scsData;
-
-    // if (scs?.default.utm.value) {
-    //   const {
-    //     utm_source,
-    //     utm_medium,
-    //     utm_campaign,
-    //     utm_id,
-    //     utm_term,
-    //     utm_content,
-    //     gBraid,
-    //     gclid,
-    //     gdpr_checkbox,
-    //   } = scs?.default.utm.value;
-    //   scsData = {
-    //     utm_source: !utm_source ? "" : utm_source,
-    //     utm_medium: !utm_medium ? "" : utm_medium,
-    //     utm_campaign: !utm_campaign ? "" : utm_campaign,
-    //     utm_id: !utm_id ? "" : utm_id,
-    //     utm_term: !utm_term ? "" : utm_term,
-    //     utm_content: !utm_content ? "" : utm_content,
-    //     gBraid: !gBraid ? "" : gBraid,
-    //     gclid: !gclid ? "" : gclid,
-    //     gdpr_checkbox: !gdpr_checkbox ? false : gdpr_checkbox,
-    //   };
-    // } else {
-    //   scsData = {
-    //     utm_source: "",
-    //     utm_medium: "",
-    //     utm_campaign: "",
-    //     utm_id: "",
-    //     utm_term: "",
-    //     utm_content: "",
-    //     gBraid: "",
-    //     gclid: "",
-    //     gdpr_checkbox: false,
-    //   };
-    // }
-
-    const landingPageInfo = {
-      lead_source: "Sangfor SASE TCO/ROI Calculator",
-      marketing_campaign: "Sangfor SASE TCO/ROI Calculator Marketing Campaign",
-      form_page_url: "",
-      pdf_report_url: "",
-      landing_page_url: "",
-    };
-
-    await addCustomer(state, landingPageInfo, scs);
-  }
-
   const [lastResult, action] = useActionState(
-    createEloquaEmail.bind(null, { scs, id: uniqueId }),
+    createEloquaEmail.bind(null, { scs, state }),
     undefined,
   );
 
@@ -117,12 +66,8 @@ function ContactForm() {
     },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
-    onSubmit: () => {
-      storeUserInputData(uniqueId);
+    onSubmit: async () => {
       setSelectedCountry(null);
-
-      // Submit the Data to the Backend
-      createCustomer();
     },
   });
 

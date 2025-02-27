@@ -46,7 +46,11 @@ function CalculatorResult() {
   const hasError = Object.values(error).some((msg) => msg !== "");
 
   const { roiPercentages, benefits, otherCalculation, cost } =
-    calculationResult(formula, state, selectedCountry);
+    calculationResult(
+      formula,
+      { ...state, created_at: new Date().toISOString() },
+      selectedCountry,
+    );
 
   return (
     <div className="flex-1">
