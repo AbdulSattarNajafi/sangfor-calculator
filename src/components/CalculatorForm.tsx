@@ -34,7 +34,7 @@ function CalculatorForm() {
             label="Region"
             id="region"
             name="region"
-            value={state.countryName}
+            value={state.region}
             onChange={inputChangeHandler}
           >
             {regions?.map((region) => (
