@@ -10,9 +10,10 @@ import Spinner from "./Spinner";
 import useFormula from "@/hooks/useFormula";
 import useRegions from "@/hooks/useRegions";
 import useSWR from "swr";
+import { CustomerDataType } from "@/utils/types";
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-function CalculatorResult() {
+function CalculatorResult({ datas }: { datas: CustomerDataType }) {
   const { regions, regionsIsLoading } = useRegions();
   const { formula, formulaIsLoading } = useFormula();
   const width = useWindowWidth();
@@ -61,6 +62,7 @@ function CalculatorResult() {
     );
 
   console.log(data, "-----------allCustomers");
+  console.log(datas, "-----------datas");
 
   return (
     <div className="flex-1">
