@@ -17,11 +17,11 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import useFormula from "@/hooks/useFormula";
 import Spinner from "@/components/Spinner";
 import useRegions from "@/hooks/useRegions";
-import { useCustomerInfo } from "@/hooks/useCustomer";
 import { redirect } from "next/navigation";
+import { CustomerDataType } from "@/utils/types";
 
-function DownloadPdfReport({ id }: { id: string }) {
-  const { customer, customerIsLoading } = useCustomerInfo(id);
+function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
+  // const { customer, customerIsLoading } = useCustomerInfo(id);
 
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useUserInputContext();
@@ -39,7 +39,7 @@ function DownloadPdfReport({ id }: { id: string }) {
     (region) => region.country === state.region,
   );
 
-  if (regionsIsLoading || formulaIsLoading || customerIsLoading) {
+  if (regionsIsLoading || formulaIsLoading) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <Spinner />

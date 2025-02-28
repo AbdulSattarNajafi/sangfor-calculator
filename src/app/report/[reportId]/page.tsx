@@ -6,10 +6,14 @@ async function ReportPage({
   params: Promise<{ reportId: string }>;
 }) {
   const id = (await params).reportId;
+  const data = await fetch(
+    `https://event.sangfor.com/sase-roi-calculator/public/api/customer/${id}/info`,
+  );
+  const customer = await data.json();
 
   return (
     <section className="relative h-dvh overflow-hidden">
-      {id && <DownloadPdfReport id={id} />}
+      {id && <DownloadPdfReport customer={customer} />}
     </section>
   );
 }

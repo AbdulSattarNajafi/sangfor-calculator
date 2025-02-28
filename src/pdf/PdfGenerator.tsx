@@ -12,17 +12,17 @@ import PDFPages from "./components/PDFPages";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import useFormula from "@/hooks/useFormula";
 import Spinner from "@/components/Spinner";
-import { useCustomerInfo } from "@/hooks/useCustomer";
 import useRegions from "@/hooks/useRegions";
+import { CustomerDataType } from "@/utils/types";
 
-function PdfGenerator({ id }: { id: string }) {
+function PdfGenerator({ customer }: { customer: CustomerDataType }) {
   const [isLoading, setIsLoading] = useState(false);
   const { state } = useUserInputContext();
   const { formula, formulaIsLoading } = useFormula();
   const { regions, regionsIsLoading } = useRegions();
   const width = useWindowWidth();
 
-  const { customer, customerIsLoading } = useCustomerInfo(id);
+  // const { customer, customerIsLoading } = useCustomerInfo(id);
 
   const roiChartRef = useRef<HTMLDivElement>(null);
   const npvChartRef = useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ function PdfGenerator({ id }: { id: string }) {
     (region) => region.country === state.region,
   );
 
-  if (regionsIsLoading || formulaIsLoading || customerIsLoading) {
+  if (regionsIsLoading || formulaIsLoading) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <Spinner />

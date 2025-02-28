@@ -2,12 +2,7 @@ import CalculatorForm from "@/components/CalculatorForm";
 import ContactForm from "@/components/ContactForm";
 import CalculatorResult from "@/components/CalculatorResult";
 
-export default async function Home() {
-  const data = await fetch(
-    "https://event.sangfor.com/sase-roi-calculator/public/api/customer/all-info",
-  );
-  const posts = await data.json();
-
+export default function Home() {
   return (
     <section className="bg-section-bg bg-cover bg-center py-14 md:py-16 lg:py-20">
       <div className="wrapper">
@@ -52,7 +47,7 @@ export default async function Home() {
                   factors associated with your Access Secure Investment.
                 </p>
               </div>
-              <CalculatorResult datas={posts} />
+              <CalculatorResult />
             </div>
           </div>
 
