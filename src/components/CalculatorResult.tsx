@@ -9,17 +9,23 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import Spinner from "./Spinner";
 import useFormula from "@/hooks/useFormula";
 import useRegions from "@/hooks/useRegions";
-import { useAllCustomers } from "@/hooks/useCustomer";
+import useSWR from "swr";
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 function CalculatorResult() {
   const { regions, regionsIsLoading } = useRegions();
   const { formula, formulaIsLoading } = useFormula();
   const width = useWindowWidth();
   const { state, error } = useUserInputContext();
-  const { allCustomers } = useAllCustomers();
+  // const { allCustomers } = useAllCustomers();
 
   const selectedCountry = regions?.find(
     (region) => region.country === state.region,
+  );
+
+  const { data } = useSWR(
+    "https://event.sangfor.com/sase-roi-calculator/public/api/customer/all-info",
+    fetcher,
   );
 
   if (formulaIsLoading || regionsIsLoading) {
@@ -54,7 +60,7 @@ function CalculatorResult() {
       selectedCountry,
     );
 
-  console.log(allCustomers, "-----------allCustomers");
+  console.log(data, "-----------allCustomers");
 
   return (
     <div className="flex-1">
