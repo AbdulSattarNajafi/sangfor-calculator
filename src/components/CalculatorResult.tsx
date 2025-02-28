@@ -9,12 +9,14 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import Spinner from "./Spinner";
 import useFormula from "@/hooks/useFormula";
 import useRegions from "@/hooks/useRegions";
+import { useAllCustomers } from "@/hooks/useCustomer";
 
 function CalculatorResult() {
   const { regions, regionsIsLoading } = useRegions();
   const { formula, formulaIsLoading } = useFormula();
   const width = useWindowWidth();
   const { state, error } = useUserInputContext();
+  const { allCustomers } = useAllCustomers();
 
   const selectedCountry = regions?.find(
     (region) => region.country === state.region,
@@ -51,6 +53,8 @@ function CalculatorResult() {
       { ...state, created_at: new Date().toISOString() },
       selectedCountry,
     );
+
+  console.log(allCustomers, "-----------allCustomers");
 
   return (
     <div className="flex-1">

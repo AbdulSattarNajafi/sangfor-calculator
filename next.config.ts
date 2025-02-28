@@ -1,10 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  // basePath: "/calculator",
-  // assetPrefix: "/calculator/",
-  // trailingSlash: true,
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

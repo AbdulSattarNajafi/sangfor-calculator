@@ -9,7 +9,7 @@ async function ResultPage({
 
   return (
     <section className="relative h-dvh overflow-hidden">
-      <PdfGenerator id={id} />
+      {id && <PdfGenerator id={id} />}
     </section>
   );
 }

@@ -9,7 +9,7 @@ async function ReportPage({
 
   return (
     <section className="relative h-dvh overflow-hidden">
-      <DownloadPdfReport id={id} />
+      {id && <DownloadPdfReport id={id} />}
     </section>
   );
 }
