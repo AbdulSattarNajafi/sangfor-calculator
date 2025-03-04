@@ -2,13 +2,13 @@
 
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import { formatCompactCurrency } from "@/utils/helpers";
-import FinancialChart from "@/pdf/charts/FinancialChart";
 import BenefitsCard from "./BenefitsCard";
 import { calculationResult } from "@/pdf/calculation/calculationResult";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import Spinner from "./Spinner";
 import useFormula from "@/hooks/useFormula";
 import useRegions from "@/hooks/useRegions";
+import FincanceChart from "./FinanceChart";
 
 function CalculatorResult() {
   const { regions, regionsIsLoading } = useRegions();
@@ -85,7 +85,7 @@ function CalculatorResult() {
       </div>
 
       <div className="mx-auto w-full max-w-6xl">
-        <FinancialChart
+        <FincanceChart
           height={width < 576 ? 280 : width >= 576 && width < 992 ? 180 : 220}
           titleFontSize={width > 576 ? 16 : 14}
           costs={cost}

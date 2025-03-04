@@ -21,19 +21,19 @@ ChartJS.register(
   Legend,
 );
 
-type FinancialChartProps = {
+type FincanceChartProps = {
   benefits: FinancialData;
   costs: FinancialData;
   titleFontSize: number;
   height?: number;
 };
 
-const FinancialChart = ({
+const FincanceChart = ({
   benefits,
   costs,
   titleFontSize,
   height,
-}: FinancialChartProps) => {
+}: FincanceChartProps) => {
   const benefit = [
     benefits.year1 - costs.year1,
     benefits.year2 - costs.year2,
@@ -58,7 +58,6 @@ const FinancialChart = ({
         backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
-        // barThickness: 40,
       },
     ],
   };
@@ -68,12 +67,6 @@ const FinancialChart = ({
     plugins: {
       legend: {
         position: "bottom" as const,
-        labels: {
-          font: {
-            size: 26, // Increase legend font size
-          },
-          boxWidth: 100,
-        },
       },
       title: {
         display: true,
@@ -98,25 +91,17 @@ const FinancialChart = ({
           display: false,
           text: "Quarters",
         },
-        ticks: {
-          font: {
-            size: 24, // Increase X-axis labels font size
-          },
-        },
       },
       y: {
         title: {
           display: false,
           text: "Amount ($)",
         },
-        fontSixe: 26,
+        fontSixe: 16,
         beginAtZero: true,
         ticks: {
           callback: function (value: string | number) {
             return `$${value.toLocaleString()}`;
-          },
-          font: {
-            size: 24, // Increase X-axis labels font size
           },
         },
       },
@@ -126,4 +111,4 @@ const FinancialChart = ({
   return <Bar data={data} options={options} height={height ? height : ""} />;
 };
 
-export default FinancialChart;
+export default FincanceChart;

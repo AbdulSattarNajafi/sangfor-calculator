@@ -5,7 +5,6 @@ import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
 import { captureChartAsImage, formatCompactCurrency } from "@/utils/helpers";
-import { useUserInputContext } from "@/contexts/UserInputContext";
 import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
 import PDFPages from "./components/PDFPages";
@@ -17,7 +16,6 @@ import { CustomerDataType } from "@/utils/types";
 
 function PdfGenerator({ customer }: { customer: CustomerDataType }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { state } = useUserInputContext();
   const { formula, formulaIsLoading } = useFormula();
   const { regions, regionsIsLoading } = useRegions();
   const width = useWindowWidth();
@@ -30,8 +28,16 @@ function PdfGenerator({ customer }: { customer: CustomerDataType }) {
   const paybackChartRef = useRef<HTMLDivElement>(null);
   const financialChartRef = useRef<HTMLDivElement>(null);
 
+  if (!customer) {
+    return (
+      <div className="flex h-dvh items-center justify-center">
+        <p className="text-center">User Data not Found!</p>
+      </div>
+    );
+  }
+
   const selectedCountry = regions?.find(
-    (region) => region.country === state.region,
+    (region) => region.country === customer.region,
   );
 
   if (regionsIsLoading || formulaIsLoading) {
@@ -42,7 +48,7 @@ function PdfGenerator({ customer }: { customer: CustomerDataType }) {
     );
   }
 
-  if (!selectedCountry || !formula || !customer) {
+  if (!selectedCountry || !formula) {
     return (
       <div className="flex h-dvh items-center justify-center">
         <p className="text-center">Something Went wrong!</p>

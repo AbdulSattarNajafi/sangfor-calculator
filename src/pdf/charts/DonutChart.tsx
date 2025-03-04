@@ -57,7 +57,9 @@ function DonutChart({
           {children}
         </div>
       </div>
-      <p className="w-full text-center text-sm font-semibold">{label}</p>
+      <p className="mb-2 h-6 w-full text-center text-sm font-semibold">
+        {label}
+      </p>
     </div>
   );
 }

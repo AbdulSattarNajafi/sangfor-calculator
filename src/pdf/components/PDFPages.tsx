@@ -20,7 +20,6 @@ import {
   formatLongDate,
 } from "@/utils/helpers";
 import { CustomerDataType, FinancialData } from "@/utils/types";
-import BoldText from "./BoldText";
 import KpiCard from "./KpiCard";
 import Steps from "./Steps";
 
@@ -297,8 +296,14 @@ function PDFPages({
             In today’s rapidly evolving digital landscape, organizations face
             increasing pressure to secure their networks while optimizing
             performance and reducing costs. The rise of hybrid work models and
-            cloud adoption has made Secure Access Service Edge (SASE) a critical
-            framework for modern IT infrastructure.
+            cloud adoption has made{" "}
+            <Link
+              style={styles.link}
+              href="https://www.sangfor.com/cybersecurity/products/sangfor-access-sase?utm_source=sase_roi_calculator_report&utm_medium=referral&utm_campaign=sase_roi_calculator"
+            >
+              Secure Access Service Edge (SASE)
+            </Link>{" "}
+            a critical framework for modern IT infrastructure.
           </Text>
           <Text style={styles.text}>
             To help you evaluate the financial and operational impact of
@@ -409,14 +414,24 @@ function PDFPages({
         <Logo />
         <View style={{ paddingHorizontal: 30 }}>
           <Text style={styles.heading}>BREAKDOWN OF TOTAL BENEFITS</Text>
+
           <Text style={styles.text}>
             The following section provides a detailed breakdown of the total
             benefits of implementing Sangfor Access Secure across four key
-            dimensions: Workforce Productivity Gains, Security and Data Breach
-            Risk Reduction Cost Savings, Security & Networking Operational
-            Efficiency Gains, and Security and Networking Infrastructure Cost
-            Savings.
+            dimensions:
           </Text>
+          <ListItem>
+            <Text>Workforce Productivity Gains</Text>
+          </ListItem>
+          <ListItem>
+            <Text>Security and Data Breach Risk Reduction Cost Savings,</Text>
+          </ListItem>
+          <ListItem>
+            <Text>Security & Networking Operational Efficiency Gains, and</Text>
+          </ListItem>
+          <ListItem>
+            <Text>Security and Networking Infrastructure Cost Savings</Text>
+          </ListItem>
 
           <FinanceTable data={financeTableData} />
 
@@ -650,7 +665,12 @@ function PDFPages({
 
           <Steps step="3" title="Learn the Access Secure Environment">
             <Text>
-              <BoldText>Sign up for a free PoC </BoldText>
+              <Link
+                style={styles.link}
+                href="https://active.sangfor.com/sangfor-sase-free-trial?utm_source=sase_roi_calculator_report&utm_medium=referral&utm_campaign=sase_roi_calculator"
+              >
+                Sign up for a free PoC{" "}
+              </Link>
               with Access Secure and explore its capabilities. Gain a clear
               understanding of configuring security policies, monitoring
               performance, responding to security alerts, installing clients,
@@ -712,9 +732,22 @@ function PDFPages({
             with confidence.
           </Text>
           <Text style={[styles.text, { marginBottom: 20 }]}>
-            Visit www.sangfor.com to learn how Access Secure can help your
-            organization. Fill out the web form in the link above to schedule a
-            meeting with our team to discuss the best solutions for your needs.
+            Visit{" "}
+            <Link
+              style={styles.link}
+              href="https://www.sangfor.com/?utm_source=sase_roi_calculator_report&utm_medium=referral&utm_campaign=sase_roi_calculator"
+            >
+              www.sangfor.com
+            </Link>{" "}
+            to learn how Access Secure can help your organization. Fill out the
+            web form in the link above to{" "}
+            <Link
+              style={styles.link}
+              href="https://calendly.com/akarsh-jain-sangfor/explore-sangfor-access-secure?utm_source=sase_roi_calculator_report&utm_medium=referral&utm_campaign=sase_roi_calculator"
+            >
+              schedule a meeting
+            </Link>{" "}
+            with our team to discuss the best solutions for your needs.
           </Text>
 
           <Text style={styles.heading}>ADDITIONAL RESOURCES</Text>

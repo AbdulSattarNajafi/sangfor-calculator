@@ -64,7 +64,7 @@ export async function createEloquaEmail(
     acceleration,
   } = state;
 
-  const pdf_report_url = "https://example.com/report.pdf";
+  const pdf_report_url = `https://www.sangfor.com/cybersecurity/products/sangfor-access-sase/sase-roi-calculator-submission-success-download-report?report=${userId}`;
   const lead_source = "LinkedIn Ads";
   const marketing_campaign = "Q1 Growth Campaign";
   const landing_page_url = "https://example.com/landing";
