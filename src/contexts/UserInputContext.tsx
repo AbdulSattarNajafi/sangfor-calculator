@@ -26,7 +26,7 @@ const initialState = {
   countries: 5,
   hostingSites: 0,
   countryName: "",
-  acceleration: 1,
+  acceleration: 0,
   demoRequest: 0,
   userConsent: 0,
 };
