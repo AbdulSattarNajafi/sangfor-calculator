@@ -80,7 +80,6 @@ function ContactForm() {
     undefined,
   );
 
-  // event: React.FormEvent<HTMLFormElement>
   const verifyTokenHandler = async (token: string | null) => {
     if (!token) {
       setRecaptchaError("Please verify you are not a robot!");
@@ -218,7 +217,10 @@ function ContactForm() {
 
       <div className="flex flex-col gap-y-2 md:grid md:grid-cols-2 md:gap-x-4 lg:flex xl:grid xl:gap-x-4">
         <div className="flex flex-col items-center gap-2 md:items-start lg:items-center xl:items-start">
-          <Recaptcha onVerify={(token) => verifyTokenHandler(token)} />
+          <Recaptcha
+            onVerify={(token) => verifyTokenHandler(token)}
+            onExpire={() => setToken("")}
+          />
           <p className="h-4 text-sm leading-tight text-red-500">
             {fields.recaptcha.errors ? fields.recaptcha.errors : recaptchaError}
           </p>

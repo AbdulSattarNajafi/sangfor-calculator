@@ -3,22 +3,17 @@
 import { useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
-export default function Recaptcha({
-  onVerify,
-}: {
+type RecaptchaProps = {
   onVerify: (token: string | null) => void;
-}) {
+  onExpire: () => void;
+};
+
+export default function Recaptcha({ onVerify, onExpire }: RecaptchaProps) {
   const recaptchaRef = useRef<ReCAPTCHA | null>(null);
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   if (!siteKey) {
     return <p>Site key not found!</p>;
-  }
-
-  function handleReset() {
-    if (recaptchaRef.current) {
-      recaptchaRef.current.reset();
-    }
   }
 
   return (
@@ -28,7 +23,7 @@ export default function Recaptcha({
       ref={recaptchaRef}
       sitekey={siteKey}
       onChange={onVerify}
-      onExpired={handleReset}
+      onExpired={onExpire}
     />
   );
 }

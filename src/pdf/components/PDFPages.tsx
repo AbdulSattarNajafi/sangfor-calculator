@@ -261,8 +261,8 @@ function PDFPages({
               display: "flex",
               fontSize: 22,
               fontWeight: "bold",
+              textAlign: "center",
               marginBottom: 15,
-              paddingLeft: 85,
             }}
           >
             ROI Analysis Report of
