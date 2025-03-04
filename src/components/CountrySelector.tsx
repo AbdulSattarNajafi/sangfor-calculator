@@ -51,7 +51,7 @@ function CountrySelector({
             htmlFor="select-country"
             className="text-sm text-white xl:text-base"
           >
-            Country / Region
+            Country / Region*
           </label>
           <div className="relative">
             <ComboboxInput
@@ -61,7 +61,7 @@ function CountrySelector({
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
               )}
               name={name}
-              placeholder="Country / Region"
+              placeholder="Please Select"
               displayValue={(country: ICountry) => country?.name}
               onChange={(event) => setQuery(event.target.value)}
             />

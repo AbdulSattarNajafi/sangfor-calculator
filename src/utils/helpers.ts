@@ -68,15 +68,15 @@ export function formatNumber(number: number) {
   return NUMBER_FORMATTER.format(number);
 }
 
-export function storeUserInputData(id: string) {
-  localStorage.setItem("report_id", JSON.stringify(id));
-}
+// export function storeUserInputData(id: string) {
+//   localStorage.setItem("report_id", JSON.stringify(id));
+// }
 
-export function getUserInputData() {
-  const storedValue = localStorage.getItem("report_id");
+// export function getUserInputData() {
+//   const storedValue = localStorage.getItem("report_id");
 
-  return storedValue ? JSON.parse(storedValue) : null;
-}
+//   return storedValue ? JSON.parse(storedValue) : null;
+// }
 
 export function toCamelCase(str: string): string {
   return str

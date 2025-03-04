@@ -6,14 +6,22 @@ import Switch from "./Switch";
 import RangeInput from "./RangeInput";
 import { useUserInputContext } from "@/contexts/UserInputContext";
 import useRegions from "@/hooks/useRegions";
+import { useState } from "react";
 
 function CalculatorForm() {
+  const [isGrayColor, setIsGrayColor] = useState(true);
   const { state, dispatch, inputChangeHandler, error } = useUserInputContext();
   const { regions, regionsError, regionsIsLoading } = useRegions();
 
   function switchChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
     const value = checked ? 1 : 0;
+    dispatch({ type: "UPDATE_FIELD", payload: { name, value } });
+  }
+
+  function handleRegionChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setIsGrayColor(false);
+    const { name, value } = e.target;
     dispatch({ type: "UPDATE_FIELD", payload: { name, value } });
   }
 
@@ -28,14 +36,17 @@ function CalculatorForm() {
             <p className="text-center">Regions not Found!</p>
           </div>
         )}
-        {regionsIsLoading && <Input label="Region" />}
+        {regionsIsLoading && (
+          <Input placeholder="Please Select" label="Region" />
+        )}
         {!regionsIsLoading && !regionsError && (
           <Select
+            isGrayColor={isGrayColor}
             label="Region"
             id="region"
             name="region"
             value={state.region}
-            onChange={inputChangeHandler}
+            onChange={handleRegionChange}
           >
             {regions?.map((region) => (
               <option key={region.country} value={region.country}>
@@ -48,8 +59,8 @@ function CalculatorForm() {
           label="Total Number of Employees"
           id="totalEmployees"
           name="totalEmployees"
+          placeholder="Please enter value"
           type="number"
-          defaultValue={state.totalEmployees}
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
@@ -69,7 +80,7 @@ function CalculatorForm() {
           id="locations"
           name="locations"
           type="number"
-          defaultValue={state.locations}
+          placeholder="Please enter value "
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
@@ -88,7 +99,7 @@ function CalculatorForm() {
           id="hostingSites"
           name="hostingSites"
           type="number"
-          defaultValue={state.hostingSites}
+          placeholder="Please enter value"
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
@@ -118,17 +129,19 @@ function CalculatorForm() {
           />
         </div>
         <RangeInput
-          label="Number of Countries"
+          label="Number of Countries / Regions"
+          hasInfo
+          infoText="Number of countries where operations / employees located (Multiple locations in one country are counted as one) "
           id="countries"
           name="countries"
           type="range"
           min={1}
-          max={195}
+          max={30}
           value={state.countries}
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
-              max: 195,
+              max: 30,
               isNumber: true,
             })
           }

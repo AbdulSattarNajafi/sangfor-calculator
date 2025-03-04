@@ -1,11 +1,13 @@
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { ComponentProps } from "react";
+import { cn } from "@/utils/helpers";
 
 type InputProps = ComponentProps<"input"> & {
   label: string;
   errorMessage?: string[] | string;
   hasInfo?: boolean;
   infoText?: string;
+  tooltipCenter?: boolean;
 };
 
 function Input({
@@ -13,6 +15,7 @@ function Input({
   errorMessage,
   hasInfo,
   infoText,
+  tooltipCenter,
   ...props
 }: InputProps) {
   return (
@@ -27,7 +30,14 @@ function Input({
             <span className="group relative -mb-px inline-block">
               <HiOutlineInformationCircle className="cursor-pointer text-lg" />
 
-              <span className="info-tooltip invisible absolute -left-40 bottom-full z-30 block w-[240px] -translate-y-6 rounded-md bg-white p-2 text-xs leading-tight text-black opacity-0 shadow-md transition-all duration-300 group-hover:visible group-hover:-translate-y-2 group-hover:opacity-100">
+              <span
+                className={cn(
+                  "invisible absolute bottom-full z-30 block -translate-y-6 rounded-md bg-white p-2 text-xs leading-tight text-black opacity-0 shadow-md transition-all duration-300 group-hover:visible group-hover:-translate-y-2 group-hover:opacity-100",
+                  tooltipCenter
+                    ? "tooltip-center left-1/2 w-[200px] -translate-x-1/2"
+                    : "info-tooltip -left-40 w-[240px]",
+                )}
+              >
                 {infoText}
               </span>
             </span>

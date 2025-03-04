@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const emailSchema = z
   .string({ message: "Email is required" })
@@ -8,15 +7,10 @@ const emailSchema = z
     message: "Invalid email domain",
   });
 
-const phoneSchema = z.string({ message: "Phone number is required" }).refine(
-  (phone) => {
-    const parsedPhone = parsePhoneNumberFromString(phone);
-    return parsedPhone && parsedPhone.isValid();
-  },
-  {
-    message: "Invalid phone number",
-  },
-);
+const phoneNumberSchema = z
+  .string({ message: "Phone number is required" })
+  .trim()
+  .regex(/^(?:\+?[1-9]\d{0,3})?\s?\d{7,15}$/, "Invalid phone number");
 
 export const contactSchema = z.object({
   firstName: z
@@ -24,7 +18,7 @@ export const contactSchema = z.object({
     .min(3, { message: "First name must be at least 3 characters long." })
     .max(30, { message: "First name must not exceed 30 characters." }),
   emailAddress: emailSchema,
-  businessPhone: phoneSchema,
+  businessPhone: phoneNumberSchema,
   companyName: z
     .string({ message: "Company name is required" })
     .min(2, { message: "Company name must be at least 2 characters long." }),
@@ -34,4 +28,7 @@ export const contactSchema = z.object({
   countryName: z
     .string({ message: "Country is required" })
     .min(2, { message: "Country name must be at least 2 characters long." }),
+  recaptcha: z
+    .string({ message: "reCAPTCHA verification is required" })
+    .min(1, "Please verify reCAPTCHA"),
 });

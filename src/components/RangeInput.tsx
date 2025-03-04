@@ -1,13 +1,25 @@
 "use client";
 
+import { cn } from "@/utils/helpers";
 import { ComponentProps } from "react";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 type RangeInputProps = ComponentProps<"input"> & {
   label: string;
   formatter?: string;
+  hasInfo?: boolean;
+  infoText?: string;
+  tooltipCenter?: boolean;
 };
 
-function RangeInput({ label, formatter, ...props }: RangeInputProps) {
+function RangeInput({
+  label,
+  formatter,
+  hasInfo,
+  infoText,
+  tooltipCenter,
+  ...props
+}: RangeInputProps) {
   const value = Number(props.value);
   const maxValue = Number(props.max);
 
@@ -17,8 +29,27 @@ function RangeInput({ label, formatter, ...props }: RangeInputProps) {
 
   return (
     <div className="flex flex-col">
-      <label htmlFor={props.id} className="text-sm text-white sm:text-base">
-        {label}
+      <label
+        className="flex items-center gap-1 text-sm text-white xl:text-base"
+        htmlFor={props.id}
+      >
+        <span className="inline-block">{label}</span>
+        {hasInfo && (
+          <span className="group relative -mb-px inline-block">
+            <HiOutlineInformationCircle className="cursor-pointer text-lg" />
+
+            <span
+              className={cn(
+                "invisible absolute bottom-full z-30 block -translate-y-6 rounded-md bg-white p-2 text-xs leading-tight text-black opacity-0 shadow-md transition-all duration-300 group-hover:visible group-hover:-translate-y-2 group-hover:opacity-100",
+                tooltipCenter
+                  ? "tooltip-center left-1/2 w-[200px] -translate-x-1/2"
+                  : "info-tooltip -left-40 w-[240px]",
+              )}
+            >
+              {infoText}
+            </span>
+          </span>
+        )}
       </label>
       <div className="relative -mt-1">
         <div className="relative">

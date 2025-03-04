@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        custom: ["var(--redHatFont)", "sans-serif"],
+      },
       screens: {
         xs: "388px",
         sm: "576px",

@@ -120,7 +120,7 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
             </h2>
             <p className="mb-8 lg:text-lg">
               Here is your FREE detailed report on how you can reduce TCO by
-              deploying Versa SASE.
+              deploying Sangfor SASE.
             </p>
             <button
               onClick={generatePDF}

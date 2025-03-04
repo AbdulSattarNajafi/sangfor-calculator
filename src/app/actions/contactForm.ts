@@ -24,6 +24,7 @@ export async function createEloquaEmail(
   }
 
   const { scs, state } = payload;
+
   const ELOQOA_API_URL =
     "https://secure.p06.eloqua.com/API/REST/2.0/data/form/172";
 
@@ -259,8 +260,6 @@ export async function createEloquaEmail(
     },
     body: JSON.stringify(eloqoaData),
   });
-
-  console.log(response, "--------------- response");
 
   if (!response.ok) {
     throw new Error(`Failed to submit form: ${response.statusText}`);

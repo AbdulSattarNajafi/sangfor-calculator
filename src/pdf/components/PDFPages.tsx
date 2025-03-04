@@ -765,6 +765,19 @@ function PDFPages({
               &nbsp;of a leading Singaporean management consultancy firm
             </Text>
           </ListItem>
+
+          <View style={{ paddingTop: 40 }}>
+            <Text style={{ marginBottom: 20 }}>
+              We appreciate your time spent for the SASE ROI Calculator report.
+              Should you have any questions or feedback then please reach us out
+              to&nbsp;
+              <Link href="mailto:marketing@sangfor.com" style={styles.link}>
+                marketing@sangfor.com
+              </Link>
+            </Text>
+            <Text>With Regards,</Text>
+            <Text>Sangfor SASE Marketing Team</Text>
+          </View>
         </View>
       </Page>
     </Document>

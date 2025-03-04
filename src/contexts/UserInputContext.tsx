@@ -1,15 +1,8 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 
 import { UserInputDataType } from "@/utils/types";
-import useRegions from "@/hooks/useRegions";
 
 type StateType = UserInputDataType;
 
@@ -27,11 +20,11 @@ const initialState = {
   jobTitle: "",
   submissionDate: "",
   region: "",
-  totalEmployees: 5000,
-  hybridPercentage: 50,
-  locations: 5,
-  countries: 2,
-  hostingSites: 1,
+  totalEmployees: 0,
+  hybridPercentage: 10,
+  locations: 0,
+  countries: 5,
+  hostingSites: 0,
   countryName: "",
   acceleration: 1,
   demoRequest: 0,
@@ -90,19 +83,6 @@ export default function UserInputContextProvider({
 }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [error, setError] = useState(errorState);
-  const { regions } = useRegions();
-
-  useEffect(() => {
-    if (regions) {
-      dispatch({
-        type: "UPDATE_FIELD",
-        payload: {
-          name: "region",
-          value: regions[0].country || "",
-        },
-      });
-    }
-  }, [regions]);
 
   function inputChangeHandler(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,

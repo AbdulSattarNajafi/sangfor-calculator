@@ -20,6 +20,14 @@ function CalculatorResult() {
     (region) => region.country === state.region,
   );
 
+  if (state.region === "" || state.totalEmployees === 0) {
+    return (
+      <div className="p-4 text-center">
+        <p>Please fill the inputs to see the calculator result</p>
+      </div>
+    );
+  }
+
   if (formulaIsLoading || regionsIsLoading) {
     return (
       <div className="flex w-full flex-1 items-center justify-center">

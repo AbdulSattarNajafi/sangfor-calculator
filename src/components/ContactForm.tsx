@@ -7,14 +7,15 @@ import { parseWithZod } from "@conform-to/zod";
 import { nanoid } from "nanoid";
 
 import Input from "./Input";
-import CountrySelector from "./CountrySelector";
 import SubmitButton from "./SubmitButton";
 import { useUserInputContext } from "@/contexts/UserInputContext";
-import { storeUserInputData } from "@/utils/helpers";
 import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { createEloquaEmail } from "@/app/actions/contactForm";
 import { useScsData } from "@/hooks/useScsData";
+import useRegions from "@/hooks/useRegions";
+import CountrySelector from "./CountrySelector";
+import Recaptcha from "./Recaptcha";
 
 function ContactForm() {
   const uniqueId = nanoid();
@@ -22,6 +23,27 @@ function ContactForm() {
   const countiesData = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const { state, dispatch } = useUserInputContext();
+  const { regions } = useRegions();
+
+  const regionLists = regions?.map((region) => {
+    if (region.country.includes("hong kong")) {
+    }
+    const countryNames = region.country.toLocaleLowerCase();
+    return countryNames;
+  });
+
+  const isFavorite = (country: ICountry) =>
+    regionLists?.some((fav) =>
+      country.name.toLowerCase().includes(fav.toLowerCase()),
+    );
+
+  const sortedCountries = [
+    ...countiesData.filter(isFavorite),
+    ...countiesData.filter((c) => !isFavorite(c)),
+  ];
+
+  const [token, setToken] = useState("");
+  const [recaptchaError, setRecaptchaError] = useState("");
 
   function handleCountryChange(countryCode: string) {
     const country = Country.getCountryByCode(countryCode);
@@ -39,7 +61,6 @@ function ContactForm() {
         type: "UPDATE_FIELD",
         payload: { name: "userId", value: uniqueId },
       });
-      storeUserInputData(state.userId);
     }
   }
 
@@ -58,6 +79,30 @@ function ContactForm() {
     createEloquaEmail.bind(null, { scs, state }),
     undefined,
   );
+
+  // event: React.FormEvent<HTMLFormElement>
+  const verifyTokenHandler = async (token: string | null) => {
+    if (!token) {
+      setRecaptchaError("Please verify you are not a robot!");
+      return;
+    }
+
+    const res = await fetch("/api/verify-recaptcha", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const { success } = await res.json();
+
+    if (success) {
+      setRecaptchaError("");
+      setToken(token);
+    } else {
+      setRecaptchaError("Please verify reCAPTCHA!");
+      setToken("");
+    }
+  };
 
   const [form, fields] = useForm({
     lastResult,
@@ -83,7 +128,7 @@ function ContactForm() {
       </h3>
       <div className="mb-6 flex flex-col gap-y-1 md:grid md:grid-cols-2 md:gap-x-4 lg:gap-x-2 xl:gap-x-4">
         <Input
-          label="First Name"
+          label="First Name*"
           id="firstName"
           placeholder="First Name"
           key={fields.firstName.key}
@@ -92,9 +137,8 @@ function ContactForm() {
           errorMessage={fields.firstName.errors}
           onChange={changeHandler}
         />
-
         <Input
-          label="Email Address"
+          label="Email Address*"
           id="email"
           placeholder="Email Address"
           key={fields.emailAddress.key}
@@ -103,11 +147,13 @@ function ContactForm() {
           errorMessage={fields.emailAddress.errors}
           onChange={changeHandler}
         />
-
         <Input
-          label="Business Phone"
+          label="Business Phone*"
+          hasInfo={true}
+          infoText="Please enter your business phone number with Country Code"
+          tooltipCenter={true}
           id="businessPhone"
-          placeholder="+CC (AAA) XXX-XXXX"
+          placeholder="Mobile number with Country Code"
           key={fields.businessPhone.key}
           name={fields.businessPhone.name}
           defaultValue={fields.businessPhone.initialValue}
@@ -115,7 +161,7 @@ function ContactForm() {
           onChange={changeHandler}
         />
         <Input
-          label="Company"
+          label="Company*"
           id="companyName"
           placeholder="Company"
           key={fields.companyName.key}
@@ -125,7 +171,7 @@ function ContactForm() {
           onChange={changeHandler}
         />
         <Input
-          label="Job Title"
+          label="Job Title*"
           id="jobTitle"
           placeholder="Job Title"
           key={fields.jobTitle.key}
@@ -134,16 +180,14 @@ function ContactForm() {
           errorMessage={fields.jobTitle.errors}
           onChange={changeHandler}
         />
-
         <CountrySelector
-          data={countiesData}
+          data={sortedCountries}
           selected={selectedCountry}
           onChange={handleCountryChange}
           key={fields.countryName.key}
           name={fields.countryName.name}
           errorMessage={fields.countryName.errors}
         />
-
         <div>
           <CheckboxInput
             label="Do you want to Request a Demo for Sangfor SASE?"
@@ -152,7 +196,6 @@ function ContactForm() {
             onChange={handleCheckboxChange}
           />
         </div>
-
         <div>
           <CheckboxInput
             label="Receive Updates User Consent"
@@ -161,10 +204,33 @@ function ContactForm() {
             onChange={handleCheckboxChange}
           />
         </div>
+
+        <input
+          className="sr-only"
+          type="text"
+          key={fields.recaptcha.key}
+          name={fields.recaptcha.name}
+          defaultValue={fields.recaptcha.initialValue}
+          value={token}
+          onChange={() => setToken((prev) => prev)}
+        />
       </div>
 
-      <div>
-        <SubmitButton label="Download Report" loadingLabel="Downloading..." />
+      <div className="flex flex-col gap-y-2 md:grid md:grid-cols-2 md:gap-x-4 lg:flex xl:grid xl:gap-x-4">
+        <div className="flex flex-col items-center gap-2 md:items-start lg:items-center xl:items-start">
+          <Recaptcha onVerify={(token) => verifyTokenHandler(token)} />
+          <p className="h-4 text-sm leading-tight text-red-500">
+            {fields.recaptcha.errors ? fields.recaptcha.errors : recaptchaError}
+          </p>
+        </div>
+        <div className="relative flex flex-col justify-center text-center md:items-end md:justify-center lg:items-center lg:pt-6 xl:items-end xl:pt-0">
+          <div>
+            <SubmitButton
+              label="Download Report"
+              loadingLabel="Downloading..."
+            />
+          </div>
+        </div>
       </div>
     </form>
   );
