@@ -61,11 +61,17 @@ function CalculatorForm() {
           name="totalEmployees"
           placeholder="Please enter value"
           type="number"
+          onKeyDown={(e) =>
+            ["e", "E", "-"].includes(e.key) && e.preventDefault()
+          }
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
               isNumber: true,
-              message: "Number of Employees is rquired",
+              message:
+                Number(e.target.value) < 0
+                  ? "Negative number is not allowed"
+                  : "Number of Employees is rquired",
             })
           }
           errorMessage={error.totalEmployees}
@@ -80,12 +86,18 @@ function CalculatorForm() {
           id="locations"
           name="locations"
           type="number"
-          placeholder="Please enter value "
+          placeholder="Please enter value"
+          onKeyDown={(e) =>
+            ["e", "E", "-"].includes(e.key) && e.preventDefault()
+          }
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
               isNumber: true,
-              message: "Number of locations is rquired",
+              message:
+                Number(e.target.value) < 0
+                  ? "Negative number is not allowed"
+                  : "Number of locations is rquired",
             })
           }
           errorMessage={error.locations}
@@ -100,11 +112,17 @@ function CalculatorForm() {
           name="hostingSites"
           type="number"
           placeholder="Please enter value"
+          onKeyDown={(e) =>
+            ["e", "E", "-"].includes(e.key) && e.preventDefault()
+          }
           onChange={(e) =>
             inputChangeHandler(e, {
               min: 1,
               isNumber: true,
-              message: "Number of Application Hosting Sites is required",
+              message:
+                Number(e.target.value) < 0
+                  ? "Negative number is not allowed"
+                  : "Number of Application Hosting Sites is required",
             })
           }
           errorMessage={error.hostingSites}

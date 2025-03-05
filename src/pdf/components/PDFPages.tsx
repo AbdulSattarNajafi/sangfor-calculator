@@ -136,7 +136,6 @@ function PDFPages({
 }: PDFPagesProps) {
   const {
     security,
-    orgEfficiencyGain,
     productivity,
     breachRisk,
     networking,
@@ -224,11 +223,11 @@ function PDFPages({
     },
     {
       label: "Security & Networking Operational Efficiency Gains",
-      year1: Math.round(orgEfficiencyGain.year1),
-      year2: Math.round(orgEfficiencyGain.year2),
-      year3: Math.round(orgEfficiencyGain.year3),
-      total: Math.round(orgEfficiencyGain.total),
-      presentValue: Math.round(orgEfficiencyGain.npv),
+      year1: Math.round(security.year1),
+      year2: Math.round(security.year2),
+      year3: Math.round(security.year3),
+      total: Math.round(security.total),
+      presentValue: Math.round(security.npv),
     },
     {
       label: "Security and Networking Infrastructure Cost Savings",
@@ -553,7 +552,7 @@ function PDFPages({
           >
             <KpiCard
               label="NetOps and SecOps Efficiency Gains"
-              value={Math.round(operationalSavings.netOps) + "%"}
+              value={`Upto ${Math.round(operationalSavings.netOps)}%`}
             />
             <KpiCard
               label="Additional FTEs on strategic projects"
