@@ -1,4 +1,4 @@
-import DownloadPdfReport from "@/pdf/DownloadPdfReport";
+import DownloadReport from "@/pdf/DownloadReport";
 
 async function ReportPage({
   params,
@@ -13,7 +13,7 @@ async function ReportPage({
 
   return (
     <section className="relative h-dvh overflow-hidden">
-      {id && <DownloadPdfReport customer={customer} />}
+      {id && <DownloadReport customer={customer} />}
     </section>
   );
 }

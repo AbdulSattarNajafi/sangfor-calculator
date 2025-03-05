@@ -3,7 +3,7 @@ import "./globals.css";
 import UserInputDataContextProvider from "@/contexts/UserInputContext";
 
 export const metadata: Metadata = {
-  title: "Calculator",
+  title: "Sase ROI Calculator Calculator",
   description: "Sangfor Sase ROI Calculator",
 };
 

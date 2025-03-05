@@ -1,4 +1,4 @@
-import PdfGenerator from "@/pdf/PdfGenerator";
+import Report from "@/pdf/Report";
 
 async function ResultPage({
   params,
@@ -14,7 +14,7 @@ async function ResultPage({
 
   return (
     <section className="relative h-dvh overflow-hidden">
-      {id && <PdfGenerator customer={customer} />}
+      {id && <Report customer={customer} />}
     </section>
   );
 }

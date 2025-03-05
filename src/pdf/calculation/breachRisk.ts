@@ -1,4 +1,4 @@
-// 3- Security and Data Breach Risk Reduction
+// SECTION 3  Security and Data Breach Risk Reduction
 import { extractYearlyData } from "@/utils/helpers";
 import { BreachRiskType, CustomerDataType, YearlyData } from "@/utils/types";
 
@@ -27,7 +27,7 @@ export class BreachRisk {
     this.hybridEmployeePercentage = userInput.hybridPercentage / 100;
   }
 
-  // Calculate total cost of security risk
+  // C 63
   public getTotalCostOfSecurityRisk() {
     return {
       year1:
@@ -48,7 +48,7 @@ export class BreachRisk {
     };
   }
 
-  // Calculate security data breach risk reduction
+  // C 65
   private getSecurityDataBreachRiskReduction() {
     const totalCostOfSecurityRisk = this.getTotalCostOfSecurityRisk();
 
@@ -62,21 +62,18 @@ export class BreachRisk {
     };
   }
 
-  // Final data breach risk reduction calculation
+  // C 68
   public getBreachRisck() {
     const securityDataBreachRiskReduction =
       this.getSecurityDataBreachRiskReduction();
 
     return {
-      year1: Math.round(
+      year1:
         securityDataBreachRiskReduction.year1 * (1 - this.riskAdjustment.year1),
-      ),
-      year2: Math.round(
+      year2:
         securityDataBreachRiskReduction.year2 * (1 - this.riskAdjustment.year2),
-      ),
-      year3: Math.round(
+      year3:
         securityDataBreachRiskReduction.year3 * (1 - this.riskAdjustment.year3),
-      ),
     };
   }
 }

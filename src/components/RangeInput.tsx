@@ -22,10 +22,11 @@ function RangeInput({
 }: RangeInputProps) {
   const value = Number(props.value);
   const maxValue = Number(props.max);
+  const minValue = Number(props.min);
 
-  const ratio = value / maxValue;
-  const widthPercentage = value / (maxValue / 100);
-  const marginLeft = value / (maxValue / 100) - ratio;
+  const width = value / (maxValue / 100);
+  const widthPercentage = value > 20 ? width : width + 1;
+  const position = ((value - minValue) / (maxValue - minValue)) * 100;
 
   return (
     <div className="flex flex-col">
@@ -55,7 +56,7 @@ function RangeInput({
         <div className="relative">
           <input
             className="range-input h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
-            id="hybridPercentage"
+            type="range"
             {...props}
           />
           <div
@@ -66,7 +67,7 @@ function RangeInput({
         <div className="tooltip-wrapper">
           <span
             className="range-input-tooltip text-xs"
-            style={{ left: `${marginLeft}%` }}
+            style={{ left: `${position}%` }}
           >
             {value}
             {formatter}

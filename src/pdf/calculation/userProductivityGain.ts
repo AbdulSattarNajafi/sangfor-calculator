@@ -1,4 +1,4 @@
-// 2- End User Productivity Gains
+// SECTION 2  End User Productivity Gains
 import { extractYearlyData } from "@/utils/helpers";
 import {
   CustomerDataType,
@@ -38,7 +38,7 @@ export class UserProductivityGain {
     this.avgNationalSalary = selectedCountry.avgNationalSalary;
   }
 
-  // Calculate total impacted user productivity
+  // C 46
   private getTotalEndUserProductivity() {
     return {
       year1:
@@ -56,7 +56,7 @@ export class UserProductivityGain {
     };
   }
 
-  // Calculate total productivity recovery
+  // C 48
   public getTotalProductivityRecover() {
     const totalEndUserProductivity = this.getTotalEndUserProductivity();
 
@@ -73,7 +73,7 @@ export class UserProductivityGain {
     };
   }
 
-  // Calculate total productivity gains
+  // C 50
   private getTotalEndUserProductivityGains() {
     const totalProductivityRecover = this.getTotalProductivityRecover();
 
@@ -84,27 +84,24 @@ export class UserProductivityGain {
     };
   }
 
-  // Final productivity gain calculation
+  // C 54
   public getProductivityGain() {
     const totalEndUserProductivityGains =
       this.getTotalEndUserProductivityGains();
 
     return {
-      year1: Math.round(
+      year1:
         totalEndUserProductivityGains.year1 *
-          (1 - this.productivityRecapture.year1) *
-          (1 - this.riskAdjustment.year1),
-      ),
-      year2: Math.round(
+        (1 - this.productivityRecapture.year1) *
+        (1 - this.riskAdjustment.year1),
+      year2:
         totalEndUserProductivityGains.year2 *
-          (1 - this.productivityRecapture.year2) *
-          (1 - this.riskAdjustment.year2),
-      ),
-      year3: Math.round(
+        (1 - this.productivityRecapture.year2) *
+        (1 - this.riskAdjustment.year2),
+      year3:
         totalEndUserProductivityGains.year3 *
-          (1 - this.productivityRecapture.year3) *
-          (1 - this.riskAdjustment.year3),
-      ),
+        (1 - this.productivityRecapture.year3) *
+        (1 - this.riskAdjustment.year3),
     };
   }
 }

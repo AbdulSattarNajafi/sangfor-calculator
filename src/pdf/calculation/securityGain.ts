@@ -1,4 +1,4 @@
-// 1- Security and Networking Org Efficiency Gain
+// SECTION 1  Security and Networking Org Efficiency Gain
 import { extractYearlyData } from "@/utils/helpers";
 import {
   CustomerDataType,
@@ -54,16 +54,16 @@ export class SecurityGain {
     this.networkSalary = selectedCountry.networkEmployeeSalary;
   }
 
-  // D 19
+  // C 19
   private getSizeOfSecurity() {
     return {
-      year1: this.numEmployees / this.securityTeamPerEmployee.year1,
-      year2: this.numEmployees / this.securityTeamPerEmployee.year2,
-      year3: this.numEmployees / this.securityTeamPerEmployee.year3,
+      year1: Math.ceil(this.numEmployees / this.securityTeamPerEmployee.year1),
+      year2: Math.ceil(this.numEmployees / this.securityTeamPerEmployee.year2),
+      year3: Math.ceil(this.numEmployees / this.securityTeamPerEmployee.year3),
     };
   }
 
-  // D 22
+  // C 22
   private getTotalTimeSaving() {
     const sizeOfSecurity = this.getSizeOfSecurity();
 
@@ -86,7 +86,7 @@ export class SecurityGain {
     };
   }
 
-  // D 25
+  // C 25
   private getTotalTimeSavingInTracking() {
     const sizeOfSecurity = this.getSizeOfSecurity();
     return {
@@ -108,7 +108,7 @@ export class SecurityGain {
     };
   }
 
-  // D 27
+  // C 27
   public getOrgEfficiencyGain() {
     const totalTimeSaving = this.getTotalTimeSaving();
     const totalTimeSavingInTracking = this.getTotalTimeSavingInTracking();
@@ -126,7 +126,7 @@ export class SecurityGain {
     };
   }
 
-  // D 29
+  // C 29
   private getSizeOfNetworking() {
     return {
       year1: Math.ceil(this.numEmployees / this.sizeOfTheNetworkingOrg.year1),
@@ -135,7 +135,7 @@ export class SecurityGain {
     };
   }
 
-  // D 32
+  // C 32
   private getAdministrationTimeSaving() {
     const sizeOfNetworking = this.getSizeOfNetworking();
 
@@ -158,7 +158,7 @@ export class SecurityGain {
     };
   }
 
-  // D 34
+  // C 34
   private getTotalValueOfNetworking() {
     const administrationTimeSaving = this.getAdministrationTimeSaving();
 
@@ -169,34 +169,39 @@ export class SecurityGain {
     };
   }
 
+  // C 38
+  public getSecurityGain() {
+    const orgEfficiencyGain = this.getOrgEfficiencyGain(); //D27
+    const totalValueOfNetworking = this.getTotalValueOfNetworking(); // D34
+
+    return {
+      year1:
+        (orgEfficiencyGain.year1 + totalValueOfNetworking.year1) *
+        (1 - this.productivityRecapture.year1) *
+        (1 - this.riskAdjustment.year1),
+
+      year2:
+        (orgEfficiencyGain.year2 + totalValueOfNetworking.year2) *
+        (1 - this.productivityRecapture.year2) *
+        (1 - this.riskAdjustment.year2),
+
+      year3:
+        (orgEfficiencyGain.year3 + totalValueOfNetworking.year3) *
+        (1 - this.productivityRecapture.year3) *
+        (1 - this.riskAdjustment.year3),
+    };
+  }
+
+  // Additional FTEs on strategic projects => F22 + F25 + F32
   public getAdditionalFte() {
     const totalTimeSaving = this.getTotalTimeSaving();
     const totalTimeSavingInTracking = this.getTotalTimeSavingInTracking();
+    const administrationTimeSaving = this.getAdministrationTimeSaving();
 
-    return totalTimeSaving.year3 + totalTimeSavingInTracking.year3;
-  }
-
-  // D38
-  public getSecurityGain() {
-    const orgEfficiencyGain = this.getOrgEfficiencyGain();
-    const totalValueOfNetworking = this.getTotalValueOfNetworking();
-
-    return {
-      year1: Math.round(
-        (orgEfficiencyGain.year1 + totalValueOfNetworking.year1) *
-          (1 - this.productivityRecapture.year1) *
-          (1 - this.riskAdjustment.year1),
-      ),
-      year2: Math.round(
-        (orgEfficiencyGain.year2 + totalValueOfNetworking.year2) *
-          (1 - this.productivityRecapture.year2) *
-          (1 - this.riskAdjustment.year2),
-      ),
-      year3: Math.round(
-        (orgEfficiencyGain.year3 + totalValueOfNetworking.year3) *
-          (1 - this.productivityRecapture.year3) *
-          (1 - this.riskAdjustment.year3),
-      ),
-    };
+    return (
+      totalTimeSaving.year3 +
+      totalTimeSavingInTracking.year3 +
+      administrationTimeSaving.year3
+    );
   }
 }

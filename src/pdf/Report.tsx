@@ -4,11 +4,7 @@ import { useRef, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
-import {
-  captureChartAsImage,
-  downloadFile,
-  formatCompactCurrency,
-} from "@/utils/helpers";
+import { captureChartAsImage, formatCompactCurrency } from "@/utils/helpers";
 import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
 import PDFPages from "./components/PDFPages";
@@ -16,12 +12,9 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import useFormula from "@/hooks/useFormula";
 import Spinner from "@/components/Spinner";
 import useRegions from "@/hooks/useRegions";
-import { redirect } from "next/navigation";
 import { CustomerDataType } from "@/utils/types";
 
-function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
-  // const { customer, customerIsLoading } = useCustomerInfo(id);
-
+function Report({ customer }: { customer: CustomerDataType }) {
   const [isLoading, setIsLoading] = useState(false);
   const { formula, formulaIsLoading } = useFormula();
   const { regions, regionsIsLoading } = useRegions();
@@ -45,8 +38,6 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
     (region) => region.country === customer.region,
   );
 
-  console.log(customer);
-
   if (regionsIsLoading || formulaIsLoading) {
     return (
       <div className="flex h-dvh items-center justify-center">
@@ -61,10 +52,6 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
         <p className="text-center">Something Went wrong!</p>
       </div>
     );
-  }
-
-  if (!customer) {
-    redirect("/");
   }
 
   const chartTitleFontSize = width < 1200 ? (width / 1000) * 24 : 32;
@@ -115,7 +102,7 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
     setIsLoading(false);
 
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    downloadFile(pdfUrl, "Sangfor-TCO-ROI-Report.pdf");
+    window.open(pdfUrl, "_blank");
   };
 
   return (
@@ -135,7 +122,7 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
               disabled={isLoading}
               className="whitespace-nowrap rounded bg-green px-4 py-2 font-semibold text-white transition-all duration-300 hover:bg-green/75"
             >
-              {isLoading ? "Downloading..." : "Download My Report"}
+              {isLoading ? "Preparing Your Report..." : "View My Report"}
             </button>
           </div>
         </div>
@@ -194,8 +181,7 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
               totalValue={36}
             >
               <h5 className="-mt-5 text-center text-4xl font-bold leading-none text-[#d26e2a]">
-                &lt; {financeSummary.otherCalculation.paybackPeriod}
-                <br />
+                &lt; {financeSummary.otherCalculation.paybackPeriod} <br />
                 <span className="text-2xl">months</span>
               </h5>
             </DonutChart>
@@ -218,4 +204,4 @@ function DownloadPdfReport({ customer }: { customer: CustomerDataType }) {
   );
 }
 
-export default DownloadPdfReport;
+export default Report;

@@ -132,7 +132,6 @@ body {
     left: 168px;
     margin-left: -5px;
     border-width: 6px;
-    /* transform: translateX(-50%); */
     border-style: solid;
     border-color: #fff transparent transparent transparent;
   }

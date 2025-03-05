@@ -115,7 +115,6 @@ function CalculatorForm() {
             label="Percentage of Remote/Hybrid Employees"
             id="hybridPercentage"
             name="hybridPercentage"
-            type="range"
             min={0}
             max={100}
             value={state.hybridPercentage}
@@ -134,7 +133,6 @@ function CalculatorForm() {
           infoText="Number of countries where operations / employees located (Multiple locations in one country are counted as one) "
           id="countries"
           name="countries"
-          type="range"
           min={1}
           max={30}
           value={state.countries}

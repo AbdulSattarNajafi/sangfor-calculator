@@ -1,4 +1,4 @@
-// 5- Analysis Of Costs
+// COSTS 5  Analysis Of Costs
 import { extractYearlyData } from "@/utils/helpers";
 import {
   CustomerDataType,
@@ -52,7 +52,7 @@ export class CostAnalysis {
     this.saseCostPerUserPerYear = selectedCountry.sASECostPerUserPerYear;
   }
 
-  // Calculate required FTE
+  // C 83
   private getRequiredFte() {
     return {
       year1: Math.ceil(this.numEmployees / this.numberOfFTEsRequired.year1),
@@ -61,7 +61,7 @@ export class CostAnalysis {
     };
   }
 
-  // Calculate installation and development cost
+  // C 87
   private getInstallationAndDevelopmentCost() {
     const requiredFte = this.getRequiredFte();
 
@@ -84,7 +84,7 @@ export class CostAnalysis {
     };
   }
 
-  // Calculate training and maintenance cost
+  // C 89
   private getTrainingMaintenanceCost() {
     const requiredFte = this.getRequiredFte();
 
@@ -104,16 +104,18 @@ export class CostAnalysis {
     };
   }
 
-  // Calculate user licenses cost
+  // C 90
   private getUserLicensesCost() {
+    const userLicenseCost = this.saseCostPerUserPerYear * this.numEmployees;
+
     return {
-      year1: this.saseCostPerUserPerYear * this.numEmployees,
-      year2: this.saseCostPerUserPerYear * this.numEmployees,
-      year3: this.saseCostPerUserPerYear * this.numEmployees,
+      year1: userLicenseCost,
+      year2: userLicenseCost,
+      year3: userLicenseCost,
     };
   }
 
-  // Calculate SASE connector cost
+  // C 91
   private getSaseConnectorCost() {
     return {
       year1: this.applicationSites * this.costOfSASEConnector.year1,
@@ -122,29 +124,30 @@ export class CostAnalysis {
     };
   }
 
-  // Calculate traffic acceleration cost
+  // C 92
   private getTrafficAccelerationCost() {
     return {
       year1: this.trafficAcceleration
         ? this.numCountries * this.costOfCrossBorderTrafficAcceleration.year1
-        : this.costOfCrossBorderTrafficAcceleration.year1,
+        : 0,
       year2: this.trafficAcceleration
         ? this.numCountries * this.costOfCrossBorderTrafficAcceleration.year2
-        : this.costOfCrossBorderTrafficAcceleration.year2,
+        : 0,
       year3: this.trafficAcceleration
         ? this.numCountries * this.costOfCrossBorderTrafficAcceleration.year3
-        : this.costOfCrossBorderTrafficAcceleration.year3,
+        : 0,
     };
   }
 
-  // Calculate total solution cost
+  // C 93
   private getSolutionTotalCost() {
     const installationAndDevelopmentCost =
-      this.getInstallationAndDevelopmentCost();
-    const trainingMaintenanceCost = this.getTrainingMaintenanceCost();
-    const userLicensesCost = this.getUserLicensesCost();
-    const saseConnectorCost = this.getSaseConnectorCost();
-    const trafficAccelerationCost = this.getTrafficAccelerationCost();
+      this.getInstallationAndDevelopmentCost(); // C87
+    const trainingMaintenanceCost = this.getTrainingMaintenanceCost(); // C89
+    const userLicensesCost = this.getUserLicensesCost(); // C90
+    const saseConnectorCost = this.getSaseConnectorCost(); // C91
+    const trafficAccelerationCost = this.getTrafficAccelerationCost(); // C92
+
     return {
       year1:
         installationAndDevelopmentCost.year1 +
@@ -167,20 +170,14 @@ export class CostAnalysis {
     };
   }
 
-  // Final total cost calculation with risk adjustment
+  // C 96
   public getTotalCost() {
     const solutionTotalCost = this.getSolutionTotalCost();
 
     return {
-      year1: Math.round(
-        solutionTotalCost.year1 * (1 + this.riskAdjustment.year1),
-      ),
-      year2: Math.round(
-        solutionTotalCost.year2 * (1 + this.riskAdjustment.year2),
-      ),
-      year3: Math.round(
-        solutionTotalCost.year3 * (1 + this.riskAdjustment.year3),
-      ),
+      year1: solutionTotalCost.year1 * (1 + this.riskAdjustment.year1),
+      year2: solutionTotalCost.year2 * (1 + this.riskAdjustment.year2),
+      year3: solutionTotalCost.year3 * (1 + this.riskAdjustment.year3),
     };
   }
 }

@@ -1,4 +1,4 @@
-// 4- Security and Networking Infra Cost Reduction
+// SECTION 4  Security and Networking Infra Cost Reduction
 import { extractYearlyData } from "@/utils/helpers";
 import { CustomerDataType, NerworkCostType, YearlyData } from "@/utils/types";
 
@@ -35,7 +35,7 @@ export class NetworkingCost {
     this.numCountries = userInput.countries;
   }
 
-  // Calculate annual security tech spending
+  // C 73
   private getAnnualSecurityTechSpending() {
     return {
       year1:
@@ -53,22 +53,22 @@ export class NetworkingCost {
     };
   }
 
-  // Calculate connectivity cost
+  // C 75
   public getConnectivityCost() {
     return {
       year1: this.trafficAcceleration
         ? this.numCountries * this.replacingExistingMPLSConnectivityCost.year1
-        : this.replacingExistingMPLSConnectivityCost.year1,
+        : 0,
       year2: this.trafficAcceleration
         ? this.numCountries * this.replacingExistingMPLSConnectivityCost.year2
-        : this.replacingExistingMPLSConnectivityCost.year2,
+        : 0,
       year3: this.trafficAcceleration
         ? this.numCountries * this.replacingExistingMPLSConnectivityCost.year3
-        : this.replacingExistingMPLSConnectivityCost.year3,
+        : 0,
     };
   }
 
-  // Calculate total security networking cost
+  // C 76
   private getSecurityNetworkingCost() {
     const annualSecurityTechSpending = this.getAnnualSecurityTechSpending();
     const connectivityCost = this.getConnectivityCost();
@@ -89,19 +89,13 @@ export class NetworkingCost {
     };
   }
 
-  // Final security networking cost reduction calculation
+  // C 78
   public getNetworkCost() {
     const securityNetworkingCost = this.getSecurityNetworkingCost();
     return {
-      year1: Math.round(
-        securityNetworkingCost.year1 * (1 - this.riskAdjustment.year1),
-      ),
-      year2: Math.round(
-        securityNetworkingCost.year2 * (1 - this.riskAdjustment.year2),
-      ),
-      year3: Math.round(
-        securityNetworkingCost.year3 * (1 - this.riskAdjustment.year3),
-      ),
+      year1: securityNetworkingCost.year1 * (1 - this.riskAdjustment.year1),
+      year2: securityNetworkingCost.year2 * (1 - this.riskAdjustment.year2),
+      year3: securityNetworkingCost.year3 * (1 - this.riskAdjustment.year3),
     };
   }
 }
