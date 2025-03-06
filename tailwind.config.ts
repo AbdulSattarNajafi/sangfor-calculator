@@ -10,7 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        custom: ["var(--redHatFont)", "sans-serif"],
+        sans: ["var(--redHatFont)", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
       },
       screens: {
         xs: "388px",

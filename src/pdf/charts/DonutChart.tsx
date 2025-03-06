@@ -47,7 +47,7 @@ function DonutChart({
   };
 
   return (
-    <div className="flex w-[220px] flex-col items-center justify-center">
+    <div className="font-inter flex w-[220px] flex-col items-center justify-center">
       <div className="relative h-[160px]">
         <div className="h-[160px] w-[160px]">
           <Doughnut data={data} options={options} />

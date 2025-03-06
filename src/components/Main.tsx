@@ -1,0 +1,29 @@
+"use client";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import useWindowWidth from "@/hooks/useWindowWidth";
+
+export default function Main({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const width = useWindowWidth();
+
+  useEffect(() => {
+    const sendHeight = () => {
+      const height = document.body.scrollHeight;
+      window.parent.postMessage(height, "https://live-sangfor.pantheonsite.io");
+    };
+
+    sendHeight();
+    window.addEventListener("resize", sendHeight);
+    const observer = new MutationObserver(sendHeight);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      window.removeEventListener("resize", sendHeight);
+      observer.disconnect();
+    };
+  }, [pathname, width]);
+
+  return <main>{children}</main>;
+}

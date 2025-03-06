@@ -3,17 +3,17 @@ import { Text, View, StyleSheet } from "@react-pdf/renderer";
 type CardProps = {
   label: string;
   value: string | number;
+  width: number;
 };
 
-function KpiCard({ label, value }: CardProps) {
+function KpiCard({ label, value, width }: CardProps) {
   const styles = StyleSheet.create({
     card: {
       display: "flex",
       flexDirection: "column",
-      width: "150px",
+      width: `${width}px`,
       border: "1px solid #0070c0",
       borderRadius: 4,
-      // backgroundColor: "#b9e5ae",
       paddingHorizontal: 2,
       paddingVertical: 12,
     },

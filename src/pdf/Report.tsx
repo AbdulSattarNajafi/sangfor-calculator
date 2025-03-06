@@ -59,6 +59,9 @@ function Report({ customer }: { customer: CustomerDataType }) {
     width < 1200 ? Math.min(220, 145 + (1200 - width) / 7) : 145;
 
   const financeSummary = calculationResult(formula, customer, selectedCountry);
+
+  const { otherCalculation } = financeSummary;
+
   const operationalSavings = {
     lostProductivityRecovered:
       formula.endUserProductivityGains.productivityImprovement[0].year1 * 100,
@@ -139,7 +142,7 @@ function Report({ customer }: { customer: CustomerDataType }) {
               value={financeSummary.roiPercentages.total}
               totalValue={100}
             >
-              <h5 className="-mt-8 text-4xl font-bold text-[#58c13d]">
+              <h5 className="-mt-8 text-4xl font-semibold text-[#58c13d]">
                 {financeSummary.roiPercentages.total}%
               </h5>
             </DonutChart>
@@ -152,7 +155,7 @@ function Report({ customer }: { customer: CustomerDataType }) {
               value={financeSummary.benefits.npv}
               totalValue={financeSummary.benefits.npv * 2}
             >
-              <h5 className="-mt-8 text-center text-4xl font-bold leading-tight text-[#0070c0]">
+              <h5 className="-mt-8 text-center text-4xl font-semibold leading-tight text-[#0070c0]">
                 <span className="break-words">
                   {formatCompactCurrency(financeSummary.benefits.npv)}
                 </span>
@@ -177,11 +180,12 @@ function Report({ customer }: { customer: CustomerDataType }) {
               background="#d26e2a"
               color="#f1a78a"
               label="Payback Period"
-              value={financeSummary.otherCalculation.paybackPeriod}
+              value={otherCalculation.paybackPeriod}
               totalValue={36}
             >
-              <h5 className="-mt-5 text-center text-4xl font-bold leading-none text-[#d26e2a]">
-                &lt; {financeSummary.otherCalculation.paybackPeriod} <br />
+              <h5 className="-mt-5 text-center text-4xl font-semibold leading-none text-[#d26e2a]">
+                {otherCalculation.paybackPeriod > 0 ? "<" : ""}{" "}
+                {otherCalculation.paybackPeriod} <br />
                 <span className="text-2xl">months</span>
               </h5>
             </DonutChart>

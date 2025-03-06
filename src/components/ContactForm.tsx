@@ -22,8 +22,15 @@ function ContactForm() {
   const scs = useScsData();
   const countiesData = Country.getAllCountries();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
-  const { state, dispatch } = useUserInputContext();
+  const { state, dispatch, error } = useUserInputContext();
   const { regions } = useRegions();
+
+  const hasError = Object.values(error).some((msg) => msg !== "");
+  const isEmptyFields =
+    state.region === "" ||
+    state.totalEmployees === 0 ||
+    state.hostingSites === 0 ||
+    state.locations === 0;
 
   const regionLists = regions?.map((region) => {
     if (region.country.includes("hong kong")) {
@@ -230,6 +237,7 @@ function ContactForm() {
             <SubmitButton
               label="Download Report"
               loadingLabel="Downloading..."
+              disabled={isEmptyFields || hasError}
             />
           </div>
         </div>

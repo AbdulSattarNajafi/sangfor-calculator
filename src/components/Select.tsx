@@ -15,7 +15,7 @@ function Select({ label, isGrayColor, ...props }: SelectProps) {
       </label>
       <select
         className={cn(
-          "w-full rounded bg-gray-200 px-3 py-2 focus:outline-blue/70",
+          "w-full rounded bg-gray-200 px-3 py-1.5 leading-tight focus:outline-blue/70",
           isGrayColor && "text-gray-400",
         )}
         {...props}

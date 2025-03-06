@@ -185,6 +185,8 @@ function PDFPages({
     },
   ];
 
+  const lessThan = otherCalculation.paybackPeriod > 0 ? "Less than" : "";
+
   const riskAdjustedTableData = [
     {
       label: "Return of Investment (ROI)",
@@ -192,7 +194,7 @@ function PDFPages({
     },
     {
       label: "Payback Period",
-      value: `Less than ${Math.round(otherCalculation.paybackPeriod)} months`,
+      value: `${lessThan} ${Math.round(otherCalculation.paybackPeriod)} months`,
     },
     {
       label: "Total Benefits (measure by Net Present Value)",
@@ -631,16 +633,19 @@ function PDFPages({
             <KpiCard
               label="Number of FTEs Savings"
               value={totalProductivityRecover.year3}
+              width={140}
             />
             <KpiCard
               label="Additional Business Value"
               value={formatCompactCurrency(productivity.total)}
+              width={140}
             />
             <KpiCard
               label="Lost Productivity Recovered"
               value={
                 Math.round(operationalSavings.lostProductivityRecovered) + "%"
               }
+              width={140}
             />
           </View>
         </View>
@@ -691,16 +696,19 @@ function PDFPages({
                 Math.round(operationalSavings.reduceLikelihoodOfDataBreach) +
                 "%"
               }
+              width={166}
             />
             <KpiCard
               label="Cost of Security and Data Breach Risk"
               value={formatCompactCurrency(
                 otherCalculation.totalCostOfSecurityAndDataRisk,
               )}
+              width={166}
             />
             <KpiCard
               label="Risk adjust cost reduction"
               value={formatCompactCurrency(breachRisk.total)}
+              width={166}
             />
           </View>
 
@@ -731,11 +739,13 @@ function PDFPages({
               justifyContent: "center",
               gap: 8,
               marginTop: 6,
+              marginBottom: 20,
             }}
           >
             <KpiCard
               label="NetOps and SecOps Efficiency Gains"
               value={`Upto ${Math.round(operationalSavings.netOps)}%`}
+              width={166}
             />
             <KpiCard
               label="Additional FTEs on strategic projects"
@@ -744,19 +754,14 @@ function PDFPages({
                   ? "0" + otherCalculation.additionalFte
                   : otherCalculation.additionalFte
               }
+              width={166}
             />
             <KpiCard
               label="Administrative Overhead Savings"
               value={formatCompactCurrency(security.total)}
+              width={166}
             />
           </View>
-        </View>
-      </Page>
-
-      {/* ========= Page 7 =============== */}
-      <Page size="A4" style={styles.page}>
-        <Logo />
-        <View style={{ paddingHorizontal: 30 }}>
           <Text style={styles.text}>
             IT teams often spend considerable time managing software updates,
             patching servers, resolving routine support tickets, and
@@ -771,6 +776,13 @@ function PDFPages({
             mean-time-to-resolution, and automated scaling of networking and
             security infrastructure.
           </Text>
+        </View>
+      </Page>
+
+      {/* ========= Page 7 =============== */}
+      <Page size="A4" style={styles.page}>
+        <Logo />
+        <View style={{ paddingHorizontal: 30 }}>
           <Text style={styles.subHeading}>
             Security and Networking Infrastructure Cost Savings
           </Text>
@@ -788,15 +800,18 @@ function PDFPages({
             <KpiCard
               label="Savings from Vendor Consolidation"
               value={Math.round(operationalSavings.savingsFromVendor) + "%"}
+              width={156}
             />
             <KpiCard
               label="Total Infrastructure cost savings"
               value={formatCompactCurrency(networking.total)}
+              width={156}
             />
             {userInput.acceleration && (
               <KpiCard
                 label="SD-WAN and MPLS Cost Savings"
                 value={"~" + formatCompactCurrency(otherCalculation.sdwan)}
+                width={156}
               />
             )}
           </View>
@@ -814,14 +829,10 @@ function PDFPages({
             deployments, organizations save on both hardware and WAN
             connectivity costs by leveraging cross-border traffic acceleration.{" "}
           </Text>
-        </View>
-      </Page>
 
-      {/* ========= Page 8 =============== */}
-      <Page size="A4" style={styles.page}>
-        <Logo />
-        <View style={{ paddingHorizontal: 30 }}>
-          <Text style={[styles.heading, { marginBottom: 20 }]}>NEXT STEPS</Text>
+          <Text style={[styles.heading, { marginVertical: 20 }]}>
+            NEXT STEPS
+          </Text>
 
           <Steps
             step="1"
@@ -884,8 +895,8 @@ function PDFPages({
         </View>
       </Page>
 
-      {/* ========= Page 9 =============== */}
-      <Page size="A4" style={styles.page}>
+      {/* ========= Page 8 =============== */}
+      <Page size="A4" style={[styles.page, { position: "relative" }]}>
         <Logo />
 
         <View style={{ paddingHorizontal: 30 }}>
@@ -913,7 +924,7 @@ function PDFPages({
             threats and network demands, empowering them to innovate and grow
             with confidence.
           </Text>
-          <Text style={[styles.text, { marginBottom: 20 }]}>
+          <Text style={[styles.text, { marginBottom: 30 }]}>
             Visit{" "}
             <Link
               style={styles.link}
@@ -980,20 +991,29 @@ function PDFPages({
               &nbsp;of a leading Singaporean management consultancy firm
             </Text>
           </ListItem>
+        </View>
 
-          <View style={{ paddingTop: 40 }}>
-            <Text style={{ marginBottom: 20 }}>
-              We appreciate your time spent for the SASE ROI Calculator report.
-              Should you have any questions or feedback then please reach us out
-              to&nbsp;
-              <Link href="mailto:marketing@sangfor.com" style={styles.link}>
-                marketing@sangfor.com
-              </Link>
-              .
-            </Text>
-            <Text>With Regards,</Text>
-            <Text>Sangfor SASE Marketing Team</Text>
-          </View>
+        <View
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            width: "100%",
+            padding: 30,
+            color: "#212121",
+          }}
+        >
+          <Text style={{ marginBottom: 20 }}>
+            We appreciate your time spent for the SASE ROI Calculator report.
+            Should you have any questions or feedback then please reach us out
+            to&nbsp;
+            <Link href="mailto:marketing@sangfor.com" style={styles.link}>
+              marketing@sangfor.com
+            </Link>
+            .
+          </Text>
+          <Text>With Regards,</Text>
+          <Text>Sangfor SASE Marketing Team</Text>
         </View>
       </Page>
     </Document>
