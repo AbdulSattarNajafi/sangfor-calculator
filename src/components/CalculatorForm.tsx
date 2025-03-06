@@ -71,7 +71,7 @@ function CalculatorForm() {
               message:
                 Number(e.target.value) < 0
                   ? "Negative number is not allowed"
-                  : "Number of Employees is rquired",
+                  : "Number of Employees is required",
             })
           }
           errorMessage={error.totalEmployees}
@@ -97,7 +97,7 @@ function CalculatorForm() {
               message:
                 Number(e.target.value) < 0
                   ? "Negative number is not allowed"
-                  : "Number of locations is rquired",
+                  : "Number of locations is required",
             })
           }
           errorMessage={error.locations}

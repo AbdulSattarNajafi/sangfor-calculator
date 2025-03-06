@@ -249,6 +249,145 @@ function PDFPages({
 
   return (
     <Document>
+      <Page
+        size="A4"
+        style={{
+          position: "relative",
+          backgroundColor: "#0070c0",
+          overflow: "hidden",
+        }}
+      >
+        <View
+          style={{
+            paddingHorizontal: 30,
+            paddingVertical: 20,
+          }}
+        >
+          <Image style={{ width: "100px", height: "auto" }} src="/logo.png" />
+        </View>
+        <View
+          style={{
+            display: "flex",
+            position: "absolute",
+            zIndex: 10,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            height: 800,
+            width: 800,
+            backgroundColor: "#1889da",
+            borderRadius: 80,
+            transform: "translate(400, 20) rotate(-54deg)",
+          }}
+        ></View>
+
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            height: 780,
+            width: 780,
+            backgroundColor: "#fff",
+            borderRadius: 80,
+            transform: "translate(390, 32) rotate(-45deg)",
+          }}
+        ></View>
+
+        <View
+          style={{
+            position: "absolute",
+            top: "50%",
+            right: 0,
+            width: "65%",
+            height: 280,
+            paddingRight: 30,
+            // border: "1px solid red",
+            transform: "translateY(-155px)",
+            textAlign: "center",
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+                marginBottom: 10,
+              }}
+            >
+              Sangfor Technologies
+            </Text>
+            <Text
+              style={{
+                display: "flex",
+                fontSize: 18,
+                fontWeight: "bold",
+                marginBottom: 4,
+              }}
+            >
+              ROI Analysis Report of Sangfor
+            </Text>
+            <Text
+              style={{
+                display: "flex",
+                fontSize: 18,
+                fontWeight: "bold",
+                marginBottom: 15,
+              }}
+            >
+              Access Secure
+            </Text>
+
+            {userInput.submissionDate && (
+              <Text style={{ fontSize: 14, color: "#0070c0" }}>
+                {formatLongDate(new Date(createdDate))}
+              </Text>
+            )}
+
+            <View
+              style={{
+                marginVertical: 40,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Image
+                style={{ width: "60px", height: "auto", marginBottom: 6 }}
+                src="/report-logo.png"
+              />
+              <Text style={{ fontSize: 12 }}>
+                Secure, Agile, and Everywhere
+              </Text>
+            </View>
+            <Text style={{ fontSize: 14 }}>A SASE Solution by Sangfor</Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            width: "100%",
+            padding: 30,
+          }}
+        >
+          <Link
+            style={{
+              fontSize: 12,
+              textDecoration: "underline",
+              color: "#fff",
+            }}
+            href="https://www.sangfor.com/"
+          >
+            www.sangfor.com
+          </Link>
+        </View>
+      </Page>
       {/* ========= Page 1 =============== */}
       <Page size="A4" style={styles.page}>
         <Logo />
@@ -282,6 +421,50 @@ function PDFPages({
               {formatLongDate(new Date(createdDate))}
             </Text>
           )}
+
+          <View
+            style={{
+              paddingVertical: 40,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Image
+              style={{ width: "80px", height: "auto", marginBottom: 10 }}
+              src="/report-logo.png"
+            />
+            <Text style={{ fontSize: 12, marginBottom: 40 }}>
+              Secure, Agile, and Everywhere
+            </Text>
+            <Text style={{ fontSize: 14 }}>A SASE Solution by Sangfor</Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 30,
+          }}
+        >
+          <Link
+            style={{
+              textAlign: "center",
+              fontSize: 12,
+              textDecoration: "underline",
+              color: "#0070c0",
+            }}
+            href="https://www.sangfor.com/"
+          >
+            www.sangfor.com
+          </Link>
         </View>
       </Page>
 
@@ -510,7 +693,7 @@ function PDFPages({
               }
             />
             <KpiCard
-              label="Cost of Securtiy"
+              label="Cost of Security and Data Breach Risk"
               value={formatCompactCurrency(
                 otherCalculation.totalCostOfSecurityAndDataRisk,
               )}
@@ -753,7 +936,7 @@ function PDFPages({
 
           <ListItem>
             <Text>
-              Learn more about &nbsp;
+              Learn more about&nbsp;
               <Link
                 src="https://www.sangfor.com/cybersecurity/products/sangfor-access-sase"
                 style={styles.link}
@@ -764,7 +947,7 @@ function PDFPages({
           </ListItem>
           <ListItem>
             <Text>
-              Sangfor Access Secure recognized in &nbsp;
+              Sangfor Access Secure recognized in&nbsp;
               <Link
                 src="https://connect.sangfor.com/frost-radar-sase-2023?utm_source=Website&utm_medium=Sangfor"
                 style={styles.link}
@@ -775,7 +958,7 @@ function PDFPages({
           </ListItem>
           <ListItem>
             <Text>
-              Explore &nbsp;
+              Explore&nbsp;
               <Link
                 src="https://www.sangfor.com/cybersecurity/solutions/zero-trust-guard-ztna"
                 style={styles.link}
@@ -787,12 +970,12 @@ function PDFPages({
           </ListItem>
           <ListItem>
             <Text>
-              Access Secure &nbsp;
+              Access Secure&nbsp;
               <Link
                 src="https://www.sangfor.com/success-stories/sangfor-access-secure-case-study-leading-singaporean-management-consultancy-firm"
                 style={styles.link}
               >
-                success story
+                Success Story
               </Link>
               &nbsp;of a leading Singaporean management consultancy firm
             </Text>
@@ -806,6 +989,7 @@ function PDFPages({
               <Link href="mailto:marketing@sangfor.com" style={styles.link}>
                 marketing@sangfor.com
               </Link>
+              .
             </Text>
             <Text>With Regards,</Text>
             <Text>Sangfor SASE Marketing Team</Text>
