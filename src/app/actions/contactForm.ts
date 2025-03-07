@@ -267,6 +267,6 @@ export async function createEloquaEmail(
 
   // redirect(`/result/${userId}`);
   redirect(
-    `https://www.sangfor.com/cybersecurity/products/sangfor-access-sase/sase-roi-calculator-submission-success-download-report=${userId}`,
+    `https://www.sangfor.com/cybersecurity/products/sangfor-access-sase/sase-roi-calculator-submission-success-download-report?result=${userId}`,
   );
 }
