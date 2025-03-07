@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
@@ -25,6 +25,10 @@ function Report({ customer }: { customer: CustomerDataType }) {
   const breachRiskChartRef = useRef<HTMLDivElement>(null);
   const paybackChartRef = useRef<HTMLDivElement>(null);
   const financialChartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   if (!customer) {
     return (
@@ -111,7 +115,7 @@ function Report({ customer }: { customer: CustomerDataType }) {
   return (
     <>
       <div className="absolute inset-0 z-10 bg-[#f7f7f7] py-14 md:py-16 lg:py-20">
-        <div className="wrapper">
+        <div className="wrapper min-h-[300px] bg-[#f7f7f7]">
           <div className="flex flex-col items-center text-center">
             <h2 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
               Thanks! You’re One Step Closer to Savings.

@@ -14,7 +14,6 @@ export default function Main({ children }: { children: React.ReactNode }) {
       window.parent.postMessage(height, "https://live-sangfor.pantheonsite.io");
     };
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
     sendHeight();
     window.addEventListener("resize", sendHeight);
     const observer = new MutationObserver(sendHeight);
