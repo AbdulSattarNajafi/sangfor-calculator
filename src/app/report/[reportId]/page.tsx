@@ -12,7 +12,7 @@ async function ReportPage({
   const customer = await data.json();
 
   return (
-    <section className="relative h-dvh overflow-hidden">
+    <section className="relative h-[360px] overflow-hidden">
       {id && <DownloadReport customer={customer} />}
     </section>
   );

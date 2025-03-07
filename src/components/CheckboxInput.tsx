@@ -2,15 +2,13 @@ import { ComponentProps } from "react";
 
 type CheckboxInputProps = ComponentProps<"input"> & {
   label: string;
+  linkText?: string;
 };
 
-function CheckboxInput({ label, ...props }: CheckboxInputProps) {
+function CheckboxInput({ label, linkText, ...props }: CheckboxInputProps) {
   return (
-    <>
-      <label htmlFor={props.id} className="text-sm text-white">
-        {label}
-      </label>
-      <span className="relative ms-2 inline-flex translate-y-1 cursor-pointer items-center">
+    <div className="flex items-start">
+      <span className="relative me-2 inline-flex flex-shrink-0 translate-y-0.5 cursor-pointer items-center">
         <input
           type="checkbox"
           className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-white shadow transition-all checked:border-blue checked:bg-blue hover:shadow-md"
@@ -33,7 +31,20 @@ function CheckboxInput({ label, ...props }: CheckboxInputProps) {
           </svg>
         </span>
       </span>
-    </>
+      <label htmlFor={props.id} className="flex-1 text-sm text-white">
+        {label}{" "}
+        {linkText && (
+          <a
+            className="text-blue underline"
+            href="https://www.sangfor.com/support/services-policy/privacy-policy"
+            target="_blacnk"
+          >
+            {linkText}
+          </a>
+        )}
+        {linkText && "!"}
+      </label>
+    </div>
   );
 }
 

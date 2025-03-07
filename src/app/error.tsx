@@ -9,7 +9,7 @@ export default function Error({
 }) {
   return (
     <section className="flex flex-col items-center justify-center gap-6 py-14 md:py-16 lg:py-20">
-      <div className="text-center">
+      <div className="wrapper text-center">
         <h1 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
           Something went wrong!
         </h1>

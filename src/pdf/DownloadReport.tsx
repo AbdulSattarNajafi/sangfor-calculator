@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 
 import FinancialChart from "./charts/FinancialChart";
@@ -30,10 +30,6 @@ function DownloadReport({ customer }: { customer: CustomerDataType }) {
   const breachRiskChartRef = useRef<HTMLDivElement>(null);
   const paybackChartRef = useRef<HTMLDivElement>(null);
   const financialChartRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
 
   if (!customer) {
     redirect("/");

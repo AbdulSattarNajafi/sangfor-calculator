@@ -28,7 +28,7 @@
 body {
   font-family: var(--redHatFont);
   color: #171717;
-  background: #ffffff;
+  background: #f7f7f7;
   overscroll-behavior: none;
 }
 

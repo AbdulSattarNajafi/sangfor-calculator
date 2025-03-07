@@ -251,6 +251,7 @@ function PDFPages({
 
   return (
     <Document>
+      {/* ========= Page 1 =============== */}
       <Page
         size="A4"
         style={{
@@ -383,85 +384,6 @@ function PDFPages({
               fontSize: 12,
               textDecoration: "underline",
               color: "#fff",
-            }}
-            href="https://www.sangfor.com/"
-          >
-            www.sangfor.com
-          </Link>
-        </View>
-      </Page>
-      {/* ========= Page 1 =============== */}
-      <Page size="A4" style={styles.page}>
-        <Logo />
-
-        <View style={{ paddingHorizontal: 30, paddingTop: 20 }}>
-          <Text style={styles.pageTitle}>Sangfor Technologies </Text>
-          <Text
-            style={{
-              display: "flex",
-              fontSize: 22,
-              fontWeight: "bold",
-              textAlign: "center",
-              marginBottom: 15,
-            }}
-          >
-            ROI Analysis Report of
-          </Text>
-          <Text
-            style={{
-              display: "flex",
-              textAlign: "center",
-              fontSize: 22,
-              fontWeight: "bold",
-              marginBottom: 20,
-            }}
-          >
-            Sangfor Access Secure
-          </Text>
-          {userInput.submissionDate && (
-            <Text style={{ textAlign: "center", fontSize: 12 }}>
-              {formatLongDate(new Date(createdDate))}
-            </Text>
-          )}
-
-          <View
-            style={{
-              paddingVertical: 40,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <Image
-              style={{ width: "80px", height: "auto", marginBottom: 10 }}
-              src="/report-logo.png"
-            />
-            <Text style={{ fontSize: 12, marginBottom: 40 }}>
-              Secure, Agile, and Everywhere
-            </Text>
-            <Text style={{ fontSize: 14 }}>A SASE Solution by Sangfor</Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: 30,
-          }}
-        >
-          <Link
-            style={{
-              textAlign: "center",
-              fontSize: 12,
-              textDecoration: "underline",
-              color: "#0070c0",
             }}
             href="https://www.sangfor.com/"
           >

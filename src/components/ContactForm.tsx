@@ -194,17 +194,16 @@ function ContactForm() {
           name={fields.countryName.name}
           errorMessage={fields.countryName.errors}
         />
-        <div>
+        <div className="col-span-2 flex flex-col gap-2.5 pt-1">
           <CheckboxInput
             label="Do you want to Request a Demo for Sangfor SASE?"
             id="request-demo"
             name="demoRequest"
             onChange={handleCheckboxChange}
           />
-        </div>
-        <div>
           <CheckboxInput
-            label="Receive Updates User Consent"
+            label={`I want to receive updates on Sangfor's latest products and solutions. I can unsubscribe at any time. By clicking on the "Download Report" button, you have read and consent to our`}
+            linkText="Privacy Policy"
             id="receive-updates"
             name="userConsent"
             onChange={handleCheckboxChange}
