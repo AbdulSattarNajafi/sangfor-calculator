@@ -6,9 +6,9 @@ import BenefitsCard from "./BenefitsCard";
 import { calculationResult } from "@/pdf/calculation/calculationResult";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import Spinner from "./Spinner";
-import useFormula from "@/hooks/useFormula";
-import useRegions from "@/hooks/useRegions";
 import FincanceChart from "./FinanceChart";
+import useRegions from "@/hooks/useRegions";
+import useFormula from "@/hooks/useFormula";
 
 function CalculatorResult() {
   const { regions, regionsIsLoading } = useRegions();

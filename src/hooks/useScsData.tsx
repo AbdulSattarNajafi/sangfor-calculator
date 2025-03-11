@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { MarketingDataTypes } from "@/utils/types";
 
@@ -16,7 +18,7 @@ const initalState = {
   landing_url: "",
 };
 
-export function useScsData() {
+export default function useScsData() {
   const [scs, setScs] = useState<MarketingDataTypes>(initalState);
 
   useEffect(() => {

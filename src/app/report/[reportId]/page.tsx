@@ -13,7 +13,7 @@ async function ReportPage({
 
   return (
     <section className="relative h-[360px] overflow-hidden">
-      {id && <DownloadReport customer={customer} />}
+      <DownloadReport customer={customer} />
     </section>
   );
 }

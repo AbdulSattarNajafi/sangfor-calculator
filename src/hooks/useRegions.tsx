@@ -1,3 +1,5 @@
+"use client";
+
 import { SelectedCountryType } from "@/utils/types";
 import useFetch from "./useFetch";
 

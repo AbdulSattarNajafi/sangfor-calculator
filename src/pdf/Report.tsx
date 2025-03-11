@@ -9,10 +9,12 @@ import { calculationResult } from "./calculation/calculationResult";
 import DonutChart from "./charts/DonutChart";
 import PDFPages from "./components/PDFPages";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import useFormula from "@/hooks/useFormula";
+
 import Spinner from "@/components/Spinner";
-import useRegions from "@/hooks/useRegions";
+
 import { CustomerDataType } from "@/utils/types";
+import useRegions from "@/hooks/useRegions";
+import useFormula from "@/hooks/useFormula";
 
 function Report({ customer }: { customer: CustomerDataType }) {
   const [isLoading, setIsLoading] = useState(false);

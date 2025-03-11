@@ -5,8 +5,8 @@ import Input from "./Input";
 import Switch from "./Switch";
 import RangeInput from "./RangeInput";
 import { useUserInputContext } from "@/contexts/UserInputContext";
-import useRegions from "@/hooks/useRegions";
 import { useState } from "react";
+import useRegions from "@/hooks/useRegions";
 
 function CalculatorForm() {
   const [isGrayColor, setIsGrayColor] = useState(true);

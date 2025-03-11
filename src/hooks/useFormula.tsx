@@ -1,3 +1,5 @@
+"use client";
+
 import { FormulaType } from "@/utils/types";
 import useFetch from "./useFetch";
 

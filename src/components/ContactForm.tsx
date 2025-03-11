@@ -12,10 +12,10 @@ import { useUserInputContext } from "@/contexts/UserInputContext";
 import { contactSchema } from "@/utils/zodSchema";
 import CheckboxInput from "./CheckboxInput";
 import { createEloquaEmail } from "@/app/actions/contactForm";
-import { useScsData } from "@/hooks/useScsData";
-import useRegions from "@/hooks/useRegions";
 import CountrySelector from "./CountrySelector";
 import Recaptcha from "./Recaptcha";
+import useRegions from "@/hooks/useRegions";
+import useScsData from "@/hooks/useScsData";
 
 function ContactForm() {
   const uniqueId = nanoid();
@@ -121,6 +121,8 @@ function ContactForm() {
       setSelectedCountry(null);
     },
   });
+
+  console.log(scs, "-------- SCS Data");
 
   return (
     <form

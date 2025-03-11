@@ -14,7 +14,7 @@ async function ResultPage({
 
   return (
     <section className="relative h-[360px] overflow-hidden">
-      {id && <ReportResult customer={customer} />}
+      <ReportResult customer={customer} />
     </section>
   );
 }

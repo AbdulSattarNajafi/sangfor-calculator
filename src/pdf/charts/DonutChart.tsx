@@ -1,3 +1,5 @@
+"use client";
+
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
@@ -47,7 +49,7 @@ function DonutChart({
   };
 
   return (
-    <div className="font-inter flex w-[220px] flex-col items-center justify-center">
+    <div className="flex w-[220px] flex-col items-center justify-center font-inter">
       <div className="relative h-[160px]">
         <div className="h-[160px] w-[160px]">
           <Doughnut data={data} options={options} />
