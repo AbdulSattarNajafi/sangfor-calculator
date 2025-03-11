@@ -16,9 +16,33 @@ function CalculatorResult() {
   const width = useWindowWidth();
   const { state, error } = useUserInputContext();
 
+  if (formulaIsLoading || regionsIsLoading) {
+    return (
+      <div className="flex w-full flex-1 items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!formula || !regions) {
+    return (
+      <div className="p-4 text-center">
+        <p>Formula and regions data are not found!</p>
+      </div>
+    );
+  }
+
   const selectedCountry = regions?.find(
     (region) => region.country === state.region,
   );
+
+  if (!selectedCountry) {
+    return (
+      <div className="p-4 text-center">
+        <p>Country not found!</p>
+      </div>
+    );
+  }
 
   if (
     state.region === "" ||
@@ -29,29 +53,6 @@ function CalculatorResult() {
     return (
       <div className="p-4 text-center">
         <p>Please fill the input fields</p>
-      </div>
-    );
-  }
-
-  if (formulaIsLoading || regionsIsLoading) {
-    return (
-      <div className="flex w-full flex-1 items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (!selectedCountry) {
-    return (
-      <div className="p-4 text-center">
-        <p>Country not found.</p>
-      </div>
-    );
-  }
-  if (!formula) {
-    return (
-      <div className="p-4 text-center">
-        <p>Formula data missing.</p>
       </div>
     );
   }

@@ -307,7 +307,6 @@ function PDFPages({
             width: "65%",
             height: 280,
             paddingRight: 30,
-            // border: "1px solid red",
             transform: "translateY(-155px)",
             textAlign: "center",
           }}

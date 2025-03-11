@@ -34,21 +34,29 @@ function Report({ customer }: { customer: CustomerDataType }) {
     );
   }
 
-  const selectedCountry = regions?.find(
-    (region) => region.country === customer.region,
-  );
-
   if (regionsIsLoading || formulaIsLoading) {
     return (
-      <div className="flex h-dvh items-center justify-center">
+      <div className="flex h-[400px] items-center justify-center">
         <Spinner />
       </div>
     );
   }
 
-  if (!selectedCountry || !formula) {
+  if (!regions || !formula) {
     return (
-      <div className="flex h-dvh items-center justify-center">
+      <div className="flex h-[400px] items-center justify-center">
+        <p className="text-center">Formula and regions data are not found!</p>
+      </div>
+    );
+  }
+
+  const selectedCountry = regions?.find(
+    (region) => region.country === customer.region,
+  );
+
+  if (!selectedCountry) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
         <p className="text-center">Something Went wrong!</p>
       </div>
     );

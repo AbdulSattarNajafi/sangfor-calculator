@@ -35,21 +35,29 @@ function DownloadReport({ customer }: { customer: CustomerDataType }) {
     redirect("/");
   }
 
-  const selectedCountry = regions?.find(
-    (region) => region.country === customer.region,
-  );
-
   if (regionsIsLoading || formulaIsLoading) {
     return (
-      <div className="flex h-dvh items-center justify-center">
+      <div className="flex h-[400px] items-center justify-center">
         <Spinner />
       </div>
     );
   }
 
-  if (!selectedCountry || !formula) {
+  if (!regions || !formula) {
     return (
-      <div className="flex h-dvh items-center justify-center">
+      <div className="flex h-[400px] items-center justify-center">
+        <p className="text-center">Formula and regions data are not found!</p>
+      </div>
+    );
+  }
+
+  const selectedCountry = regions?.find(
+    (region) => region.country === customer.region,
+  );
+
+  if (!selectedCountry) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
         <p className="text-center">Something Went wrong!</p>
       </div>
     );
@@ -110,7 +118,7 @@ function DownloadReport({ customer }: { customer: CustomerDataType }) {
   return (
     <>
       <div className="absolute inset-0 z-10 bg-[#f7f7f7] py-14 md:py-16 lg:py-20">
-        <div className="wrapper">
+        <div className="wrapper min-h-[300px] bg-[#f7f7f7]">
           <div className="flex flex-col items-center text-center">
             <h2 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
               Thanks! You’re One Step Closer to Savings.

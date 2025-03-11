@@ -1,4 +1,4 @@
-import Report from "@/pdf/Report";
+import ReportResult from "@/components/ReportResult";
 
 async function ResultPage({
   params,
@@ -14,7 +14,7 @@ async function ResultPage({
 
   return (
     <section className="relative h-[360px] overflow-hidden">
-      {id && <Report customer={customer} />}
+      {id && <ReportResult customer={customer} />}
     </section>
   );
 }
