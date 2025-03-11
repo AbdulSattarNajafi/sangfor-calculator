@@ -122,8 +122,6 @@ function ContactForm() {
     },
   });
 
-  console.log(scs, "-------- SCS Data");
-
   return (
     <form
       className="w-full"

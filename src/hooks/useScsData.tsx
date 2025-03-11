@@ -28,6 +28,8 @@ export default function useScsData() {
         return;
       }
 
+      // console.log(event.data, "------- Original SCS Data");
+
       const { key, value } = event.data;
       if (key === "_scs" && value) {
         try {
@@ -72,6 +74,8 @@ export default function useScsData() {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
+  // console.log(scs, "-------- SCS Data");
 
   return scs;
 }
