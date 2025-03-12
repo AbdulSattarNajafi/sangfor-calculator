@@ -266,7 +266,7 @@ function PDFPages({
             paddingVertical: 20,
           }}
         >
-          <Image style={{ width: "100px", height: "auto" }} src="/logo.png" />
+          <Image style={{ width: "140px", height: "auto" }} src="/logo.png" />
         </View>
         <View
           style={{
@@ -380,7 +380,7 @@ function PDFPages({
         >
           <Link
             style={{
-              fontSize: 12,
+              fontSize: 14,
               textDecoration: "underline",
               color: "#fff",
             }}

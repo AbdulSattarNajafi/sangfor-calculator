@@ -15,7 +15,7 @@ function Redirect({ id }: { id: string }) {
     <div>
       <a
         ref={buttonRef}
-        target="_blank"
+        target="_self"
         href={`https://www.sangfor.com/cybersecurity/products/sangfor-access-sase/sase-roi-calculator-submission-success-download-report?result=${id}`}
         className="flex h-20 w-36 px-4 py-2 text-center"
       ></a>
