@@ -349,8 +349,5 @@ export async function createEloquaEmail(
     throw new Error(`Failed to submit form: ${response.statusText}`);
   }
 
-  // redirect(`/redirect/${userId}`);
-  redirect(
-    `https://www.sangfor.com/cybersecurity/products/sangfor-access-sase/sase-roi-calculator-submission-success-download-report?result=${userId}`,
-  );
+  redirect(`/redirect/${userId}`);
 }
