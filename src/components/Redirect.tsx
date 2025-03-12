@@ -12,9 +12,9 @@ function Redirect({ id }: { id: string }) {
   }, []);
 
   return (
-    <section>
-      <div className="wrapper min-h-[300px]">
-        <div className="flex flex-col items-center text-center">
+    <section className="flex min-h-[300px] items-center">
+      <div className="wrapper">
+        <div className="flex w-full flex-col items-center text-center">
           <h2 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
             Thanks! You’re One Step Closer to Savings.
           </h2>
